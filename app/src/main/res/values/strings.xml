@@ -3,6 +3,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">Login</string>
-    <string name="please_login_to_your_account">Please Login to your account</string>
-    <string name="email">Email</string>
+    <string name="sign_in_to_access_your_account">sign in to access your account</string>
+    <string name="email">Enter your email</string>
+    <string name="password">Enter your password</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="don_t_have_an_account_sign_up_now">Don’t have an account, <b><u><font color="#006B5F">Sign Up</font></u></b></string>
+    <string name="or">or</string>
+    <string name="already_a_member_log_in">Already a member? <b><u><font color="#006B5F">Log In</font></u></b></string>
+    <string name="register">REGISTER</string>
 </resources>

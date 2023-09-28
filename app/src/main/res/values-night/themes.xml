@@ -2,9 +2,13 @@
     <style name="Theme.FoodPlanner" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer</item>
         <item name="colorSecondary">@color/md_theme_dark_secondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer</item>
         <item name="colorOnSecondary">@color/md_theme_dark_onSecondary</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer</item>
     </style>
 
     <style name="splashScreenTheme" parent="Theme.SplashScreen">
@@ -12,4 +16,6 @@
         <item name="windowSplashScreenBackground">@color/md_theme_dark_primary</item>
         <item name="postSplashScreenTheme">@style/Theme.FoodPlanner</item>
     </style>
+
+
 </resources>
