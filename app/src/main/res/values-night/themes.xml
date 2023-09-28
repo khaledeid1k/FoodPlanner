@@ -9,6 +9,9 @@
         <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer</item>
         <item name="colorOnSecondary">@color/md_theme_dark_onSecondary</item>
         <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer</item>
+
+        <item name="backgroundColor">@color/md_theme_dark_background</item>
+
     </style>
 
     <style name="splashScreenTheme" parent="Theme.SplashScreen">

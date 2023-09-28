@@ -10,6 +10,8 @@
         <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer</item>
         <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer</item>
 
+        <item name="backgroundColor">@color/md_theme_light_background</item>
+
     </style>
 
     <style name="Theme.splashScreenTheme" parent="Theme.SplashScreen">
