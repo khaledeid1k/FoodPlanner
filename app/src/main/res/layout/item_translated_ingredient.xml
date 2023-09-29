@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/text_ingredient_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="start|center_horizontal"
+    android:paddingVertical="@dimen/margin_16"
+    android:maxLines="1"
+    android:ellipsize="end"
+    android:paddingStart="@dimen/margin_16"
+    android:paddingEnd="@dimen/margin_24"
+    tools:text="3 Tomato\'s "
+    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+    />

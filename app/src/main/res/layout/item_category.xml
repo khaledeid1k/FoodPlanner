@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:foreground="@drawable/foreground_card_category"
             android:scaleType="centerCrop"
-            tools:src="@drawable/cook"/>
+            tools:src="@drawable/ic_launcher_background"/>
 
         <TextView
             android:id="@+id/text_value_category"

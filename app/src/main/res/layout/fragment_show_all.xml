@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/margin_30"
-        android:layout_marginStart="@dimen/margin_12"
+        android:layout_marginHorizontal="@dimen/margin_12"
         android:orientation="vertical"
         android:clipToPadding="false"
 
