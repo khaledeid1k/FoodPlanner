@@ -20,4 +20,7 @@
     <string name="country">Country</string>
     <string name="ingredients">Ingredients</string>
     <string name="favourites">Favourites</string>
+    <string name="home">Home</string>
+    <string name="favourite">Favourite</string>
+    <string name="plan">Plan</string>
 </resources>
