@@ -12,4 +12,5 @@
     <string name="already_a_member_log_in">Already a member? <b><u><font color="#006B5F">Log In</font></u></b></string>
     <string name="register">REGISTER</string>
     <string name="show_more">Show More</string>
+    <string name="search">Search</string>
 </resources>
