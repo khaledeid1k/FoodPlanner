@@ -38,4 +38,5 @@
     <dimen name="radius_16">16dp</dimen>
     <dimen name="margin_14">14dp</dimen>
     <dimen name="margin_208">208dp</dimen>
+    <dimen name="width_0">0dp</dimen>
 </resources>

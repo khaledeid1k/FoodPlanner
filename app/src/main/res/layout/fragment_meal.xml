@@ -26,15 +26,27 @@
 
         <TextView
             android:id="@+id/text_meal_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_8"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+
+            app:layout_constraintBottom_toBottomOf="@+id/favourite_icon"
+            app:layout_constraintEnd_toStartOf="@+id/favourite_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_meal"
+            tools:text="sdfsdfsdfds" />
+        <ImageView
+            android:id="@+id/favourite_icon"
+            android:layout_width="@dimen/width_0"
             android:layout_marginTop="@dimen/margin_8"
             android:layout_marginHorizontal="@dimen/margin_16"
-            tools:text="sdfsdfsdfds"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:src="@drawable/favorite"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_meal" />
+            app:layout_constraintTop_toBottomOf="@id/image_meal"
+            />
 
 
         <com.google.android.material.button.MaterialButtonToggleGroup

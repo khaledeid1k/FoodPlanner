@@ -19,4 +19,5 @@
     <string name="category">Category</string>
     <string name="country">Country</string>
     <string name="ingredients">Ingredients</string>
+    <string name="favourites">Favourites</string>
 </resources>
