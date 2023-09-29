@@ -13,7 +13,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_16"
         android:gravity="center|top"
-        android:textColor="@color/black"
         android:textSize="@dimen/font_size_28"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/backTo"
