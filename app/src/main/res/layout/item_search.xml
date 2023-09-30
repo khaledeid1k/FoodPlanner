@@ -11,7 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:id="@+id/image_search_item"
+        android:id="@+id/image_meal_of_search"
         android:layout_width="@dimen/width_158"
         android:layout_height="@dimen/height_0"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +33,7 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_search_item"
+        app:layout_constraintStart_toEndOf="@+id/image_f"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Egyptian Fatteh " />
 

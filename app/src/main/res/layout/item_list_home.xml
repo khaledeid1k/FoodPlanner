@@ -11,7 +11,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/image_item_list_home"
         android:layout_width="@dimen/width_160"
         android:layout_height="@dimen/height_160"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,18 +19,23 @@
         tools:src="@drawable/ic_launcher_background" />
 
     <TextView
+        android:id="@+id/text_item_list_home"
         style="@style/TextAppearance.Material3.BodySmall"
-        android:layout_width="wrap_content"
-        android:maxLines="1"
-        android:ellipsize="end"
-
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        android:background="@color/back_text"
         android:drawableStart="@drawable/knife"
+        android:textColor="@color/white"
+        android:paddingTop="@dimen/margin_4"
         android:drawablePadding="@dimen/margin_4"
-        android:layout_marginStart="@dimen/margin_8"
-        android:layout_marginBottom="@dimen/margin_12"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAlignment="textStart"
+        android:paddingStart="@dimen/margin_8"
+        android:paddingBottom="@dimen/margin_8"
+        app:layout_constraintBottom_toBottomOf="@+id/image_item_list_home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/image_item_list_home"
         tools:text="Masala karel" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
