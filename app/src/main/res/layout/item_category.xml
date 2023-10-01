@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/card_img_holder"
+            android:id="@+id/image_category_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,10 +27,10 @@
             tools:src="@drawable/ic_launcher_background"/>
 
         <TextView
-            android:id="@+id/text_value_category"
+            android:id="@+id/text_category_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
             app:layout_constraintBottom_toBottomOf="@id/card_category"
             app:layout_constraintEnd_toEndOf="@id/card_category"
             app:layout_constraintStart_toStartOf="@id/card_category"

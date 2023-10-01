@@ -26,7 +26,7 @@ public interface Repository {
 
     StateOfResponse<Ingredients> getAllIngredients(StateOfResponse<Ingredients> stateOfResponse);
 
-    StateOfResponse<FilteredItems> FilterByMainIngredient(String nameOfMainIngredient,StateOfResponse<FilteredItems> stateOfResponse);
+    StateOfResponse<FilteredItems> filterByMainIngredient(String nameOfMainIngredient, StateOfResponse<FilteredItems> stateOfResponse);
 
     StateOfResponse<FilteredItems> filterByCategory(String nameOfCategory, StateOfResponse<FilteredItems> stateOfResponse);
 

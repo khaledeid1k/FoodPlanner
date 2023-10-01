@@ -5,15 +5,21 @@ import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.Navigation;
 
 import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.meal.Meal;
+import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.StateOfResponse;
 import com.example.foodplanner.data.repository.Repository;
+import com.example.foodplanner.ui.home.adapter.CategoriesItem;
+import com.example.foodplanner.ui.home.adapter.CountriesItem;
+import com.example.foodplanner.ui.home.adapter.MealsItem;
 import com.example.foodplanner.ui.home.adapter.OnClickItem;
+import com.example.foodplanner.ui.show.ShowAllFragmentDirections;
 
-public class MealsPresenter implements OnClickItem {
+public class MealsPresenter implements OnClickListener {
     Repository repository;
 
     public MealsPresenter(Repository repository,String nameOfItem) {
@@ -67,8 +73,25 @@ public class MealsPresenter implements OnClickItem {
         });
     }
 
-    @Override
-    public void click(DataItem dataItem, int position, View view) {
 
+    @Override
+    public void onclick(String nameOfMeal,View view) {
+        repository.getMealByName(nameOfMeal, new StateOfResponse<>() {
+            @Override
+            public void succeeded(Meals response) {
+                MealsFragmentDirections.ActionMealsFragmentToMealFragment action =
+                        MealsFragmentDirections.actionMealsFragmentToMealFragment(
+                                response.getMeals().get(0));
+                Navigation.findNavController(view).navigate(
+                        action
+                );
+            }
+
+            @Override
+            public void failure(String message) {
+
+            }
+        });
     }
 }
+

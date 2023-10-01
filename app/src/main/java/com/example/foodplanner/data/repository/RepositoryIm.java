@@ -71,7 +71,7 @@ public class RepositoryIm implements Repository {
     }
 
     @Override
-    public StateOfResponse<FilteredItems> FilterByMainIngredient(String nameOfMainIngredient, StateOfResponse<FilteredItems> stateOfResponse) {
+    public StateOfResponse<FilteredItems> filterByMainIngredient(String nameOfMainIngredient, StateOfResponse<FilteredItems> stateOfResponse) {
         return WrapResponse(remoteSource.filterByMainIngredient(nameOfMainIngredient), stateOfResponse);
 
     }

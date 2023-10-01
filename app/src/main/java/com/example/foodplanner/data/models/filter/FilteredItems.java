@@ -1,11 +1,12 @@
 package com.example.foodplanner.data.models.filter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FilteredItems {
-    List<FilteredItem> meals;
+    ArrayList<FilteredItem> meals;
 
-    public List<FilteredItem> getMeals() {
+    public ArrayList<FilteredItem> getMeals() {
         return meals;
     }
 }

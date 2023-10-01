@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.DataItem;
+import com.example.foodplanner.data.models.filter.FilteredItem;
 import com.example.foodplanner.data.models.filter.FilteredItems;
+import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.network.NetWork;
 import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.home.HomePresenter;
@@ -31,6 +33,7 @@ public class MealsFragment extends Fragment {
     TextView nameList;
     MealsAdapter mealsAdapter;
     MealsPresenter mealsPresenter;
+    ArrayList<FilteredItem> meals;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +60,15 @@ public class MealsFragment extends Fragment {
         nameList.setText(getString(R.string.meals_of_first_item, nameOfItem.split(",")[0]));
         mealsPresenter = new MealsPresenter(
                 RepositoryIm.getInstance(NetWork.getInstance()),nameOfItem);
+        meals=new ArrayList<>();
+        mealsAdapter = new MealsAdapter(meals, getActivity(),mealsPresenter);
+        recyclerViewMeals.setAdapter(mealsAdapter);
+
     }
     void setUp(){
         mealsPresenter.filteredItemsLiveData().observe(getActivity(),
                 filteredItems -> {
-                    mealsAdapter = new MealsAdapter(new ArrayList<>(filteredItems.getMeals()), getActivity());
-                    recyclerViewMeals.setAdapter(mealsAdapter);
+                    mealsAdapter.updateData(filteredItems.getMeals());
                 });
     }
 }

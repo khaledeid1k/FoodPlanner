@@ -15,19 +15,18 @@
         android:gravity="center|top"
         android:textSize="@dimen/font_size_28"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/back_from_show_all"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Meals" />
+        tools:text="Meals of ....." />
 
     <ImageView
         android:id="@+id/back_from_show_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16"
-        android:layout_marginTop="@dimen/margin_16"
         app:layout_constraintBottom_toBottomOf="@+id/tile_of_list_of_show_all"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tile_of_list_of_show_all"
         app:srcCompat="@drawable/arrow_back" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,7 +35,7 @@
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/margin_30"
+        android:layout_marginTop="@dimen/margin_8"
         android:layout_marginHorizontal="@dimen/margin_12"
         android:orientation="vertical"
         android:clipToPadding="false"

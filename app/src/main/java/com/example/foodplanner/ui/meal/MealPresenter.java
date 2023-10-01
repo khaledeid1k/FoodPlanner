@@ -1,5 +1,7 @@
 package com.example.foodplanner.ui.meal;
 
+import android.util.Log;
+
 import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.meal.Meal;
@@ -52,9 +54,8 @@ public class MealPresenter {
         List<IngredientMeasurePair> collect = ingredientMeasurePairs.stream().filter(
                 i -> i.getIngredient() != null && !i.getIngredient().trim().isEmpty()
         ).collect(Collectors.toList());
-        ingredientMeasurePairs = (ArrayList<IngredientMeasurePair>) collect;
-
-
+        ingredientMeasurePairs.clear();
+        ingredientMeasurePairs.addAll(collect);
     }
 
     void addInstructions() {

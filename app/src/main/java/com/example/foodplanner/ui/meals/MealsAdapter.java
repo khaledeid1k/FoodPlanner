@@ -12,18 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
+import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.filter.FilteredItem;
 import com.example.foodplanner.data.models.meal.Meals;
+import com.example.foodplanner.ui.home.adapter.OnClickItem;
 
 import java.util.ArrayList;
 
 public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHolder> {
     ArrayList<FilteredItem> meals;
     Context context;
-
-    public MealsAdapter(ArrayList<FilteredItem> meals, Context context) {
+    OnClickListener onClickItem;
+    public MealsAdapter(ArrayList<FilteredItem> meals, Context context,OnClickListener onClickItem) {
         this.meals = meals;
         this.context = context;
+        this.onClickItem = onClickItem;
     }
 
     @NonNull
@@ -42,6 +45,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
                 R.drawable.ic_launcher_background
         ).into(holder.ImageOfMeal);
 
+       holder.itemView.setOnClickListener(view -> onClickItem.onclick(filteredItem.getStrMeal(),view));
 
     }
 
@@ -56,5 +60,9 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
         }
         TextView nameOfMeal =itemView.findViewById(R.id.name_meal_of_search);
         ImageView ImageOfMeal =itemView.findViewById(R.id.image_meal_of_search);
+    }
+    public void updateData(ArrayList<FilteredItem> newData) {
+        meals=newData;
+        notifyDataSetChanged();
     }
 }
