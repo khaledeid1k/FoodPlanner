@@ -4,6 +4,11 @@ public class CategoryWithDetails {
       String  idCategory ;
       String strCategory ;
      String strCategoryDescription ;
+     String strCategoryThumb ;
+
+    public String getStrCategoryThumb() {
+        return strCategoryThumb;
+    }
 
     public String getIdCategory() {
         return idCategory;

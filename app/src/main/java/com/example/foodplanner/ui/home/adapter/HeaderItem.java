@@ -1,7 +1,8 @@
-package com.example.foodplanner.data.models;
+package com.example.foodplanner.ui.home.adapter;
 
+import com.example.foodplanner.data.models.DataItem;
+import com.example.foodplanner.data.models.Tag;
 import com.example.foodplanner.data.models.meal.Meal;
-import com.example.foodplanner.data.models.meal.Meals;
 
 public class HeaderItem extends DataItem<Meal> {
     Meal meal;
@@ -10,9 +11,6 @@ public class HeaderItem extends DataItem<Meal> {
         return meal;
     }
 
-    public void setMeal(Meal meal) {
-        this.meal = meal;
-    }
 
     public HeaderItem(Meal meal) {
         super(new Tag<>("Header",meal));

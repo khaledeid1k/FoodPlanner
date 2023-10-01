@@ -1,6 +1,5 @@
 package com.example.foodplanner.data.models;
 
-import java.util.List;
 
 public class Tag<T> {
     String title;

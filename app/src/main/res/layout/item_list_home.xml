@@ -14,6 +14,8 @@
         android:id="@+id/image_item_list_home"
         android:layout_width="@dimen/width_160"
         android:layout_height="@dimen/height_160"
+        android:scaleType="centerCrop"
+        android:background="@color/back_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_launcher_background" />

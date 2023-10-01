@@ -1,4 +1,4 @@
-package com.example.foodplanner.ui.home;
+package com.example.foodplanner.ui.home.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,53 +14,51 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.DataItem;
-import com.example.foodplanner.data.models.HeaderItem;
-import com.example.foodplanner.data.models.MealsItem;
+import com.example.foodplanner.data.models.category.CategoryWithDetails;
+import com.example.foodplanner.data.models.country.Country;
+import com.example.foodplanner.ui.home.HomePresenter;
 import com.example.foodplanner.data.models.Tag;
 import com.example.foodplanner.data.models.meal.Meal;
-import com.example.foodplanner.data.models.meal.Meals;
-import com.example.foodplanner.ui.base.BaseInteractionListener;
+import com.example.foodplanner.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-interface NavigationInteractionListener extends BaseInteractionListener {
-    void onNavigate(DataItem dataItem);
-}
+
 
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
-    List<DataItem> dataItemList;
-    NavigationInteractionListener navigationInteractionListener;
-    final int HEADER_ITEM = 0;
-    final int TAG_ITEM = 1;
+    ArrayList<DataItem> dataItemList;
+    NavigationToShowAll navigationToShowAll;
     Context context;
-    String TAG="HomeAdapter";
+    HomePresenter presenter;
 
     public HomeAdapter(
             Context context,
-            List<DataItem> dataItemList
-            //NavigationInteractionListener navigationInteractionListener
+            ArrayList<DataItem> dataItemList,
+            NavigationToShowAll navigationToShowAll,
+            HomePresenter presenter
     ) {
         this.dataItemList = dataItemList;
-      //  this.navigationInteractionListener = navigationInteractionListener;
+       this.navigationToShowAll = navigationToShowAll;
         this.context = context;
+        this.presenter = presenter;
     }
 
 
     @Override
     public int getItemViewType(int position) {
         if (dataItemList.get(position) instanceof HeaderItem) {
-            return HEADER_ITEM;
+            return Constants.HEADER_ITEM;
         }
-        return TAG_ITEM;
+        return Constants.TAG_ITEM;
     }
 
     @NonNull
     @Override
     public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         HomeViewHolder homeViewHolder;
-        if (viewType == HEADER_ITEM) {
+        if (viewType == Constants.HEADER_ITEM) {
             homeViewHolder = new HeaderViewHolder(
                     LayoutInflater.from(context).inflate(
                             R.layout.head_of_home, parent, false
@@ -78,8 +76,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
         DataItem dataItem = dataItemList.get(position);
-        Log.i(TAG, "onBindViewHoldertitle: "  +dataItem.getTag().getTitle());
-        Log.i(TAG, "onBindViewHolderresourse: "  +dataItem.getTag().getResourcesData());
+
 
         if(holder instanceof HeaderViewHolder){
             if (dataItem instanceof HeaderItem) {
@@ -93,28 +90,63 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 Glide.with(context).load(meal.getStrMealThumb()).error(
                         R.drawable.no_result_search
                 ).into(((HeaderViewHolder) holder).imageMealOfDay);
+                holder.itemView.setOnClickListener(view -> navigationToShowAll.onNavigate(dataItem,view));
 
 
             }
         } else if(holder instanceof ItemViewHolder){
-             if (dataItem instanceof MealsItem) {
-                Tag<List<Meal>> tag = ((MealsItem) dataItem).getTag();
+             if (dataItem instanceof CategoriesItem) {
+                Tag<List<CategoryWithDetails>> tag = ((CategoriesItem) dataItem).getTag();
                 String title = tag.getTitle();
-
-                List<Meal> resourcesData = tag.getResourcesData();
-
-
-
-                ((ItemViewHolder) holder).tileOfList.setText(
-                        title
-                );
-
+                ((ItemViewHolder) holder).tileOfList.setText(title);
                 ItemsAdapter itemsAdapter = new ItemsAdapter(context,
-                        new ArrayList<>(resourcesData));
+                       dataItem,presenter
+                        );
                 ((ItemViewHolder) holder).recycleItemHome.setAdapter(
                         itemsAdapter
                 );
+                 ((ItemViewHolder) holder).showAll.setOnClickListener(
+                         view -> {
+                             navigationToShowAll.onNavigate(dataItem,view);
+                         }
+                 );
+
             }
+            else if  (dataItem instanceof MealsItem) {
+                Tag<List<Meal>> tag = ((MealsItem) dataItem).getTag();
+                String title = tag.getTitle();
+                ((ItemViewHolder) holder).tileOfList.setText(title);
+                ItemsAdapter itemsAdapter = new ItemsAdapter(context,
+                        dataItem,presenter
+                );
+                ((ItemViewHolder) holder).recycleItemHome.setAdapter(
+                        itemsAdapter
+                );
+                ((ItemViewHolder) holder).showAll.setOnClickListener(
+                        view -> {
+                            navigationToShowAll.onNavigate(dataItem,view);
+                        }
+                );
+
+            }
+             else if (dataItem instanceof CountriesItem) {
+                Tag<List<Country>> tag = ((CountriesItem) dataItem).getTag();
+                String title = tag.getTitle();
+                ((ItemViewHolder) holder).tileOfList.setText(title);
+                ItemsAdapter itemsAdapter = new ItemsAdapter(context,
+                       dataItem,presenter
+                        );
+                ((ItemViewHolder) holder).recycleItemHome.setAdapter(
+                        itemsAdapter
+                );
+                 ((ItemViewHolder) holder).showAll.setOnClickListener(
+                         view -> {
+                             navigationToShowAll.onNavigate(dataItem,view);
+                         }
+                 );
+
+            }
+
         }
 
 
@@ -122,7 +154,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public int getItemCount() {
-        return dataItemList.size();
+        return dataItemList==null ? 0:dataItemList.size();
     }
 
     public class HomeViewHolder extends RecyclerView.ViewHolder {
@@ -135,9 +167,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     public class HeaderViewHolder extends HomeViewHolder {
         public HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
-
         }
-
         ImageView imageMealOfDay = itemView.findViewById(R.id.img_meal_day);
         TextView nameMeaOfDay = itemView.findViewById(R.id.name_meal_day);
         TextView countryMeaOfDay = itemView.findViewById(R.id.country_meal_day);
@@ -150,7 +180,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         TextView tileOfList = itemView.findViewById(R.id.title_list);
         RecyclerView recycleItemHome = itemView.findViewById(R.id.recycle_item_home);
+        TextView showAll = itemView.findViewById(R.id.show_more);
 
 
+    }
+
+    public void updateData(ArrayList<DataItem> newData) {
+        dataItemList=newData;
+        notifyDataSetChanged();
     }
 }
