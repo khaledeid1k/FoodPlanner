@@ -24,4 +24,11 @@
     <string name="favourite">Favourite</string>
     <string name="plan">Plan</string>
     <string name="meal_of_day">Meal Of Day</string>
+    <string name="ingredient_measure">
+   %1$s
+    <small space=" ">
+        <span style="font-weight: bold;">%2$s</span>
+    </small>
+</string>
+
 </resources>

@@ -36,7 +36,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setup(view);
+        inti(view);
         addRandomMeal();
         addMealsByFirstLetter();
         addCategoriesWithDetails();
@@ -44,7 +44,7 @@ public class HomeFragment extends BaseFragment {
         recyclerView.setAdapter(homeAdapter);
     }
 
-    void setup(View view) {
+    void inti(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
         presenter = new HomePresenter(
                 RepositoryIm.getInstance(NetWork.getInstance()), "b");

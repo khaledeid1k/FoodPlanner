@@ -20,6 +20,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="@dimen/margin_4"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

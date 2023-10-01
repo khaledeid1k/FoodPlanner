@@ -4,15 +4,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.meal.MealFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/add_to_plan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_8"
+            android:src="@drawable/add"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            app:layout_constraintBottom_toBottomOf="@+id/favourite_icon_single_meal"
+
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/favourite_icon_single_meal" />
         <androidx.constraintlayout.utils.widget.ImageFilterView
-            android:id="@+id/image_meal"
+            android:id="@+id/image_single_meal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/margin_170"
             android:layout_marginHorizontal="@dimen/margin_16"
@@ -25,32 +38,49 @@
             app:roundPercent="0.2" />
 
         <TextView
-            android:id="@+id/text_meal_name"
+            android:id="@+id/name_single_meal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_16"
-            android:layout_marginTop="@dimen/margin_8"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_marginTop="@dimen/margin_12"
+            android:textAlignment="center"
+            android:maxLines="1"
+            android:ellipsize="middle"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            app:layout_constraintStart_toEndOf="@id/add_to_plan"
+            app:layout_constraintEnd_toStartOf="@id/favourite_icon_single_meal"
 
-            app:layout_constraintBottom_toBottomOf="@+id/favourite_icon"
-            app:layout_constraintEnd_toStartOf="@+id/favourite_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_meal"
+            app:layout_constraintTop_toBottomOf="@id/image_single_meal"
+            tools:text="sdfsdfsdfds" />
+        <TextView
+            android:id="@+id/category_single_meal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_4"
+            android:textAlignment="center"
+            android:maxLines="1"
+            android:ellipsize="middle"
+            app:layout_constraintStart_toEndOf="@id/add_to_plan"
+            app:layout_constraintEnd_toStartOf="@id/favourite_icon_single_meal"
+
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            app:layout_constraintTop_toBottomOf="@id/name_single_meal"
             tools:text="sdfsdfsdfds" />
         <ImageView
-            android:id="@+id/favourite_icon"
+            android:id="@+id/favourite_icon_single_meal"
             android:layout_width="@dimen/width_0"
-            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_12"
             android:layout_marginHorizontal="@dimen/margin_16"
             android:src="@drawable/favorite"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_meal"
+            app:layout_constraintTop_toBottomOf="@id/image_single_meal"
             />
 
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/button_toggle_group"
+            android:id="@+id/toggle_group_single_meal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_16"
@@ -60,11 +90,12 @@
             android:weightSum="2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_meal_name"
+            app:layout_constraintTop_toBottomOf="@id/category_single_meal"
            >
 
-            <Button
-                android:id="@+id/button_ingredient"
+            <com.google.android.material.button.MaterialButton
+
+            android:id="@+id/button_ingredient_single_meal"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,8 +103,8 @@
                 android:text="@string/ingredient" />
 
 
-            <Button
-                android:id="@+id/button_instructions"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_instructions_single_meal"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,14 +117,14 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_meal"
+            android:id="@+id/recyclerview_single_meal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_toggle_group"
-            tools:listitem="@layout/item_translated_ingredient" />
+            app:layout_constraintTop_toBottomOf="@id/toggle_group_single_meal"
+            tools:listitem="@layout/item_ingredient" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

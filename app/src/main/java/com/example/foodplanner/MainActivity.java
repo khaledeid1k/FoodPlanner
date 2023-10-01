@@ -19,8 +19,5 @@ public class MainActivity extends AppCompatActivity {
                 R.id.fragmentContainerView);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        return   navController.navigateUp()||  super.onSupportNavigateUp();
-    }
+
 }
