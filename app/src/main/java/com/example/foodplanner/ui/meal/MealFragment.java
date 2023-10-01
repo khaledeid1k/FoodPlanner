@@ -16,15 +16,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.models.meal.IngredientMeasurePair;
-import com.example.foodplanner.data.models.meal.Instructions;
+import com.example.foodplanner.data.models.IngredientMeasurePair;
+import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.ui.meal.dapter.IngredientAdapter;
 import com.example.foodplanner.ui.meal.dapter.InstructionsAdapter;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 public class MealFragment extends Fragment {
@@ -36,10 +34,10 @@ public class MealFragment extends Fragment {
     Button buttonInstructionsSingleMeal;
     IngredientAdapter ingredientAdapter;
     InstructionsAdapter instructionsAdapter;
-    Meal meal;
     ArrayList<IngredientMeasurePair> ingredientMeasurePairs;
     ArrayList<Instructions> instructionsArrayList;
-
+    Meal meal;
+    MealPresenter mealPresenter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +54,7 @@ public class MealFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         inti(view);
-        addIngredientAndMeasure();
         setUp();
-        addInstructions();
-
         addCallBacks();
     }
 
@@ -71,11 +66,11 @@ public class MealFragment extends Fragment {
         favouriteIconSingleMeal = view.findViewById(R.id.favourite_icon_single_meal);
         buttonIngredientSingleMeal = view.findViewById(R.id.button_ingredient_single_meal);
         buttonInstructionsSingleMeal = view.findViewById(R.id.button_instructions_single_meal);
-        ingredientMeasurePairs = new ArrayList<>();
-        instructionsArrayList = new ArrayList<>();
-        meal = MealFragmentArgs.fromBundle(getArguments()).getMeal();
         buttonIngredientSingleMeal.performClick();
-
+         meal = MealFragmentArgs.fromBundle(getArguments()).getMeal();
+         instructionsArrayList=new ArrayList<>();
+         ingredientMeasurePairs=new ArrayList<>();
+        mealPresenter=new MealPresenter(meal,ingredientMeasurePairs,instructionsArrayList);
     }
 
     void setUp() {
@@ -94,35 +89,7 @@ public class MealFragment extends Fragment {
         recyclerViewSingleMeal.setAdapter(ingredientAdapter);
     }
 
-    void addIngredientAndMeasure() {
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient1(), meal.getStrMeasure1()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient2(), meal.getStrMeasure2()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient2(), meal.getStrMeasure3()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient4(), meal.getStrMeasure4()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient5(), meal.getStrMeasure5()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient6(), meal.getStrMeasure6()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient7(), meal.getStrMeasure7()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient8(), meal.getStrMeasure8()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient9(), meal.getStrMeasure9()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient10(), meal.getStrMeasure10()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient11(), meal.getStrMeasure11()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient12(), meal.getStrMeasure12()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient13(), meal.getStrMeasure13()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient14(), meal.getStrMeasure14()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient15(), meal.getStrMeasure15()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient16(), meal.getStrMeasure16()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient17(), meal.getStrMeasure17()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient18(), meal.getStrMeasure18()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient19(), meal.getStrMeasure19()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient20(), meal.getStrMeasure20()));
 
-        List<IngredientMeasurePair> collect = ingredientMeasurePairs.stream().filter(
-                i -> i.getIngredient() != null && !i.getIngredient().trim().isEmpty()
-        ).collect(Collectors.toList());
-        ingredientMeasurePairs = (ArrayList<IngredientMeasurePair>) collect;
-
-
-    }
 
     void addCallBacks() {
         buttonIngredientSingleMeal.setOnClickListener(view -> {
@@ -136,17 +103,7 @@ public class MealFragment extends Fragment {
 
     }
 
-    void addInstructions() {
-        String[] split = meal.getStrInstructions().split("\\.");
-        int stepNumber = 1;
-        for (String s : split) {
-            String trimmedInstruction = s.trim();
-            if (!trimmedInstruction.isEmpty()) {
-                instructionsArrayList.add(new Instructions(stepNumber + "-", trimmedInstruction));
-                stepNumber++;
-            }
-        }
-    }
+
 
 
 }

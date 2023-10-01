@@ -1,4 +1,4 @@
-package com.example.foodplanner.data.models.meal;
+package com.example.foodplanner.data.models;
 
 public class IngredientMeasurePair {
     private String ingredient;

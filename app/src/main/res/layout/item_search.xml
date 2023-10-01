@@ -23,17 +23,18 @@
         />
 
     <TextView
-        style="@style/TextAppearance.Material3.HeadlineMedium"
+        android:id="@+id/name_meal_of_search"
+        style="@style/TextAppearance.Material3.HeadlineSmall"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_12"
         android:ellipsize="end"
         android:letterSpacing="0.01"
         android:maxLines="1"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_f"
+        app:layout_constraintStart_toEndOf="@+id/image_meal_of_search"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Egyptian Fatteh " />
 

@@ -15,6 +15,9 @@ import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.StateOfResponse;
 import com.example.foodplanner.data.repository.Repository;
+import com.example.foodplanner.ui.home.adapter.CategoriesItem;
+import com.example.foodplanner.ui.home.adapter.CountriesItem;
+import com.example.foodplanner.ui.home.adapter.HeaderItem;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
 import com.example.foodplanner.ui.home.adapter.NavigationToShowAll;
 import com.example.foodplanner.ui.home.adapter.OnClickItem;
@@ -23,6 +26,16 @@ import java.util.List;
 
 public class HomePresenter implements NavigationToShowAll, OnClickItem {
     Repository repository;
+
+    HomePresenter(Repository repository) {
+        this.repository = repository;
+        getAllCategoriesWithDetails();
+
+        getRandomMeal();
+        getAllCountries();
+        getMealsByFirstLetter("b");
+    }
+
     private MutableLiveData<Meal> randomMealLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Meal>> mealsByFirstLetter = new MutableLiveData<>();
     private MutableLiveData<List<CategoryWithDetails>> allCategoriesWithDetails = new MutableLiveData<>();
@@ -31,27 +44,16 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
     public LiveData<Meal> randomMealLiveData() {
         return randomMealLiveData;
     }
-
     public LiveData<List<Meal>> mealsByFirstLetter() {
         return mealsByFirstLetter;
     }
-
     public LiveData<List<CategoryWithDetails>> categoriesWithDetails() {
         return allCategoriesWithDetails;
     }
-
     public LiveData<List<Country>> allCountries() {
         return allCountries;
     }
 
-    HomePresenter(Repository repository, String firstLetter) {
-        this.repository = repository;
-        getAllCategoriesWithDetails();
-
-        getRandomMeal();
-        getAllCountries();
-        getMealsByFirstLetter(firstLetter);
-    }
 
     private void getRandomMeal() {
         repository.getRandomMeal(new StateOfResponse<>() {
@@ -118,18 +120,50 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
             Navigation.findNavController(view).navigate(
                     action
             );
+        }else  if (dataItem instanceof CategoriesItem) {
+            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        }else  if (dataItem instanceof CountriesItem) {
+            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        }
+      else if (dataItem instanceof HeaderItem) {
+            HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((HeaderItem)dataItem).getTag().getResourcesData());
+            Navigation.findNavController(view).navigate(
+                    action
+            );
         }
     }
 
     @Override
     public void click(DataItem dataItem, int position, View view) {
-        if (dataItem instanceof MealsItem) {
+         if (dataItem instanceof MealsItem) {
             HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
                     HomeFragmentDirections.actionHomeFragmentToMealFragment(((MealsItem)dataItem).getTag().getResourcesData().get(0));
             Navigation.findNavController(view).navigate(
                     action
             );
-
         }
+         else if (dataItem instanceof CategoriesItem) {
+             HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
+                     HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CategoriesItem)dataItem).getTag().getResourcesData().get(position).getStrCategory()+",ca");
+             Navigation.findNavController(view).navigate(
+                     action
+             );
+         }
+         else if (dataItem instanceof CountriesItem) {
+             HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
+                     HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CountriesItem)dataItem).getTag().getResourcesData().get(position).getStrArea()+",co");
+             Navigation.findNavController(view).navigate(
+                     action
+             );
+         }
     }
 }

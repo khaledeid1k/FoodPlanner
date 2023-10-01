@@ -32,20 +32,23 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
     OnClickItem onClickItem;
     int type;
 
-    public ItemsAdapter(Context context, DataItem dataItem, OnClickItem onClickItem,int type) {
+    public ItemsAdapter(Context context,
+                        DataItem dataItem,
+                        OnClickItem onClickItem,
+                        int type) {
         this.context = context;
         this.dataItem = dataItem;
         this.onClickItem = onClickItem;
         this.type = type;
         if (dataItem instanceof MealsItem) {
             List<Meal> resourcesData = ((MealsItem) dataItem).getTag().getResourcesData();
-            items = new ArrayList<>(resourcesData.subList(0,6));
+            items = new ArrayList<>(resourcesData);
         } else if (dataItem instanceof CategoriesItem) {
             List<CategoryWithDetails> resourcesData = ((CategoriesItem) dataItem).getTag().getResourcesData();
-            items = new ArrayList<>(resourcesData.subList(0,8));
+            items = new ArrayList<>(resourcesData);
         } else if (dataItem instanceof CountriesItem) {
             List<Country> resourcesData = ((CountriesItem) dataItem).getTag().getResourcesData();
-            items = new ArrayList<>(resourcesData.subList(0,8));
+            items = new ArrayList<>(resourcesData);
         }
 
     }

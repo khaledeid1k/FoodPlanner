@@ -79,6 +79,6 @@ public class NetWork implements RemoteSource {
 
     @Override
     public Call<FilteredItems> filterByArea(String nameOfArea) {
-        return filterByArea(nameOfArea);
+        return services.filterByArea(nameOfArea);
     }
 }

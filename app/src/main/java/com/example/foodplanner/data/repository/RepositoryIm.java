@@ -77,13 +77,13 @@ public class RepositoryIm implements Repository {
     }
 
     @Override
-    public StateOfResponse<FilteredItems> FilterByCategory(String nameOfCategory, StateOfResponse<FilteredItems> stateOfResponse) {
+    public StateOfResponse<FilteredItems> filterByCategory(String nameOfCategory, StateOfResponse<FilteredItems> stateOfResponse) {
         return WrapResponse(remoteSource.filterByCategory(nameOfCategory), stateOfResponse);
 
     }
 
     @Override
-    public StateOfResponse<FilteredItems> FilterByArea(String nameOfArea, StateOfResponse<FilteredItems> stateOfResponse) {
+    public StateOfResponse<FilteredItems> filterByArea(String nameOfArea, StateOfResponse<FilteredItems> stateOfResponse) {
         return WrapResponse(remoteSource.filterByArea(nameOfArea), stateOfResponse);
 
     }

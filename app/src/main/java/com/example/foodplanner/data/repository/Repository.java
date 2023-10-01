@@ -28,8 +28,8 @@ public interface Repository {
 
     StateOfResponse<FilteredItems> FilterByMainIngredient(String nameOfMainIngredient,StateOfResponse<FilteredItems> stateOfResponse);
 
-    StateOfResponse<FilteredItems> FilterByCategory(String nameOfCategory,StateOfResponse<FilteredItems> stateOfResponse);
+    StateOfResponse<FilteredItems> filterByCategory(String nameOfCategory, StateOfResponse<FilteredItems> stateOfResponse);
 
-    StateOfResponse<FilteredItems> FilterByArea(String nameOfArea,StateOfResponse<FilteredItems> stateOfResponse);
+    StateOfResponse<FilteredItems> filterByArea(String nameOfArea, StateOfResponse<FilteredItems> stateOfResponse);
 
 }

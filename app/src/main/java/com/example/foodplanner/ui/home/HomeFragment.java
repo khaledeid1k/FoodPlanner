@@ -1,10 +1,13 @@
 package com.example.foodplanner.ui.home;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
@@ -21,18 +24,19 @@ import com.example.foodplanner.ui.home.adapter.MealsItem;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends Fragment {
 
     RecyclerView recyclerView;
     HomePresenter presenter;
     HomeAdapter homeAdapter;
     ArrayList<DataItem> items;
 
-    @Override
-    protected int getLayout() {
-        return R.layout.fragment_home;
-    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -47,7 +51,7 @@ public class HomeFragment extends BaseFragment {
     void inti(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
         presenter = new HomePresenter(
-                RepositoryIm.getInstance(NetWork.getInstance()), "b");
+                RepositoryIm.getInstance(NetWork.getInstance()));
         items = new ArrayList<>();
         homeAdapter = new HomeAdapter(getActivity(), items, presenter, presenter);
 

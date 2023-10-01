@@ -30,5 +30,7 @@
         <span style="font-weight: bold;">%2$s</span>
     </small>
 </string>
+    <string name="meals">Meals</string>
+    <string name="meals_of_first_item">Meals Of %s</string>
 
 </resources>
