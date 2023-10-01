@@ -7,7 +7,7 @@
     tools:context=".ui.show.ShowAllFragment">
 
     <TextView
-        android:id="@+id/tile_of_list"
+        android:id="@+id/tile_of_list_of_show_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -15,12 +15,12 @@
         android:gravity="center|top"
         android:textSize="@dimen/font_size_28"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/backTo"
+        app:layout_constraintStart_toEndOf="@+id/back_from_show_all"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Meals" />
 
     <ImageView
-        android:id="@+id/backTo"
+        android:id="@+id/back_from_show_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16"
@@ -30,7 +30,7 @@
         app:srcCompat="@drawable/arrow_back" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Recycle_Stand"
+        android:id="@+id/recycle_of_show_aLl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,11 +39,10 @@
         android:layout_marginHorizontal="@dimen/margin_12"
         android:orientation="vertical"
         android:clipToPadding="false"
-
         tools:listitem="@layout/item_show_all"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tile_of_list"
+        app:layout_constraintTop_toBottomOf="@+id/tile_of_list_of_show_all"
         app:spanCount="2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

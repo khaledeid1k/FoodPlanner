@@ -100,7 +100,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 String title = tag.getTitle();
                 ((ItemViewHolder) holder).tileOfList.setText(title);
                 ItemsAdapter itemsAdapter = new ItemsAdapter(context,
-                       dataItem,presenter
+                       dataItem,presenter,Constants.VIEW_TYPE_LINER
                         );
                 ((ItemViewHolder) holder).recycleItemHome.setAdapter(
                         itemsAdapter
@@ -117,7 +117,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 String title = tag.getTitle();
                 ((ItemViewHolder) holder).tileOfList.setText(title);
                 ItemsAdapter itemsAdapter = new ItemsAdapter(context,
-                        dataItem,presenter
+                        dataItem,presenter,Constants.VIEW_TYPE_LINER
                 );
                 ((ItemViewHolder) holder).recycleItemHome.setAdapter(
                         itemsAdapter
@@ -134,7 +134,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 String title = tag.getTitle();
                 ((ItemViewHolder) holder).tileOfList.setText(title);
                 ItemsAdapter itemsAdapter = new ItemsAdapter(context,
-                       dataItem,presenter
+                       dataItem,presenter,Constants.VIEW_TYPE_LINER
                         );
                 ((ItemViewHolder) holder).recycleItemHome.setAdapter(
                         itemsAdapter

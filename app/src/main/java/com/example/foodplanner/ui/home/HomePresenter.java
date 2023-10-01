@@ -122,9 +122,14 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
     }
 
     @Override
-    public void click(DataItem dataItem, int position) {
-//        Log.i(TAG, "click: "+((MealsItem)dataItem).getTag().getResourcesData()
-//                .get(position).getStrArea());
+    public void click(DataItem dataItem, int position, View view) {
+        if (dataItem instanceof MealsItem) {
+            HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((MealsItem)dataItem).getTag().getResourcesData().get(0));
+            Navigation.findNavController(view).navigate(
+                    action
+            );
 
+        }
     }
 }
