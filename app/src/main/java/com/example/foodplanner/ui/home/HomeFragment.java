@@ -47,7 +47,7 @@ public class HomeFragment extends BaseFragment {
     void setup(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
         presenter = new HomePresenter(
-                RepositoryIm.getInstance(NetWork.getInstance()), "a");
+                RepositoryIm.getInstance(NetWork.getInstance()), "b");
         items = new ArrayList<>();
         homeAdapter = new HomeAdapter(getActivity(), items, presenter, presenter);
 

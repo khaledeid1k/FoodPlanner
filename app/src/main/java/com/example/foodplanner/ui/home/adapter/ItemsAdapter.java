@@ -33,19 +33,17 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
     public ItemsAdapter(Context context, DataItem dataItem, OnClickItem onClickItem) {
         this.context = context;
         this.dataItem = dataItem;
-      this.onClickItem = onClickItem;
-      if(dataItem instanceof MealsItem){
-          List<Meal> resourcesData = ((MealsItem) dataItem).getTag().getResourcesData();
-          items=  new  ArrayList<>(resourcesData);
-      }
-      else if(dataItem instanceof CategoriesItem){
-          List<CategoryWithDetails> resourcesData = ((CategoriesItem) dataItem).getTag().getResourcesData();
-          items=  new  ArrayList<>(resourcesData);
-      }
-      else if(dataItem instanceof CountriesItem){
-          List<Country> resourcesData = ((CountriesItem) dataItem).getTag().getResourcesData();
-          items=  new  ArrayList<>(resourcesData);
-      }
+        this.onClickItem = onClickItem;
+        if (dataItem instanceof MealsItem) {
+            List<Meal> resourcesData = ((MealsItem) dataItem).getTag().getResourcesData();
+            items = new ArrayList<>(resourcesData.subList(0,6));
+        } else if (dataItem instanceof CategoriesItem) {
+            List<CategoryWithDetails> resourcesData = ((CategoriesItem) dataItem).getTag().getResourcesData();
+            items = new ArrayList<>(resourcesData.subList(0,8));
+        } else if (dataItem instanceof CountriesItem) {
+            List<Country> resourcesData = ((CountriesItem) dataItem).getTag().getResourcesData();
+            items = new ArrayList<>(resourcesData.subList(0,8));
+        }
 
     }
 
@@ -61,19 +59,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
     @Override
     public void onBindViewHolder(@NonNull ItemsViewHolder holder, int position) {
         Object o = items.get(position);
-        if( o instanceof Meal){
-            Log.i("yyyyyyyy", "onBindViewHolder: "+((Meal) o).getStrArea());
-
+        if (o instanceof Meal) {
             Meal meal = ((Meal) o);
             holder.title.setText(meal.getStrMeal());
             Glide.with(context).load(meal.getStrMealThumb()).error(
                     R.drawable.ic_launcher_background
             ).into(holder.productImage);
-            holder.itemView.setOnClickListener(view -> onClickItem.click(dataItem,position));
+            holder.itemView.setOnClickListener(view -> onClickItem.click(dataItem, position));
 
-        }
-      else   if( o instanceof CategoryWithDetails){
-            Log.i("ssssss", "onBindViewHolder: "+((CategoryWithDetails) o).getStrCategory());
+        } else if (o instanceof CategoryWithDetails) {
             CategoryWithDetails categoryWithDetails = ((CategoryWithDetails) o);
             holder.title.setText(categoryWithDetails.getStrCategory());
             Glide.with(context).load(categoryWithDetails.getStrCategoryThumb()).error(
@@ -81,8 +75,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
             ).into(holder.productImage);
             holder.itemView.setOnClickListener(view -> onClickItem.click(dataItem, position));
 
-        }
-        else if( o instanceof Country){
+        } else if (o instanceof Country) {
             Country country = ((Country) o);
             holder.title.setText(country.getStrArea());
             Glide.with(context).load(R.drawable.food_image_eleven).error(
@@ -96,13 +89,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
 
     @Override
     public int getItemCount() {
-        return items==null ? 0 :items.size();
+        return items == null ? 0 : items.size();
     }
 
     class ItemsViewHolder extends RecyclerView.ViewHolder {
         public ItemsViewHolder(@NonNull View itemView) {
             super(itemView);
         }
+
         TextView title = itemView.findViewById(R.id.text_item_list_home);
         ImageView productImage = itemView.findViewById(R.id.image_item_list_home);
 

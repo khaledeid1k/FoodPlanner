@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="@dimen/margin_16"
         android:layout_marginStart="@dimen/margin_16"
-        android:text="@string/day_of_meal"
+        android:text="@string/meal_of_day"
         style="@style/TextAppearance.Material3.TitleLarge"
 
         />

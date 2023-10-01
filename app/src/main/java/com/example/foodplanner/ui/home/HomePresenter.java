@@ -1,6 +1,5 @@
 package com.example.foodplanner.ui.home;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -8,42 +7,45 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 
 import com.example.foodplanner.data.models.DataItem;
+import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
+import com.example.foodplanner.data.models.country.Countries;
 import com.example.foodplanner.data.models.country.Country;
 import com.example.foodplanner.data.models.meal.Meal;
-import com.example.foodplanner.ui.home.adapter.MealsItem;
-import com.example.foodplanner.data.models.category.CategoriesWithDetails;
-import com.example.foodplanner.data.models.country.Countries;
 import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.StateOfResponse;
 import com.example.foodplanner.data.repository.Repository;
+import com.example.foodplanner.ui.home.adapter.MealsItem;
 import com.example.foodplanner.ui.home.adapter.NavigationToShowAll;
 import com.example.foodplanner.ui.home.adapter.OnClickItem;
 
 import java.util.List;
 
-public class HomePresenter implements NavigationToShowAll,OnClickItem{
+public class HomePresenter implements NavigationToShowAll, OnClickItem {
     Repository repository;
-    String TAG = "TAG HomePresenter";
-    private  MutableLiveData<Meal> randomMealLiveData = new MutableLiveData<>();
-    private  MutableLiveData<List<Meal>> mealsByFirstLetter = new MutableLiveData<>();
-    private  MutableLiveData<List<CategoryWithDetails>> allCategoriesWithDetails = new MutableLiveData<>();
-    private  MutableLiveData<List<Country>> allCountries = new MutableLiveData<>();
+    private MutableLiveData<Meal> randomMealLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Meal>> mealsByFirstLetter = new MutableLiveData<>();
+    private MutableLiveData<List<CategoryWithDetails>> allCategoriesWithDetails = new MutableLiveData<>();
+    private MutableLiveData<List<Country>> allCountries = new MutableLiveData<>();
 
     public LiveData<Meal> randomMealLiveData() {
         return randomMealLiveData;
     }
+
     public LiveData<List<Meal>> mealsByFirstLetter() {
         return mealsByFirstLetter;
     }
+
     public LiveData<List<CategoryWithDetails>> categoriesWithDetails() {
         return allCategoriesWithDetails;
     }
+
     public LiveData<List<Country>> allCountries() {
         return allCountries;
     }
-    HomePresenter( Repository repository,String firstLetter) {
-        this.repository= repository;
+
+    HomePresenter(Repository repository, String firstLetter) {
+        this.repository = repository;
         getAllCategoriesWithDetails();
 
         getRandomMeal();
@@ -51,7 +53,7 @@ public class HomePresenter implements NavigationToShowAll,OnClickItem{
         getMealsByFirstLetter(firstLetter);
     }
 
-    private  void getRandomMeal() {
+    private void getRandomMeal() {
         repository.getRandomMeal(new StateOfResponse<>() {
             @Override
             public void succeeded(Meals response) {
@@ -94,7 +96,7 @@ public class HomePresenter implements NavigationToShowAll,OnClickItem{
         });
     }
 
-  private   void getAllCountries() {
+    private void getAllCountries() {
         repository.getAllCountries(new StateOfResponse<>() {
             @Override
             public void succeeded(Countries response) {
@@ -110,8 +112,8 @@ public class HomePresenter implements NavigationToShowAll,OnClickItem{
 
     @Override
     public void onNavigate(DataItem dataItem, View view) {
-        if(dataItem instanceof MealsItem){
-            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action=
+        if (dataItem instanceof MealsItem) {
+            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
                     HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
             Navigation.findNavController(view).navigate(
                     action
@@ -120,9 +122,9 @@ public class HomePresenter implements NavigationToShowAll,OnClickItem{
     }
 
     @Override
-    public void click(DataItem dataItem,int position) {
-        Log.i(TAG, "click: "+((MealsItem)dataItem).getTag().getResourcesData()
-                .get(position).getStrArea());
+    public void click(DataItem dataItem, int position) {
+//        Log.i(TAG, "click: "+((MealsItem)dataItem).getTag().getResourcesData()
+//                .get(position).getStrArea());
 
     }
 }
