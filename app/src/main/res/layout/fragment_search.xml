@@ -8,7 +8,7 @@
     tools:context=".ui.search.SearchFragment">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search"
+        android:id="@+id/search_text"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16"
         app:chipSpacingHorizontal="@dimen/margin_16"
-        app:layout_constraintTop_toBottomOf="@+id/search"
+        app:layout_constraintTop_toBottomOf="@+id/search_text"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="@dimen/margin_16"
         >

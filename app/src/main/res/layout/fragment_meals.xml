@@ -20,7 +20,7 @@
         tools:text="@string/meals" />
 
     <ImageView
-        android:id="@+id/back_from_show_all"
+        android:id="@+id/back_from_meals"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16"

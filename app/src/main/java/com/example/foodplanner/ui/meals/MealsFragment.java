@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.foodplanner.R;
@@ -26,6 +27,7 @@ import com.example.foodplanner.ui.home.HomePresenter;
 import com.example.foodplanner.ui.home.adapter.ItemsAdapter;
 import com.example.foodplanner.ui.meal.MealFragmentArgs;
 import com.example.foodplanner.utils.Constants;
+import com.example.foodplanner.utils.Extensions;
 
 import java.util.ArrayList;
 
@@ -36,6 +38,8 @@ public class MealsFragment extends Fragment {
     MealsAdapter mealsAdapter;
     MealsPresenter mealsPresenter;
     ArrayList<FilteredItem> meals;
+    ImageView back;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,8 @@ public class MealsFragment extends Fragment {
     void init(View view){
         recyclerViewMeals=view.findViewById(R.id.recycle_of_meals);
         nameList=view.findViewById(R.id.meals_text);
+        back = view.findViewById(R.id.back_from_meals);
+
         String nameOfItem = MealsFragmentArgs.fromBundle(getArguments()).getNameOfItem();
         nameList.setText(getString(R.string.meals_of_first_item, nameOfItem.split(",")[0]));
         mealsPresenter = new MealsPresenter(
@@ -72,5 +78,7 @@ public class MealsFragment extends Fragment {
                 filteredItems -> {
                     mealsAdapter.updateData(filteredItems.getMeals());
                 });
+
+        back.setOnClickListener(Extensions::closeFragment);
     }
 }

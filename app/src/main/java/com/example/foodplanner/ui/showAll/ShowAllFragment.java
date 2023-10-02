@@ -27,6 +27,7 @@ import com.example.foodplanner.ui.home.adapter.MealsItem;
 import com.example.foodplanner.data.models.Tag;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.utils.Constants;
+import com.example.foodplanner.utils.Extensions;
 
 import java.util.List;
 
@@ -66,9 +67,7 @@ public class ShowAllFragment extends Fragment {
         recyclerViewShowAll = view.findViewById(R.id.recycle_of_show_aLl);
         back = view.findViewById(R.id.back_from_show_all);
         showAllPresenter = new ShowAllPresenter();
-        back.setOnClickListener(view1 -> {
-            Navigation.findNavController(view1).popBackStack();
-        });
+        back.setOnClickListener(Extensions::closeFragment);
 
 
     }

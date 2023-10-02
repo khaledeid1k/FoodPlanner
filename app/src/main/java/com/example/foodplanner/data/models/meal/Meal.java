@@ -63,9 +63,14 @@ public class Meal implements Parcelable {
     String strMeasure19;
     String strMeasure20;
 
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    boolean isFavorite;
     String strSource;
 
-    public Meal(@NotNull String idMeal, String strArea, String strCategory, String strMeal, String strTags, String strYoutube, String strMealThumb, String strIngredient1, String strIngredient10, String strIngredient11, String strIngredient12, String strIngredient13, String strIngredient14, String strIngredient15, String strIngredient16, String strIngredient17, String strIngredient18, String strIngredient19, String strIngredient2, String strIngredient20, String strIngredient3, String strIngredient4, String strIngredient5, String strIngredient6, String strIngredient7, String strIngredient8, String strIngredient9, String strInstructions, String strMeasure1, String strMeasure2, String strMeasure3, String strMeasure4, String strMeasure5, String strMeasure6, String strMeasure7, String strMeasure8, String strMeasure9, String strMeasure10, String strMeasure11, String strMeasure12, String strMeasure13, String strMeasure14, String strMeasure15, String strMeasure16, String strMeasure17, String strMeasure18, String strMeasure19, String strMeasure20, String strSource) {
+    public Meal(@NotNull String idMeal, String strArea, String strCategory, String strMeal, String strTags, String strYoutube, String strMealThumb, String strIngredient1, String strIngredient10, String strIngredient11, String strIngredient12, String strIngredient13, String strIngredient14, String strIngredient15, String strIngredient16, String strIngredient17, String strIngredient18, String strIngredient19, String strIngredient2, String strIngredient20, String strIngredient3, String strIngredient4, String strIngredient5, String strIngredient6, String strIngredient7, String strIngredient8, String strIngredient9, String strInstructions, String strMeasure1, String strMeasure2, String strMeasure3, String strMeasure4, String strMeasure5, String strMeasure6, String strMeasure7, String strMeasure8, String strMeasure9, String strMeasure10, String strMeasure11, String strMeasure12, String strMeasure13, String strMeasure14, String strMeasure15, String strMeasure16, String strMeasure17, String strMeasure18, String strMeasure19, String strMeasure20, boolean isFavorite, String strSource) {
         this.idMeal = idMeal;
         this.strArea = strArea;
         this.strCategory = strCategory;
@@ -114,6 +119,7 @@ public class Meal implements Parcelable {
         this.strMeasure18 = strMeasure18;
         this.strMeasure19 = strMeasure19;
         this.strMeasure20 = strMeasure20;
+        this.isFavorite = isFavorite;
         this.strSource = strSource;
     }
 
@@ -166,6 +172,7 @@ public class Meal implements Parcelable {
         strMeasure18 = in.readString();
         strMeasure19 = in.readString();
         strMeasure20 = in.readString();
+        isFavorite = in.readByte() != 0;
         strSource = in.readString();
     }
 
@@ -181,6 +188,7 @@ public class Meal implements Parcelable {
         }
     };
 
+    @NotNull
     public String getIdMeal() {
         return idMeal;
     }
@@ -373,6 +381,10 @@ public class Meal implements Parcelable {
         return strMeasure20;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
     public String getStrSource() {
         return strSource;
     }
@@ -432,6 +444,7 @@ public class Meal implements Parcelable {
         parcel.writeString(strMeasure18);
         parcel.writeString(strMeasure19);
         parcel.writeString(strMeasure20);
+        parcel.writeByte((byte) (isFavorite ? 1 : 0));
         parcel.writeString(strSource);
     }
 }
