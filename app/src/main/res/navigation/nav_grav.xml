@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_grav"
-    app:startDestination="@id/favouriteFragment">
+    app:startDestination="@id/homeF">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/homeF"
         android:name="com.example.foodplanner.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
@@ -56,7 +56,7 @@
             app:destination="@id/mealFragment" />
     </fragment>
     <fragment
-        android:id="@+id/categoryFragment"
+        android:id="@+id/category"
         android:name="com.example.foodplanner.ui.category.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" >
@@ -65,11 +65,21 @@
             app:destination="@id/mealsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/favouriteFragment"
+        android:id="@+id/favourite"
         android:name="com.example.foodplanner.ui.favourite.FavouriteFragment"
         android:label="FavouriteFragment" >
         <action
             android:id="@+id/action_favouriteFragment_to_mealFragment"
             app:destination="@id/mealFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/search"
+        android:name="com.example.foodplanner.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/plan"
+        android:name="com.example.foodplanner.ui.plan.PlanFragment"
+        android:label="fragment_plan"
+        tools:layout="@layout/fragment_plan" />
 </navigation>

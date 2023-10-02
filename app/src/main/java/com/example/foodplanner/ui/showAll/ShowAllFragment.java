@@ -5,11 +5,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.foodplanner.R;
@@ -31,6 +35,7 @@ public class ShowAllFragment extends Fragment {
     TextView tileOfShowAll;
     RecyclerView recyclerViewShowAll;
     ItemsAdapter itemsAdapter;
+    ImageView back;
     DataItem dataItem;
     ShowAllPresenter showAllPresenter;
 
@@ -43,13 +48,13 @@ public class ShowAllFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_show_all, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setUp(view);
         dataItem = ShowAllFragmentArgs.fromBundle(getArguments()).getDataitem();
         showData();
@@ -59,9 +64,15 @@ public class ShowAllFragment extends Fragment {
     void setUp(View view) {
         tileOfShowAll = view.findViewById(R.id.tile_of_list_of_show_all);
         recyclerViewShowAll = view.findViewById(R.id.recycle_of_show_aLl);
+        back = view.findViewById(R.id.back_from_show_all);
         showAllPresenter = new ShowAllPresenter();
+        back.setOnClickListener(view1 -> {
+            Navigation.findNavController(view1).popBackStack();
+        });
+
 
     }
+
 
     void showData() {
         if (dataItem instanceof MealsItem) {
