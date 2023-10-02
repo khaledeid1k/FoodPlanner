@@ -1,12 +1,10 @@
-package com.example.foodplanner.ui.show;
+package com.example.foodplanner.ui.showAll;
 
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.navigation.Navigation;
 
 import com.example.foodplanner.data.models.DataItem;
-import com.example.foodplanner.ui.home.HomeFragmentDirections;
 import com.example.foodplanner.ui.home.adapter.CategoriesItem;
 import com.example.foodplanner.ui.home.adapter.CountriesItem;
 import com.example.foodplanner.ui.home.adapter.MealsItem;

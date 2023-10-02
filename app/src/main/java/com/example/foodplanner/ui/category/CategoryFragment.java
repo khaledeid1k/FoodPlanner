@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
 import com.example.foodplanner.data.network.NetWork;
 import com.example.foodplanner.data.repository.RepositoryIm;
@@ -52,17 +53,12 @@ public class CategoryFragment extends Fragment {
         recycleCategory=view.findViewById(R.id.recycle_category);
         categoryWithDetails=new ArrayList<>();
         categoryPresenter = new CategoryPresenter(
-                RepositoryIm.getInstance(NetWork.getInstance()));
-        categoryAdapter=new CategoryAdapter(getContext(),categoryWithDetails);
+                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())));
+        categoryAdapter=new CategoryAdapter(getContext(),categoryWithDetails,categoryPresenter);
         recycleCategory.setAdapter(categoryAdapter);
 
     }
     void setUp(){
-        categoryPresenter.categoriesWithDetails().observe(getActivity(), new Observer<List<CategoryWithDetails>>() {
-            @Override
-            public void onChanged(List<CategoryWithDetails> categoryWithDetailsList) {
-             categoryAdapter.updateData(new ArrayList<>(categoryWithDetailsList));
-            }
-        });
+        categoryPresenter.categoriesWithDetails().observe(getActivity(), categoryWithDetailsList -> categoryAdapter.updateData(new ArrayList<>(categoryWithDetailsList)));
     }
 }

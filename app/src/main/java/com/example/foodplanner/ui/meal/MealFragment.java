@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,9 +17,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
+import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.meal.Meal;
+import com.example.foodplanner.data.network.NetWork;
+import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.meal.dapter.IngredientAdapter;
 import com.example.foodplanner.ui.meal.dapter.InstructionsAdapter;
 
@@ -38,6 +42,7 @@ public class MealFragment extends Fragment {
     ArrayList<Instructions> instructionsArrayList;
     Meal meal;
     MealPresenter mealPresenter;
+    boolean flag=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,15 +73,15 @@ public class MealFragment extends Fragment {
         buttonIngredientSingleMeal = view.findViewById(R.id.button_ingredient_single_meal);
         buttonInstructionsSingleMeal = view.findViewById(R.id.button_instructions_single_meal);
         buttonIngredientSingleMeal.performClick();
+
         meal = MealFragmentArgs.fromBundle(getArguments()).getMeal();
         instructionsArrayList = new ArrayList<>();
         ingredientMeasurePairs = new ArrayList<>();
-        mealPresenter = new MealPresenter(meal, ingredientMeasurePairs, instructionsArrayList);
-        ingredientAdapter = new IngredientAdapter(getActivity(),
-                ingredientMeasurePairs);
-
-        instructionsAdapter = new InstructionsAdapter(getActivity(),
-                instructionsArrayList);
+        mealPresenter = new MealPresenter(meal, ingredientMeasurePairs,
+                instructionsArrayList,
+                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())));
+        ingredientAdapter = new IngredientAdapter(getActivity(), ingredientMeasurePairs);
+        instructionsAdapter = new InstructionsAdapter(getActivity(), instructionsArrayList);
     }
 
     void setUp() {
@@ -89,7 +94,15 @@ public class MealFragment extends Fragment {
         categorySingleMeal.setText(meal.getStrCategory());
 
        favouriteIconSingleMeal.setOnClickListener(view -> {
-
+           if (flag){
+               favouriteIconSingleMeal.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.favorite));
+               flag=false;
+               mealPresenter.deleteFromFavorite(meal);
+           }else {
+               favouriteIconSingleMeal.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.favorite_done));
+               flag=true;
+               mealPresenter.saveToFavorite(meal);
+           }
        });
 
         recyclerViewSingleMeal.setAdapter(ingredientAdapter);
@@ -107,7 +120,6 @@ public class MealFragment extends Fragment {
         });
 
     }
-
 
 }
 

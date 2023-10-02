@@ -5,13 +5,15 @@ import android.util.Log;
 import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.meal.Meal;
+import com.example.foodplanner.data.repository.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MealPresenter {
+public class MealPresenter  {
 
+Repository repository;
 
 
 
@@ -20,13 +22,15 @@ public class MealPresenter {
     ArrayList<Instructions> instructionsArrayList;
     public MealPresenter(Meal meal,
                          ArrayList<IngredientMeasurePair> ingredientMeasurePairs,
-                         ArrayList<Instructions> instructionsArrayList) {
+                         ArrayList<Instructions> instructionsArrayList,
+                         Repository repository) {
 
         this.meal = meal;
         this.ingredientMeasurePairs = ingredientMeasurePairs;
         this.instructionsArrayList = instructionsArrayList;
         addIngredientAndMeasure();
         addInstructions();
+        this.repository=repository;
     }
 
     void addIngredientAndMeasure() {
@@ -69,4 +73,12 @@ public class MealPresenter {
             }
         }
     }
+
+    void saveToFavorite(Meal meal){
+        repository.saveMeal(meal);
+    }
+    void deleteFromFavorite(Meal meal){
+        repository.deleteMeal(meal);
+    }
+
 }
