@@ -17,17 +17,23 @@ import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
 import com.example.foodplanner.data.models.filter.FilteredItem;
 import com.example.foodplanner.ui.meal.dapter.IngredientAdapter;
+import com.example.foodplanner.utils.Constants;
 
 import java.util.ArrayList;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+public class CategoryAdapter extends
+        RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     Context context;
     ArrayList<CategoryWithDetails> categoryWithDetailsArrayList;
+    OnClickCategory onClickCategory;
 
-    public CategoryAdapter(Context context, ArrayList<CategoryWithDetails> categoryWithDetailsArrayList) {
+    public CategoryAdapter(Context context,
+                           ArrayList<CategoryWithDetails> categoryWithDetailsArrayList,
+                           OnClickCategory onClickCategory) {
         this.context = context;
         this.categoryWithDetailsArrayList = categoryWithDetailsArrayList;
+        this.onClickCategory = onClickCategory;
     }
 
     @NonNull
@@ -45,6 +51,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 R.drawable.ic_launcher_background
         ).into(holder.imageViewOfCategory);
         holder.textViewOfCategory.setText(categoryWithDetails.getStrCategory());
+        holder.itemView.setOnClickListener(view -> {
+            onClickCategory.onClick(categoryWithDetails.getStrCategory()+ Constants.CATEGORY,view);
+        });
     }
 
     @Override
@@ -59,6 +68,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
         TextView textViewOfCategory=itemView.findViewById(R.id.text_category_item);
         ImageView imageViewOfCategory=itemView.findViewById(R.id.image_category_item);
+
 
     }
     public void updateData(ArrayList<CategoryWithDetails>newData) {

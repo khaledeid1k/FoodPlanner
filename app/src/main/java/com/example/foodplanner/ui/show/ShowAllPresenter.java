@@ -11,6 +11,7 @@ import com.example.foodplanner.ui.home.adapter.CategoriesItem;
 import com.example.foodplanner.ui.home.adapter.CountriesItem;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
 import com.example.foodplanner.ui.home.adapter.OnClickItem;
+import com.example.foodplanner.utils.Constants;
 
 
 public class ShowAllPresenter implements OnClickItem {
@@ -30,14 +31,14 @@ public class ShowAllPresenter implements OnClickItem {
         }
         else if (dataItem instanceof CategoriesItem) {
             ShowAllFragmentDirections.ActionShowAllFragmentToMealsFragment action =
-                    ShowAllFragmentDirections.actionShowAllFragmentToMealsFragment(((CategoriesItem)dataItem).getTag().getResourcesData().get(position).getStrCategory()+",ca");
+                    ShowAllFragmentDirections.actionShowAllFragmentToMealsFragment(((CategoriesItem)dataItem).getTag().getResourcesData().get(position).getStrCategory()+ Constants.CATEGORY);
             Navigation.findNavController(view).navigate(
                     action
             );
         }
         else if (dataItem instanceof CountriesItem) {
          ShowAllFragmentDirections.ActionShowAllFragmentToMealsFragment action =
-                 ShowAllFragmentDirections.actionShowAllFragmentToMealsFragment(((CountriesItem)dataItem).getTag().getResourcesData().get(position).getStrArea()+",co");
+                 ShowAllFragmentDirections.actionShowAllFragmentToMealsFragment(((CountriesItem)dataItem).getTag().getResourcesData().get(position).getStrArea()+Constants.COUNTRY);
             Navigation.findNavController(view).navigate(
                     action
             );

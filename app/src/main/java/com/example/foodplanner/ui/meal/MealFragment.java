@@ -21,8 +21,8 @@ import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.ui.meal.dapter.IngredientAdapter;
 import com.example.foodplanner.ui.meal.dapter.InstructionsAdapter;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 
 
 public class MealFragment extends Fragment {
@@ -38,6 +38,7 @@ public class MealFragment extends Fragment {
     ArrayList<Instructions> instructionsArrayList;
     Meal meal;
     MealPresenter mealPresenter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,28 +68,32 @@ public class MealFragment extends Fragment {
         buttonIngredientSingleMeal = view.findViewById(R.id.button_ingredient_single_meal);
         buttonInstructionsSingleMeal = view.findViewById(R.id.button_instructions_single_meal);
         buttonIngredientSingleMeal.performClick();
-         meal = MealFragmentArgs.fromBundle(getArguments()).getMeal();
-         instructionsArrayList=new ArrayList<>();
-         ingredientMeasurePairs=new ArrayList<>();
-        mealPresenter=new MealPresenter(meal,ingredientMeasurePairs,instructionsArrayList);
+        meal = MealFragmentArgs.fromBundle(getArguments()).getMeal();
+        instructionsArrayList = new ArrayList<>();
+        ingredientMeasurePairs = new ArrayList<>();
+        mealPresenter = new MealPresenter(meal, ingredientMeasurePairs, instructionsArrayList);
+        ingredientAdapter = new IngredientAdapter(getActivity(),
+                ingredientMeasurePairs);
+
+        instructionsAdapter = new InstructionsAdapter(getActivity(),
+                instructionsArrayList);
     }
 
     void setUp() {
         Glide.with(getActivity()).load(meal.getStrMealThumb()).error(
                 R.drawable.no_result_search
         ).into(imageSingleMeal);
+
         nameSingleMeal.setText(meal.getStrMeal());
+
         categorySingleMeal.setText(meal.getStrCategory());
 
-        ingredientAdapter = new IngredientAdapter(getActivity(),
-                ingredientMeasurePairs);
+       favouriteIconSingleMeal.setOnClickListener(view -> {
 
-        instructionsAdapter = new InstructionsAdapter(getActivity(),
-                instructionsArrayList);
+       });
 
         recyclerViewSingleMeal.setAdapter(ingredientAdapter);
     }
-
 
 
     void addCallBacks() {
@@ -102,8 +107,6 @@ public class MealFragment extends Fragment {
         });
 
     }
-
-
 
 
 }

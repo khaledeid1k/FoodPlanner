@@ -1,7 +1,10 @@
 package com.example.foodplanner.ui.category;
 
+import android.view.View;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.Navigation;
 
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
@@ -10,7 +13,7 @@ import com.example.foodplanner.data.repository.Repository;
 
 import java.util.List;
 
-public class CategoryPresenter {
+public class CategoryPresenter implements OnClickCategory{
     Repository repository;
 
     public CategoryPresenter(Repository repository) {
@@ -36,5 +39,12 @@ public class CategoryPresenter {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(String nameOfCategory, View view) {
+        CategoryFragmentDirections.ActionCategoryFragmentToMealsFragment action=
+                CategoryFragmentDirections.actionCategoryFragmentToMealsFragment(nameOfCategory);
+        Navigation.findNavController(view).navigate(action);
     }
 }

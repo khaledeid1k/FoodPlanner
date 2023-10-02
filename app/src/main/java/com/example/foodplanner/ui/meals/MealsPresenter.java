@@ -25,11 +25,9 @@ public class MealsPresenter implements OnClickListener {
     public MealsPresenter(Repository repository,String nameOfItem) {
         this.repository = repository;
         if(nameOfItem.split(",")[1].equals("ca")){
-            Log.i("TAG", "getMealsCategories: " +nameOfItem.split(",")[0]);
             getMealsCategories(nameOfItem.split(",")[0]);
         }else {
             getMealsCountries(nameOfItem.split(",")[0]);
-            Log.i("TAG", "getMealsCountries: " +nameOfItem.split(",")[0]);
 
         }
 

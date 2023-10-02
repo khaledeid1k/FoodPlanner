@@ -7,7 +7,12 @@ public class Constants {
 
     public static final int VIEW_TYPE_GRID = 1;
     public static final int VIEW_TYPE_LINER = 2;
-    public static final int VIEW_TYPE_LINER_SHOW_MEALS = 3;
+
+    public static final String CATEGORY = ",ca";
+    public static final String COUNTRY = ",co";
+
+ public static String dataBaseName="FoodDataBase";
+
 
 
 

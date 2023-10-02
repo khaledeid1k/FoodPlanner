@@ -21,6 +21,7 @@ import com.example.foodplanner.ui.home.adapter.HeaderItem;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
 import com.example.foodplanner.ui.home.adapter.NavigationToShowAll;
 import com.example.foodplanner.ui.home.adapter.OnClickItem;
+import com.example.foodplanner.utils.Constants;
 
 import java.util.List;
 
@@ -153,14 +154,14 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
         }
          else if (dataItem instanceof CategoriesItem) {
              HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
-                     HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CategoriesItem)dataItem).getTag().getResourcesData().get(position).getStrCategory()+",ca");
+                     HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CategoriesItem)dataItem).getTag().getResourcesData().get(position).getStrCategory()+ Constants.CATEGORY);
              Navigation.findNavController(view).navigate(
                      action
              );
          }
          else if (dataItem instanceof CountriesItem) {
              HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
-                     HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CountriesItem)dataItem).getTag().getResourcesData().get(position).getStrArea()+",co");
+                     HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CountriesItem)dataItem).getTag().getResourcesData().get(position).getStrArea()+Constants.COUNTRY);
              Navigation.findNavController(view).navigate(
                      action
              );
