@@ -1,13 +1,19 @@
 package com.example.foodplanner.data.repository;
 
+import androidx.lifecycle.LiveData;
+
+import com.example.foodplanner.data.local.LocalSource;
 import com.example.foodplanner.data.models.category.Categories;
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.country.Countries;
 import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.ingredient.Ingredients;
+import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.RemoteSource;
 import com.example.foodplanner.data.network.StateOfResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -15,16 +21,19 @@ import retrofit2.Response;
 
 public class RepositoryIm implements Repository {
     private RemoteSource remoteSource;
+    private LocalSource localSource;
     private  static RepositoryIm repo=null;
 
-    public  static RepositoryIm getInstance(RemoteSource remoteResource){
+    public  static RepositoryIm getInstance(RemoteSource remoteResource,
+                                            LocalSource localSource){
         if(repo==null){
-            repo= new RepositoryIm(remoteResource);
+            repo= new RepositoryIm(remoteResource,localSource);
         }
         return repo;
     }
-    public RepositoryIm(RemoteSource remoteResource) {
+    public RepositoryIm(RemoteSource remoteResource, LocalSource localSource) {
         this.remoteSource = remoteResource;
+        this.localSource = localSource;
     }
 
     @Override
@@ -86,6 +95,21 @@ public class RepositoryIm implements Repository {
     public StateOfResponse<FilteredItems> filterByArea(String nameOfArea, StateOfResponse<FilteredItems> stateOfResponse) {
         return WrapResponse(remoteSource.filterByArea(nameOfArea), stateOfResponse);
 
+    }
+
+    @Override
+    public LiveData<List<Meal>> getFavoritesMeals() {
+        return localSource.getFavoritesMeals();
+    }
+
+    @Override
+    public void saveMeal(Meal meal) {
+        localSource.saveMeal(meal);
+    }
+
+    @Override
+    public void deleteMeal(Meal meal) {
+        localSource.deleteMeal(meal);
     }
 
 

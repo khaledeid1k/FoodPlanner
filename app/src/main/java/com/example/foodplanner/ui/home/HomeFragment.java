@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.Tag;
 import com.example.foodplanner.data.network.NetWork;
@@ -51,7 +52,7 @@ public class HomeFragment extends Fragment {
     void inti(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
         presenter = new HomePresenter(
-                RepositoryIm.getInstance(NetWork.getInstance()));
+                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())));
         items = new ArrayList<>();
         homeAdapter = new HomeAdapter(getActivity(), items, presenter, presenter);
 

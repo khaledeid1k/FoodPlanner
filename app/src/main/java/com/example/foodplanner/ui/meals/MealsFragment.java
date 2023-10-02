@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.data.local.LocalSource;
+import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.filter.FilteredItem;
 import com.example.foodplanner.data.models.filter.FilteredItems;
@@ -59,7 +61,7 @@ public class MealsFragment extends Fragment {
         String nameOfItem = MealsFragmentArgs.fromBundle(getArguments()).getNameOfItem();
         nameList.setText(getString(R.string.meals_of_first_item, nameOfItem.split(",")[0]));
         mealsPresenter = new MealsPresenter(
-                RepositoryIm.getInstance(NetWork.getInstance()),nameOfItem);
+                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())),nameOfItem);
         meals=new ArrayList<>();
         mealsAdapter = new MealsAdapter(meals, getActivity(),mealsPresenter);
         recyclerViewMeals.setAdapter(mealsAdapter);
