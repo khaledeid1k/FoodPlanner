@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'androidx.navigation.safeargs'
+    id 'com.google.gms.google-services'
 
 }
 
@@ -76,5 +77,8 @@ dependencies {
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28'
 
 
+    //fireBase
+    implementation platform('com.google.firebase:firebase-bom:32.3.1')
+    implementation 'com.google.firebase:firebase-analytics'
 
 }
