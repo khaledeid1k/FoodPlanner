@@ -159,7 +159,12 @@ public class SearchPresenter implements OnClickListener {
         repository.getMealByName(nameOfMeal, new StateOfResponse<>() {
             @Override
             public void succeeded(Meals response) {
-
+                SearchFragmentDirections.ActionSearchToMealFragment action =
+                        SearchFragmentDirections.actionSearchToMealFragment(
+                      response.getMeals().get(0)  );
+                Navigation.findNavController(view).navigate(
+                        action
+                );
             }
 
             @Override
@@ -171,6 +176,9 @@ public class SearchPresenter implements OnClickListener {
 
     @Override
     public void onclick(String nameOfMeal, View view) {
+
         moveToMealScreen(nameOfMeal,view);
+
+
     }
 }
