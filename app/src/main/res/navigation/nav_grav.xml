@@ -12,13 +12,20 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_showAllFragment"
-            app:destination="@id/showAllFragment" />
+            app:destination="@id/showAllFragment"
+            app:popUpTo="@id/homeF"/>
         <action
             android:id="@+id/action_homeFragment_to_mealFragment"
-            app:destination="@id/mealFragment" />
+            app:destination="@id/mealFragment"
+            app:popUpTo="@id/homeF"
+
+          />
         <action
             android:id="@+id/action_homeFragment_to_mealsFragment"
-            app:destination="@id/mealsFragment" />
+            app:destination="@id/mealsFragment"
+            app:popUpTo="@id/homeF"
+            app:popUpToInclusive="false"
+             />
     </fragment>
     <fragment
         android:id="@+id/showAllFragment"
@@ -62,7 +69,9 @@
         tools:layout="@layout/fragment_category" >
         <action
             android:id="@+id/action_categoryFragment_to_mealsFragment"
-            app:destination="@id/mealsFragment" />
+            app:destination="@id/mealsFragment"
+            app:popUpTo="@id/category"
+             />
     </fragment>
     <fragment
         android:id="@+id/favourite"
@@ -70,7 +79,8 @@
         android:label="FavouriteFragment" >
         <action
             android:id="@+id/action_favouriteFragment_to_mealFragment"
-            app:destination="@id/mealFragment" />
+            app:destination="@id/mealFragment"
+            app:popUpTo="@id/favourite" />
     </fragment>
     <fragment
         android:id="@+id/search"

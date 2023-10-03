@@ -34,16 +34,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        controller.navigateUp();
-//        return true;
-//    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-    }
 }
