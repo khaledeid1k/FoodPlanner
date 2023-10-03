@@ -4,13 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +27,9 @@ import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.meal.dapter.IngredientAdapter;
 import com.example.foodplanner.ui.meal.dapter.InstructionsAdapter;
 import com.example.foodplanner.utils.Extensions;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
 
@@ -40,8 +40,8 @@ public class MealFragment extends Fragment {
     CheckBox favouriteIconSingleMeal;
     TextView nameSingleMeal, categorySingleMeal,tileOfMeal;
     RecyclerView recyclerViewSingleMeal;
-    Button buttonIngredientSingleMeal;
-    Button buttonInstructionsSingleMeal;
+    Button buttonIngredientSingleMeal,buttonVideoSingleMeal,buttonInstructionsSingleMeal;
+
 
     IngredientAdapter ingredientAdapter;
     InstructionsAdapter instructionsAdapter;
@@ -49,6 +49,8 @@ public class MealFragment extends Fragment {
     ArrayList<Instructions> instructionsArrayList;
     Meal meal;
     MealPresenter mealPresenter;
+    YouTubePlayerView youTubePlayerView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +69,7 @@ public class MealFragment extends Fragment {
         inti(view);
         setUp();
         moveBetweenIngredientAndInstructions();
+        showVideo();
     }
 
 
@@ -80,6 +83,8 @@ public class MealFragment extends Fragment {
         favouriteIconSingleMeal = view.findViewById(R.id.favourite_icon_single_meal);
         buttonIngredientSingleMeal = view.findViewById(R.id.button_ingredient_single_meal);
         buttonInstructionsSingleMeal = view.findViewById(R.id.button_instructions_single_meal);
+        buttonVideoSingleMeal = view.findViewById(R.id.button_video_single_meal);
+        youTubePlayerView = view.findViewById(R.id.video_layout);
 
         buttonIngredientSingleMeal.performClick();
         meal = MealFragmentArgs.fromBundle(getArguments()).getMeal();
@@ -122,13 +127,45 @@ public class MealFragment extends Fragment {
 
     void moveBetweenIngredientAndInstructions() {
         buttonIngredientSingleMeal.setOnClickListener(view -> {
+            recyclerViewSingleMeal.setVisibility(View.VISIBLE);
+            youTubePlayerView.setVisibility(View.INVISIBLE);
             recyclerViewSingleMeal.setAdapter(ingredientAdapter);
 
         });
         buttonInstructionsSingleMeal.setOnClickListener(view -> {
+            recyclerViewSingleMeal.setVisibility(View.VISIBLE);
+            youTubePlayerView.setVisibility(View.INVISIBLE);
+
             recyclerViewSingleMeal.setAdapter(instructionsAdapter);
 
+
         });
+        buttonVideoSingleMeal.setOnClickListener(view -> {
+
+
+        });
+
+    }
+
+    void showVideo(){
+        buttonVideoSingleMeal.setOnClickListener(view -> {
+            String strYoutube = meal.getStrYoutube();
+            String[] split = strYoutube.split("=");
+            recyclerViewSingleMeal.setVisibility(View.INVISIBLE);
+            youTubePlayerView.setVisibility(View.VISIBLE);
+            getLifecycle().addObserver(youTubePlayerView);
+            youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                    String videoId = split[1];
+                    youTubePlayer.loadVideo(videoId, 0);
+                }
+            });
+        });
+
+
+
+
 
     }
 

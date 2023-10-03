@@ -133,6 +133,14 @@
             android:layout_weight="1"
             android:text="@string/instructions" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_video_single_meal"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cooking_guide" />
+
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -149,5 +157,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toggle_group_single_meal"
         tools:listitem="@layout/item_ingredient" />
+
+    <include
+        layout="@layout/video_of_cook"
+        android:id="@+id/video_layout"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/margin_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toggle_group_single_meal"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
