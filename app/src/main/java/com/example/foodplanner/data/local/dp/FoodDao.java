@@ -18,6 +18,8 @@ public interface FoodDao {
     @Query("SELECT * FROM favorite_table")
     LiveData<List<Meal>> getAllFavoritesMeals();
 
+    @Query("SELECT EXISTS (SELECT 1 FROM favorite_table WHERE idMeal = :mealId LIMIT 1)")
+    LiveData<Boolean> getFavoriteMealById(String mealId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveMeal(Meal meal);

@@ -2,6 +2,9 @@ package com.example.foodplanner.ui.meal;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.meal.Meal;
@@ -20,6 +23,8 @@ Repository repository;
     Meal meal;
     ArrayList<IngredientMeasurePair> ingredientMeasurePairs;
     ArrayList<Instructions> instructionsArrayList;
+    MutableLiveData<Boolean> isFavouriteClicked = new MutableLiveData<>();
+
     public MealPresenter(Meal meal,
                          ArrayList<IngredientMeasurePair> ingredientMeasurePairs,
                          ArrayList<Instructions> instructionsArrayList,
@@ -79,6 +84,9 @@ Repository repository;
     }
     void deleteFromFavorite(Meal meal){
         repository.deleteMeal(meal);
+    }
+    LiveData<Boolean> checkMealInFavoriteOrNot(String mealId){
+       return repository.getFavoriteMealById(mealId);
     }
 
 }

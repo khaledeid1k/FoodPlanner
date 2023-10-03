@@ -11,4 +11,5 @@ public interface LocalSource {
     LiveData<List<Meal>> getFavoritesMeals();
     void saveMeal(Meal meal);
     void deleteMeal(Meal meal);
+    LiveData<Boolean> getFavoriteMealById(String mealId);
 }

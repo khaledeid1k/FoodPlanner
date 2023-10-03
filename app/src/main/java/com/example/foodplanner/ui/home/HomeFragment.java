@@ -52,14 +52,14 @@ public class HomeFragment extends Fragment {
     void inti(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
         presenter = new HomePresenter(
-                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())));
+                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(requireActivity())));
         items = new ArrayList<>();
-        homeAdapter = new HomeAdapter(getActivity(), items, presenter, presenter);
+        homeAdapter = new HomeAdapter(requireActivity(), items, presenter, presenter);
 
     }
 
     void addRandomMeal() {
-        presenter.randomMealLiveData().observe(getActivity(), meal -> {
+        presenter.randomMealLiveData().observe(getViewLifecycleOwner(), meal -> {
             items.add(0,new HeaderItem(meal));
             homeAdapter.updateData(items);
         });
@@ -67,14 +67,14 @@ public class HomeFragment extends Fragment {
     }
 
     void addMealsByFirstLetter() {
-        presenter.mealsByFirstLetter().observe(getActivity(), meals -> {
+        presenter.mealsByFirstLetter().observe(getViewLifecycleOwner(), meals -> {
             items.add(new MealsItem(new Tag<>("Meals", meals)));
             homeAdapter.updateData(items);
         });
     }
 
     void addCategoriesWithDetails() {
-        presenter.categoriesWithDetails().observe(getActivity(), categoryWithDetailsList -> {
+        presenter.categoriesWithDetails().observe(getViewLifecycleOwner(), categoryWithDetailsList -> {
             items.add(new CategoriesItem(new Tag<>("Categories", categoryWithDetailsList)));
             homeAdapter.updateData(items);
         });
@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment {
 
     void addAllCountries() {
 
-        presenter.allCountries().observe(getActivity(), countryList -> {
+        presenter.allCountries().observe(getViewLifecycleOwner(), countryList -> {
             items.add(new CountriesItem(new Tag<>("Countries", countryList)));
             homeAdapter.updateData(items);
         });

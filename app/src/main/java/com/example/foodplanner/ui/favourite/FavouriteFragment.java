@@ -61,7 +61,7 @@ public class FavouriteFragment extends Fragment implements FavouriteView {
         recyclerView.setAdapter(favouriteAdapter);
     }
     void setUp(){
-        favouritePresenter.getFavoritesMeals().observe(getActivity(), meals -> {
+        favouritePresenter.getFavoritesMeals().observe(getViewLifecycleOwner(), meals -> {
             favouriteAdapter.updateData(new ArrayList<>(meals));
         });
 

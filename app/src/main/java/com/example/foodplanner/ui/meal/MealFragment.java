@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,7 +36,8 @@ import java.util.ArrayList;
 
 public class MealFragment extends Fragment {
 
-    ImageView imageSingleMeal, favouriteIconSingleMeal,backFromMeal;
+    ImageView imageSingleMeal,backFromMeal;
+    CheckBox favouriteIconSingleMeal;
     TextView nameSingleMeal, categorySingleMeal,tileOfMeal;
     RecyclerView recyclerViewSingleMeal;
     Button buttonIngredientSingleMeal;
@@ -46,8 +49,6 @@ public class MealFragment extends Fragment {
     ArrayList<Instructions> instructionsArrayList;
     Meal meal;
     MealPresenter mealPresenter;
-    boolean flag=false;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,16 +64,11 @@ public class MealFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if ( ((AppCompatActivity)getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("dfds");
-        }else {
-            Log.i("TAG", "onViewCreated: "+"nullllllllll");
-        }
         inti(view);
         setUp();
         moveBetweenIngredientAndInstructions();
     }
+
 
     void inti(View view) {
         recyclerViewSingleMeal = view.findViewById(R.id.recyclerview_single_meal);
@@ -97,14 +93,7 @@ public class MealFragment extends Fragment {
     }
 
     void setUp() {
-
-        if(meal.isFavorite()){
-            favouriteIconSingleMeal.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.favorite_done));
-        }else {
-            favouriteIconSingleMeal.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.favorite));
-
-        }
-        Glide.with(getActivity()).load(meal.getStrMealThumb()).error(
+        Glide.with(requireActivity()).load(meal.getStrMealThumb()).error(
                 R.drawable.no_result_search
         ).into(imageSingleMeal);
 
@@ -114,19 +103,19 @@ public class MealFragment extends Fragment {
         categorySingleMeal.setText(meal.getStrCategory());
 
        favouriteIconSingleMeal.setOnClickListener(view -> {
-           if (flag){
-               favouriteIconSingleMeal.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.favorite));
-               flag=false;
-               meal.setFavorite(false);
-               mealPresenter.deleteFromFavorite(meal);
-           }else {
-               favouriteIconSingleMeal.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.favorite_done));
-               flag=true;
-               meal.setFavorite(true);
-               mealPresenter.saveToFavorite(meal);
+           if (favouriteIconSingleMeal.isChecked()) {
+              mealPresenter.isFavouriteClicked.setValue(true);
+           } else {
+               mealPresenter.isFavouriteClicked.setValue(false);
            }
-       });
 
+       });
+        mealPresenter.checkMealInFavoriteOrNot(meal.getIdMeal()).observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                favouriteIconSingleMeal.setChecked(aBoolean);
+            }
+        });
         recyclerViewSingleMeal.setAdapter(ingredientAdapter);
     }
 
@@ -141,6 +130,16 @@ public class MealFragment extends Fragment {
 
         });
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(favouriteIconSingleMeal.isChecked()){
+            mealPresenter.saveToFavorite(meal);
+        }else {
+            mealPresenter.deleteFromFavorite(meal);
+        }
     }
 
 }

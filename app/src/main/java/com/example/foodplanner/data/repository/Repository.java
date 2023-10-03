@@ -42,5 +42,6 @@ public interface Repository {
     void saveMeal(Meal meal);
 
     void deleteMeal(Meal meal);
+    LiveData<Boolean> getFavoriteMealById(String mealId);
 
 }

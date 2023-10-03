@@ -59,6 +59,6 @@ public class CategoryFragment extends Fragment {
 
     }
     void setUp(){
-        categoryPresenter.categoriesWithDetails().observe(getActivity(), categoryWithDetailsList -> categoryAdapter.updateData(new ArrayList<>(categoryWithDetailsList)));
+        categoryPresenter.categoriesWithDetails().observe(getViewLifecycleOwner(), categoryWithDetailsList -> categoryAdapter.updateData(new ArrayList<>(categoryWithDetailsList)));
     }
 }

@@ -46,4 +46,9 @@ public class LocalSourceIm implements LocalSource {
         new Thread(() -> foodDao.deleteMeal(meal)).start();
 
     }
+
+    @Override
+    public LiveData<Boolean> getFavoriteMealById(String mealId) {
+        return foodDao.getFavoriteMealById(mealId);
+    }
 }

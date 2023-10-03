@@ -112,6 +112,11 @@ public class RepositoryIm implements Repository {
         localSource.deleteMeal(meal);
     }
 
+    @Override
+    public LiveData<Boolean> getFavoriteMealById(String mealId) {
+       return localSource.getFavoriteMealById(mealId);
+    }
+
 
     <T> StateOfResponse<T> WrapResponse(Call<T> call, StateOfResponse<T> stateOfResponse) {
         call.enqueue(new Callback<T>() {

@@ -91,16 +91,16 @@
         app:layout_constraintTop_toBottomOf="@id/name_single_meal"
         tools:text="sdfsdfsdfds" />
 
-    <ImageView
+    <CheckBox
         android:id="@+id/favourite_icon_single_meal"
-        android:layout_width="@dimen/width_0"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_12"
-        android:src="@drawable/favorite"
+        android:button="@drawable/selector_favourite_item"
+        app:layout_constraintBottom_toBottomOf="@+id/name_single_meal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image_single_meal" />
-
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/toggle_group_single_meal"

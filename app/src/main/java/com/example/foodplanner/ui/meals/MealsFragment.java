@@ -67,14 +67,14 @@ public class MealsFragment extends Fragment {
         String nameOfItem = MealsFragmentArgs.fromBundle(getArguments()).getNameOfItem();
         nameList.setText(getString(R.string.meals_of_first_item, nameOfItem.split(",")[0]));
         mealsPresenter = new MealsPresenter(
-                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())),nameOfItem);
+                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(requireActivity())),nameOfItem);
         meals=new ArrayList<>();
-        mealsAdapter = new MealsAdapter(meals, getActivity(),mealsPresenter);
+        mealsAdapter = new MealsAdapter(meals, requireActivity(),mealsPresenter);
         recyclerViewMeals.setAdapter(mealsAdapter);
 
     }
     void setUp(){
-        mealsPresenter.filteredItemsLiveData().observe(getActivity(),
+        mealsPresenter.filteredItemsLiveData().observe(getViewLifecycleOwner(),
                 filteredItems -> {
                     mealsAdapter.updateData(filteredItems.getMeals());
                 });
