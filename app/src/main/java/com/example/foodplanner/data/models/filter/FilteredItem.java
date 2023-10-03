@@ -5,6 +5,12 @@ public class FilteredItem {
     String strMealThumb;
     String idMeal;
 
+    public FilteredItem(String strMeal, String strMealThumb, String idMeal) {
+        this.strMeal = strMeal;
+        this.strMealThumb = strMealThumb;
+        this.idMeal = idMeal;
+    }
+
     public String getStrMeal() {
         return strMeal;
     }

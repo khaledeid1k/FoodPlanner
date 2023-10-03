@@ -12,6 +12,9 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:hint="@string/search"
+        app:hintEnabled="false"
         android:layout_marginHorizontal="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_24"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,6 +29,7 @@
             android:drawableStart="@drawable/search"
             android:drawablePadding="@dimen/margin_16"
             android:inputType="text"
+            android:hint="@string/search_for_your_meal"
             android:maxLines="1"
             android:paddingStart="@dimen/margin_16"
 
@@ -34,7 +38,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/ChipGroup"
+        android:id="@+id/chipGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16"
@@ -42,10 +46,12 @@
         app:layout_constraintTop_toBottomOf="@+id/search_text"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="@dimen/margin_16"
+        app:hintEnabled="false"
+
         >
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/Category_search"
+            android:id="@+id/category_search"
             android:text="@string/category"
             style="@style/Widget.Material3.Chip.Filter"
             android:layout_width="wrap_content"
@@ -71,12 +77,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_search"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ChipGroup"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_12"
         android:layout_width="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
         tools:listitem="@layout/item_search"
         android:layout_height="@dimen/height_0"/>
 

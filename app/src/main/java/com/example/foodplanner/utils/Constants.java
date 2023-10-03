@@ -14,6 +14,14 @@ public class Constants {
  public static String dataBaseName="FoodDataBase";
 
 
+ public final static String Category="Category";
+ public final static String Country="Country";
+ public final static String Ingredients="Ingredients";
+ public final static String Meal="Meal";
+
+
+
+
 
 
 

@@ -32,5 +32,6 @@
 </string>
     <string name="meals">Meals</string>
     <string name="meals_of_first_item">Meals Of %s</string>
+    <string name="search_for_your_meal">Search for your meal</string>
 
 </resources>
