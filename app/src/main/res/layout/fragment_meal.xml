@@ -125,13 +125,6 @@
             android:text="@string/ingredient" />
 
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_instructions_single_meal"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/instructions" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_video_single_meal"
@@ -140,6 +133,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cooking_guide" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_instructions_single_meal"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/instructions" />
 
 
     </com.google.android.material.button.MaterialButtonToggleGroup>

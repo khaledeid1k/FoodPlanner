@@ -12,7 +12,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:hint="@string/search"
         app:hintEnabled="false"
         android:layout_marginHorizontal="@dimen/margin_16"
@@ -24,7 +23,6 @@
             android:layout_width="match_parent"
             style="@style/SearchBarStyle"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/margin_16"
             android:layout_marginTop="@dimen/margin_16"
             android:drawableStart="@drawable/search"
             android:drawablePadding="@dimen/margin_16"

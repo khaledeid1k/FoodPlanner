@@ -34,8 +34,6 @@ public class LoginFragment extends Fragment {
     AppCompatButton login;
     LoginPresenter loginPresenter;
     FirebaseAuth firebaseAuth;
-    
-    String TAG="asfdsdfdsf";
 
 
     @Override
@@ -64,27 +62,27 @@ public class LoginFragment extends Fragment {
         passwordText = view.findViewById(R.id.password_value_login);
         emailP = view.findViewById(R.id.email_p);
         passwordP = view.findViewById(R.id.password_p);
-        login  = view.findViewById(R.id.login_b);
-        register  = view.findViewById(R.id.go_to_register);
+        login = view.findViewById(R.id.login_b);
+        register = view.findViewById(R.id.go_to_register);
         firebaseAuth = FirebaseAuth.getInstance();
         loginPresenter = new LoginPresenter(new AuthenticationImpl(new AuthInputValidatorImpl()));
     }
 
-    void loginAction(){
-        login.setOnClickListener(this:: validateData);
+    void loginAction() {
+        login.setOnClickListener(view -> validateData());
     }
 
     User getData() {
         return new User(emailText.getText().toString(),
-
                 passwordText.getText().toString());
     }
 
-    void validateData(View view) {
+    void validateData() {
         loginPresenter.validation(getData());
-        checkData(view);
+        checkData();
     }
-    void  checkData(View view){
+
+    void checkData() {
         loginPresenter.validationLiveDataLogin().observe(getViewLifecycleOwner(),
                 validation -> {
                     if (validation.isValid()) {
@@ -96,14 +94,14 @@ public class LoginFragment extends Fragment {
                                 passwordText.getText().toString()).addOnCompleteListener(
                                 requireActivity(), task -> {
                                     if (task.isSuccessful()) {
-                                        navigateToHome(view);
+                                        navigateToHome();
 
                                     }
 
                                 }
                         );
 
-                    }else {
+                    } else {
                         printError(validation);
 
                     }
@@ -113,11 +111,11 @@ public class LoginFragment extends Fragment {
     }
 
     private void printError(Validation validation) {
-        if(validation.getType().equals(Constants.ErrorEmail)){
+        if (validation.getType().equals(Constants.ErrorEmail)) {
             emailP.setErrorEnabled(true);
             passwordP.setErrorEnabled(false);
             emailP.setError(validation.getMessage());
-        }else {
+        } else {
             emailP.setErrorEnabled(false);
             passwordP.setErrorEnabled(true);
             passwordP.setError(validation.getMessage());
@@ -127,24 +125,24 @@ public class LoginFragment extends Fragment {
     void checkIfUserLoginBefore(View view) {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
-            navigateToHome(view);
+            navigateToHome();
         }
     }
 
-    void navigateToHome(View view) {
-        Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_homeF);
-
+    void navigateToHome() {
+        Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
     }
 
-    void navigateToRegister () {
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_singUpFragment);
-
-            }
-        });
-
+    void navigateToRegister() {
+        register.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_singUpFragment));
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            navigateToHome();
+        }
+    }
 }

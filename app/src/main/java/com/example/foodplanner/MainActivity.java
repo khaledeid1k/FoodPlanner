@@ -10,11 +10,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     NavController controller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,10 +28,24 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);
 
-         controller = navHostFragment.getNavController();
+        controller = navHostFragment.getNavController();
 
-        NavigationUI.setupWithNavController(bottomNavigationView, controller);
+       // NavigationUI.setupWithNavController(bottomNavigationView, controller);
 
+
+        if (controller.getCurrentDestination() != null) {
+            int currentFragmentId = controller.getCurrentDestination().getId();
+            if (currentFragmentId == R.id.homeF ||
+                    currentFragmentId == R.id.category ||
+                    currentFragmentId == R.id.favourite ||
+                    currentFragmentId == R.id.search ||
+                    currentFragmentId == R.id.plan) {
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                NavigationUI.setupWithNavController(bottomNavigationView, controller);
+            } else {
+                bottomNavigationView.setVisibility(View.GONE);
+            }
+        }
 
 
     }

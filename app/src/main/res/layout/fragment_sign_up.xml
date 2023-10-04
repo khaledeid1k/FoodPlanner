@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     >
-
-
 
     <ImageView
         android:id="@+id/background_login"
-        android:layout_marginTop="@dimen/margin_40"
+        android:layout_marginTop="@dimen/margin_28"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_0"
         app:layout_constraintHorizontal_bias=".5"
@@ -19,89 +22,98 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/email"
+        android:id="@+id/email_p_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_16"
         android:hint="@string/email"
+
         app:startIconDrawable="@drawable/email"
-        app:endIconMode="clear_text"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/background_login">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email_value"
+            android:id="@+id/email_value_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
             tools:text="sdfdsfsdfsdfds@gmail.com" />
 
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password"
+        android:id="@+id/password_p_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_16"
+        app:errorEnabled="true"
+        app:errorIconTintMode="screen"
+
         android:layout_marginTop="@dimen/margin_16"
         android:hint="@string/password"
         app:endIconMode="password_toggle"
+        app:errorIconDrawable="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email">
+        app:layout_constraintTop_toBottomOf="@+id/email_p_register">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_value"
+            android:id="@+id/password_value_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             tools:text="564654655614561465165" />
 
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/confirm_password"
+        android:id="@+id/confirm_password_p_register"
         android:layout_width="match_parent"
+        app:errorEnabled="true"
+
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_16"
         android:hint="@string/password"
         app:endIconMode="password_toggle"
+        app:errorIconDrawable="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password">
+        app:layout_constraintTop_toBottomOf="@+id/password_p_register">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/confirm_password_value"
+            android:id="@+id/repeated_password_value_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             tools:text="564654655614561465165" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/appCompatButton"
+        android:id="@+id/register_b_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_32"
+        android:layout_marginTop="@dimen/margin_16"
         android:text="@string/register"
         android:background="@drawable/rounded_button"
         android:layout_marginHorizontal="@dimen/margin_60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/confirm_password" />
+        app:layout_constraintTop_toBottomOf="@id/confirm_password_p_register" />
 
     <TextView
-        android:id="@+id/sign_up"
+        android:id="@+id/go_to_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/already_a_member_log_in"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="@dimen/margin_16"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatButton" />
+        app:layout_constraintTop_toBottomOf="@+id/register_b_register" />
 
     <TextView
         android:id="@+id/or"
@@ -112,7 +124,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="@dimen/margin_16"
         style="@style/TextAppearance.Material3.TitleMedium"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up" />
+        app:layout_constraintTop_toBottomOf="@+id/go_to_login" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -137,3 +149,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
