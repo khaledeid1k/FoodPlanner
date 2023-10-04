@@ -30,7 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginFragment extends Fragment {
     TextInputEditText emailText, passwordText;
     TextInputLayout emailP, passwordP;
-    TextView register;
+    TextView register,loginAsGust;
     AppCompatButton login;
     LoginPresenter loginPresenter;
     FirebaseAuth firebaseAuth;
@@ -55,6 +55,7 @@ public class LoginFragment extends Fragment {
         checkIfUserLoginBefore(view);
         loginAction();
         navigateToRegister();
+        setLoginAsGust();
     }
 
     void inti(View view) {
@@ -64,6 +65,7 @@ public class LoginFragment extends Fragment {
         passwordP = view.findViewById(R.id.password_p);
         login = view.findViewById(R.id.login_b);
         register = view.findViewById(R.id.go_to_register);
+        loginAsGust = view.findViewById(R.id.login_as_gust);
         firebaseAuth = FirebaseAuth.getInstance();
         loginPresenter = new LoginPresenter(new AuthenticationImpl(new AuthInputValidatorImpl()));
     }
@@ -144,5 +146,9 @@ public class LoginFragment extends Fragment {
         if (currentUser != null) {
             navigateToHome();
         }
+    }
+
+    void setLoginAsGust(){
+        loginAsGust.setOnClickListener(view -> navigateToHome());
     }
 }

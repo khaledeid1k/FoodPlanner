@@ -39,4 +39,5 @@
     <dimen name="margin_14">14dp</dimen>
     <dimen name="margin_208">208dp</dimen>
     <dimen name="width_0">0dp</dimen>
+    <dimen name="padding_7">7dp</dimen>
 </resources>

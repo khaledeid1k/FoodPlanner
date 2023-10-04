@@ -30,24 +30,22 @@ public class MainActivity extends AppCompatActivity {
 
         controller = navHostFragment.getNavController();
 
-       // NavigationUI.setupWithNavController(bottomNavigationView, controller);
-
-
-        if (controller.getCurrentDestination() != null) {
-            int currentFragmentId = controller.getCurrentDestination().getId();
-            if (currentFragmentId == R.id.homeF ||
-                    currentFragmentId == R.id.category ||
-                    currentFragmentId == R.id.favourite ||
-                    currentFragmentId == R.id.search ||
-                    currentFragmentId == R.id.plan) {
+        NavigationUI.setupWithNavController(bottomNavigationView, controller);
+        controller.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            int destinationId = destination.getId();
+            if (destinationId == R.id.homeF ||
+                    destinationId == R.id.category ||
+                    destinationId == R.id.favourite ||
+                    destinationId == R.id.search ||
+                    destinationId == R.id.plan) {
                 bottomNavigationView.setVisibility(View.VISIBLE);
-                NavigationUI.setupWithNavController(bottomNavigationView, controller);
             } else {
                 bottomNavigationView.setVisibility(View.GONE);
             }
-        }
+        });
+    }
 
 
     }
 
-}
+

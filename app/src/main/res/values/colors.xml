@@ -14,6 +14,7 @@
     <color name="md_theme_light_surfaceVariant">#DAE5E1</color>
     <color name="md_theme_light_onSurfaceVariant">#3F4946</color>
     <color name="md_theme_light_onBackground_opacity">#8A000000</color>
+    <color name="back_text_light">#90006B5F</color>
 
     <color name="md_theme_dark_primary">#55DBC7</color>
     <color name="md_theme_dark_onPrimary">#003731</color>
@@ -29,6 +30,7 @@
     <color name="md_theme_dark_surfaceVariant">#3F4946</color>
     <color name="md_theme_dark_onSurfaceVariant">#BEC9C5</color>
     <color name="md_theme_dark_onBackground_opacity">#B3FFFFFF</color>
+    <color name="back_text_dark">#9055DBC7</color>
 
 
     <color name="white">#FFFFFF</color>

@@ -5,7 +5,6 @@
     android:id="@+id/youtube_player_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:videoId="lNlK8DVhXXA"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
