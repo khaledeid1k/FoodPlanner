@@ -10,20 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <TextView
             android:id="@+id/login_as_gust"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16"
             android:background="@drawable/rounded_textview_bg"
             android:padding="@dimen/padding_7"
             android:text="@string/skip"
             android:textColor="@color/white"
-            style="@style/TextAppearance.Material3.LabelLarge"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/font_size_20"
-            app:layout_constraintTop_toTopOf="@+id/background_login"
-        />
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/facebook_login" />
 
         <ImageView
             android:id="@+id/background_login"
@@ -119,7 +119,7 @@
             app:layout_constraintTop_toBottomOf="@+id/go_to_register" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/facebook_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/facebook"
@@ -135,10 +135,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/google"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintBottom_toBottomOf="@+id/facebook_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.59"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView" />
+            app:layout_constraintTop_toTopOf="@+id/facebook_login" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

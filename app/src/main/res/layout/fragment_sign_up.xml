@@ -127,7 +127,7 @@
         app:layout_constraintTop_toBottomOf="@+id/go_to_login" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/facebook_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/facebook"
@@ -143,11 +143,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/google"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/facebook_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.59"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="@+id/facebook_login" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
