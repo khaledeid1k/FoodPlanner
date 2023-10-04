@@ -18,6 +18,11 @@ public class Constants {
  public final static String Country="Country";
  public final static String Ingredients="Ingredients";
  public final static String Meal="Meal";
+ public final static String ErrorEmail="ErrorEmail";
+ public final static String ErrorPassword="ErrorPassword";
+ public final static String ErrorRePassword="ErrorRePassword";
+
+
 
 
 
