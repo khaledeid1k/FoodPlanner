@@ -62,6 +62,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
         ImageView ImageOfMeal =itemView.findViewById(R.id.image_meal_of_search);
     }
     public void updateData(ArrayList<FilteredItem> newData) {
+     //   meals.clear();
         meals=newData;
         notifyDataSetChanged();
     }

@@ -1,19 +1,18 @@
 package com.example.foodplanner.ui.search;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
@@ -27,6 +26,10 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class SearchFragment extends Fragment {
@@ -101,7 +104,12 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchPresenter.getTextOfSearch(charSequence.toString());
+                if (charSequence.length()>0) {
+                    searchPresenter.getTextOfSearch(charSequence.toString());
+                }else {
+                    searchPresenter.getTextOfSearch(Constants.Empty);
+
+                }
             }
 
             @Override
@@ -112,7 +120,15 @@ public class SearchFragment extends Fragment {
         searchPresenter.filteredItemsLiveData().observe(getViewLifecycleOwner(),
                 filteredItems -> {
                     Log.i(TAG, "afdsdfsdf: "+filteredItems);
-            mealsAdapter.updateData(filteredItems);
+                    ArrayList<FilteredItem> collect =
+
+                            (ArrayList<FilteredItem>) filteredItems.stream().distinct()
+                                    .sorted(Comparator.comparing(FilteredItem::getStrMeal)) // Sort by strMeal
+
+                                    .collect(Collectors.toList());
+
+
+                    mealsAdapter.updateData(collect);
                 });
 
     }

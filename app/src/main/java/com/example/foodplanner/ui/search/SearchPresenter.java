@@ -1,5 +1,6 @@
 package com.example.foodplanner.ui.search;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -18,11 +19,14 @@ import com.example.foodplanner.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class SearchPresenter implements OnClickListener {
     String selectedChip=Constants.Meal;
     Repository repository;
     ArrayList<FilteredItem> filteredItemArrayList=new ArrayList<>();
+    ArrayList<FilteredItem> filtered=new ArrayList<>();
 
 
     private MutableLiveData<ArrayList<FilteredItem>> filteredItemsMutableLiveData =
@@ -83,25 +87,34 @@ public class SearchPresenter implements OnClickListener {
     }
 
     void searchByMeal(String charOfMeal) {
-        repository.getMealsByFirstLetter(charOfMeal, new StateOfResponse<Meals>() {
-            @Override
-            public void succeeded(Meals response) {
-                List<Meal> meals = response.getMeals();
-                for (Meal meal : meals) {
-                    filteredItemArrayList.add(new FilteredItem
-                            (meal.getStrMeal(),
-                                    meal.getStrMealThumb(),
-                                    meal.getIdMeal()));
+        if (charOfMeal.length()==1) {
+            repository.getMealsByFirstLetter(charOfMeal, new StateOfResponse<>() {
+                @Override
+                public void succeeded(Meals response) {
+                    List<Meal> meals = response.getMeals();
+                    for (Meal meal : meals) {
+                        filtered.add(new FilteredItem
+                                (meal.getStrMeal(),
+                                        meal.getStrMealThumb(),
+                                        meal.getIdMeal()));}
+                    filteredItemsMutableLiveData.setValue(filtered);
                 }
-                filteredItemsMutableLiveData.setValue(filteredItemArrayList);
 
-            }
+                @Override
+                public void failure(String message) {
 
-            @Override
-            public void failure(String message) {
+                }
+            });
+        }else {
+            filtered= (ArrayList<FilteredItem>) filtered.stream()
 
-            }
-        });
+                 .filter(s -> s.getStrMeal().toLowerCase(Locale.ROOT)
+                         .contains(charOfMeal))
+                    .distinct().collect(Collectors.toList());
+            filteredItemsMutableLiveData.setValue(filtered);
+
+           }
+
     }
 
 
@@ -149,6 +162,11 @@ public class SearchPresenter implements OnClickListener {
                 searchByMeal(wordOfSearch);
             }
             break;
+            case Constants.Empty: {
+                Log.i("TAG", "getTextOfSearch: " + selectedChip.length());
+                filteredItemArrayList.clear();
+                filteredItemsMutableLiveData.setValue(filteredItemArrayList);
+            }
         }
 
     }
