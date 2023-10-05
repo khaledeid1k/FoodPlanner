@@ -99,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16"
         android:text="@string/register"
+        android:textColor="@color/white"
         android:background="@drawable/rounded_button"
         android:layout_marginHorizontal="@dimen/margin_60"
         app:layout_constraintEnd_toEndOf="parent"

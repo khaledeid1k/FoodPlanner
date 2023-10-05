@@ -1,5 +1,6 @@
 package com.example.foodplanner.ui.auth.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.User;
@@ -21,19 +24,31 @@ import com.example.foodplanner.data.models.Validation;
 import com.example.foodplanner.ui.auth.validation.AuthInputValidatorImpl;
 import com.example.foodplanner.ui.auth.validation.AuthenticationImpl;
 import com.example.foodplanner.utils.Constants;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginFragment extends Fragment {
     TextInputEditText emailText, passwordText;
     TextInputLayout emailP, passwordP;
-    TextView register,loginAsGust;
+    TextView register, loginAsGust;
     AppCompatButton login;
     LoginPresenter loginPresenter;
     FirebaseAuth firebaseAuth;
+    ImageView loginBYGoogle;
+    GoogleSignInClient mGoogleSignInClient;
+    private static final int RC_SIGN_IN = 1;
+
 
 
     @Override
@@ -56,6 +71,11 @@ public class LoginFragment extends Fragment {
         loginAction();
         navigateToRegister();
         setLoginAsGust();
+        loginBYGoogle();
+        loginBYGoogle.setOnClickListener(viaew -> {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
     }
 
     void inti(View view) {
@@ -66,6 +86,7 @@ public class LoginFragment extends Fragment {
         login = view.findViewById(R.id.login_b);
         register = view.findViewById(R.id.go_to_register);
         loginAsGust = view.findViewById(R.id.login_as_gust);
+        loginBYGoogle = view.findViewById(R.id.google_login);
         firebaseAuth = FirebaseAuth.getInstance();
         loginPresenter = new LoginPresenter(new AuthenticationImpl(new AuthInputValidatorImpl()));
     }
@@ -75,8 +96,8 @@ public class LoginFragment extends Fragment {
     }
 
     User getData() {
-        return new User(emailText.getText().toString(),
-                passwordText.getText().toString());
+        return new User(emailText.getText().toString().trim(),
+                passwordText.getText().toString().trim());
     }
 
     void validateData() {
@@ -91,12 +112,13 @@ public class LoginFragment extends Fragment {
                         emailP.setErrorEnabled(false);
                         passwordP.setErrorEnabled(false);
                         firebaseAuth.signInWithEmailAndPassword(
-
-                                emailText.getText().toString(),
-                                passwordText.getText().toString()).addOnCompleteListener(
+                                emailText.getText().toString().trim(),
+                                passwordText.getText().toString().trim()).addOnCompleteListener(
                                 requireActivity(), task -> {
                                     if (task.isSuccessful()) {
                                         navigateToHome();
+                                    } else {
+
 
                                     }
 
@@ -148,7 +170,44 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    void setLoginAsGust(){
+    void setLoginAsGust() {
         loginAsGust.setOnClickListener(view -> navigateToHome());
+    }
+
+
+    void loginBYGoogle() {
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), googleSignInOptions);
+
+
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,
+                null);
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(requireActivity(), task -> {
+            if (task.isSuccessful()) {
+                navigateToHome();
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+     super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException ignored) {
+            }
+        }
     }
 }

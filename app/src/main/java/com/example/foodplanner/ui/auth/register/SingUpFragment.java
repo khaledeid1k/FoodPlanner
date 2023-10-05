@@ -71,9 +71,9 @@ public class SingUpFragment extends Fragment {
     }
 
     User getData() {
-        return new User(emailText.getText().toString(),
-                passwordText.getText().toString()
-                , repeatedPasswordText.getText().toString()
+        return new User(emailText.getText().toString().trim(),
+                passwordText.getText().toString().trim()
+                , repeatedPasswordText.getText().toString().trim()
         );
     }
 
@@ -90,8 +90,8 @@ public class SingUpFragment extends Fragment {
                         passwordText_P.setErrorEnabled(false);
                         repeatedPasswordText_P.setErrorEnabled(false);
                         firebaseAuth.createUserWithEmailAndPassword(
-                                emailText.getText().toString(),
-                                passwordText.getText().toString()).addOnCompleteListener(
+                                emailText.getText().toString().trim(),
+                                passwordText.getText().toString().trim()).addOnCompleteListener(
                                 requireActivity(), task -> {
                                     if (task.isSuccessful()) {
                                         navigateToHome();

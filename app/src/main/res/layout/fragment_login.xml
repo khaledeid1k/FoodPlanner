@@ -91,7 +91,7 @@
             android:layout_marginHorizontal="@dimen/margin_60"
             android:layout_marginTop="@dimen/margin_32"
             android:background="@drawable/rounded_button"
-
+            android:textColor="@color/white"
             android:text="@string/login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,14 +124,14 @@
             android:layout_height="wrap_content"
             android:src="@drawable/facebook"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintEnd_toStartOf="@+id/google_login"
             app:layout_constraintHorizontal_bias=".8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/or"
             app:layout_constraintVertical_bias=".1" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/google_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/google"

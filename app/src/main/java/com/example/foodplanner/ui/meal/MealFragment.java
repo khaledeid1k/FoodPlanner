@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +41,7 @@ public class MealFragment extends Fragment {
 
     ImageView imageSingleMeal,backFromMeal;
     CheckBox favouriteIconSingleMeal;
-    TextView nameSingleMeal, categorySingleMeal,tileOfMeal;
+    TextView nameSingleMeal, countrySingleMeal,tileOfMeal;
     RecyclerView recyclerViewSingleMeal;
     Button buttonIngredientSingleMeal,buttonVideoSingleMeal,buttonInstructionsSingleMeal;
 
@@ -81,7 +80,7 @@ public class MealFragment extends Fragment {
         recyclerViewSingleMeal = view.findViewById(R.id.recyclerview_single_meal);
         nameSingleMeal = view.findViewById(R.id.name_single_meal);
         tileOfMeal = view.findViewById(R.id.tile_of_meal);
-        categorySingleMeal = view.findViewById(R.id.category_single_meal);
+        countrySingleMeal = view.findViewById(R.id.country_single_meal);
         imageSingleMeal = view.findViewById(R.id.image_single_meal);
         backFromMeal = view.findViewById(R.id.back_from_meal);
         favouriteIconSingleMeal = view.findViewById(R.id.favourite_icon_single_meal);
@@ -109,7 +108,7 @@ public class MealFragment extends Fragment {
         nameSingleMeal.setText(meal.getStrMeal());
         tileOfMeal.setText(meal.getStrMeal());
         backFromMeal.setOnClickListener(Extensions::closeFragment);
-        categorySingleMeal.setText(meal.getStrCategory());
+        countrySingleMeal.setText(meal.getStrArea());
 
         favouriteIconSingleMeal.setOnClickListener(view -> {
             if (!Constants.isLogin) {
