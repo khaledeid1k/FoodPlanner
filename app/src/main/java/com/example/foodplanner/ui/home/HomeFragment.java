@@ -1,6 +1,9 @@
 package com.example.foodplanner.ui.home;
 
+import static com.example.foodplanner.utils.Extensions.moveToLoginScreen;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +11,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
@@ -22,15 +27,21 @@ import com.example.foodplanner.ui.home.adapter.CountriesItem;
 import com.example.foodplanner.ui.home.adapter.HeaderItem;
 import com.example.foodplanner.ui.home.adapter.HomeAdapter;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements HomeView {
 
     RecyclerView recyclerView;
     HomePresenter presenter;
     HomeAdapter homeAdapter;
     ArrayList<DataItem> items;
+    private static final String TAG = "HomeFragmentlollllllllll";
 
 
     @Override
@@ -52,7 +63,7 @@ public class HomeFragment extends Fragment {
     void inti(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
         presenter = new HomePresenter(
-                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(requireActivity())));
+                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(requireActivity())),this);
         items = new ArrayList<>();
         homeAdapter = new HomeAdapter(requireActivity(), items, presenter, presenter);
 
@@ -91,8 +102,39 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @Override
+    public void logout() {
 
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager()
+                .findFragmentById(R.id.fragmentContainerView);
 
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), googleSignInOptions);
+        mGoogleSignInClient.signOut().addOnCompleteListener(requireActivity(), task -> {
+            if (task.isSuccessful()) {
+
+                moveToLoginScreen( navHostFragment.getNavController());
+                Log.i(TAG, "logout: ");
+            } else {
+                Log.i(TAG, "Error in logout: ");
+
+            }
+        });
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signOut();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            moveToLoginScreen( navHostFragment.getNavController());
+            Log.d(TAG, "Sign out was successful");
+        } else {
+            Log.e(TAG, "Sign out failed");
+        }
+    }
 }
 
 

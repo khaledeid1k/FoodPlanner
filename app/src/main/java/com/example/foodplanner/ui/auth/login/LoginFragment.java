@@ -1,22 +1,23 @@
 package com.example.foodplanner.ui.auth.login;
 
+import static com.example.foodplanner.utils.Extensions.moveToLoginScreen;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.User;
@@ -30,13 +31,25 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 public class LoginFragment extends Fragment {
     TextInputEditText emailText, passwordText;
@@ -47,8 +60,9 @@ public class LoginFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     ImageView loginBYGoogle;
     GoogleSignInClient mGoogleSignInClient;
-    private static final int RC_SIGN_IN = 1;
-
+    private  final int RC_SIGN_IN = 1;
+    private static final String TAG = "LoginFragmentlollllllllll";
+    FirebaseFirestore firebaseDatabase;
 
 
     @Override
@@ -67,14 +81,14 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         inti(view);
-        checkIfUserLoginBefore(view);
+        checkIfUserLoginBefore();
         loginAction();
         navigateToRegister();
         setLoginAsGust();
-        loginBYGoogle();
         loginBYGoogle.setOnClickListener(viaew -> {
+            loginBYGoogle();
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+     startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
 
@@ -87,6 +101,7 @@ public class LoginFragment extends Fragment {
         register = view.findViewById(R.id.go_to_register);
         loginAsGust = view.findViewById(R.id.login_as_gust);
         loginBYGoogle = view.findViewById(R.id.google_login);
+        firebaseDatabase = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         loginPresenter = new LoginPresenter(new AuthenticationImpl(new AuthInputValidatorImpl()));
     }
@@ -146,7 +161,7 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    void checkIfUserLoginBefore(View view) {
+    void checkIfUserLoginBefore() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             navigateToHome();
@@ -154,6 +169,7 @@ public class LoginFragment extends Fragment {
     }
 
     void navigateToHome() {
+        Constants.isLogin=true;
         Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
     }
 
@@ -164,14 +180,16 @@ public class LoginFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser != null) {
-            navigateToHome();
-        }
+        checkIfUserLoginBefore();
+
     }
 
     void setLoginAsGust() {
-        loginAsGust.setOnClickListener(view -> navigateToHome());
+        loginAsGust.setOnClickListener(view -> {
+                navigateToHome();
+                Constants.isLogin=false;
+    }
+        );
     }
 
 
@@ -182,32 +200,100 @@ public class LoginFragment extends Fragment {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
+
+
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), googleSignInOptions);
 
+//        mGoogleSignInClient.signOut().addOnCompleteListener(requireActivity(), task -> {
+//            // Now, initiate the sign-in process, which will show the dialog
+//            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//            startActivityForResult(signInIntent, RC_SIGN_IN);
+//        });
 
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,
-                null);
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(requireActivity(), task -> {
             if (task.isSuccessful()) {
-                navigateToHome();
+                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                String email = currentUser.getEmail();
+                Log.i(TAG, "firebaseAuthWithGoogle: " + email);
+                checkIfEmailExists(email);
+
+            } else {
+                Toast.makeText(requireActivity(), "Failed to sign in with Google.", Toast.LENGTH_LONG).show();
+                firebaseAuth.getCurrentUser().delete();
             }
         });
     }
 
+    void checkIfEmailExists(String userEmail) {
+        CollectionReference collection = firebaseDatabase.collection(Constants.CollectionPath);
+        collection.whereEqualTo(Constants.email, userEmail)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot result = task.getResult();
+                        boolean isEmailExists = !result.isEmpty();
+
+                        if (isEmailExists) {
+                            navigateToHome();
+                        } else {
+                            logout();
+                            Toast.makeText(requireActivity(), "Email not found in Firestore.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Log.i(TAG, "Error checking email in Firestore: " + task.getException());
+                    }
+                });
+    }
+
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-     super.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken());
+                if (account != null) {
+                    // Get the ID token and proceed with Firebase authentication
+                   firebaseAuthWithGoogle(account.getIdToken());
+
+                }
             } catch (ApiException ignored) {
             }
+        }
+    }
+
+    public void logout() {
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), googleSignInOptions);
+        mGoogleSignInClient.signOut().addOnCompleteListener(requireActivity(), task -> {
+            if (task.isSuccessful()) {
+                Log.i(TAG, "logout: ");
+            } else {
+                Log.i(TAG, "Error in logout: ");
+
+            }
+        });
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signOut();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            Log.d(TAG, "Sign out was successful");
+        } else {
+            Log.e(TAG, "Sign out failed");
         }
     }
 }

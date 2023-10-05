@@ -15,6 +15,9 @@ public class Constants {
     public final static String ErrorEmail = "ErrorEmail";
     public final static String ErrorPassword = "ErrorPassword";
     public final static String ErrorRePassword = "ErrorRePassword";
+    public final static String email = "email";
+    public final static String password = "password";
+    public final static String CollectionPath = "users";
     public static boolean isLogin = false;
 
 }

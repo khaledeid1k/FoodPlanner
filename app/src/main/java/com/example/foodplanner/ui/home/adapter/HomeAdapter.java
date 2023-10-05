@@ -91,6 +91,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                         R.drawable.no_result_search
                 ).into(((HeaderViewHolder) holder).imageMealOfDay);
                 holder.itemView.setOnClickListener(view -> navigationToShowAll.onNavigate(dataItem,view));
+                ((HeaderViewHolder) holder).logout.setOnClickListener(
+                        view -> navigationToShowAll.logout()
+                );
 
 
             }
@@ -169,6 +172,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             super(itemView);
         }
         ImageView imageMealOfDay = itemView.findViewById(R.id.img_meal_day);
+        ImageView logout = itemView.findViewById(R.id.log_out);
         TextView nameMeaOfDay = itemView.findViewById(R.id.name_meal_day);
         TextView countryMeaOfDay = itemView.findViewById(R.id.country_meal_day);
     }

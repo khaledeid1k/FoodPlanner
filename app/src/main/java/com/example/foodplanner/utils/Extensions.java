@@ -19,7 +19,7 @@ public class Extensions {
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle("Please log in to access this feature.");
-        builder.setPositiveButton("Login", (dialog, which) -> controller.navigate(R.id.loginFragment));
+        builder.setPositiveButton("Login", (dialog, which) -> moveToLoginScreen(controller));
         builder.setNegativeButton("Cancel", (dialog, which) -> {
         });
 
@@ -28,5 +28,11 @@ public class Extensions {
 
 
     }
+
+    public static void moveToLoginScreen(NavController controller){
+        controller.navigate(R.id.loginFragment);
+    }
+
+
 
 }

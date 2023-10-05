@@ -7,4 +7,5 @@ import com.example.foodplanner.ui.base.BaseInteractionListener;
 
 public interface NavigationToShowAll extends BaseInteractionListener {
     void onNavigate(DataItem dataItem, View view);
+    void logout();
 }

@@ -27,11 +27,11 @@ import java.util.List;
 
 public class HomePresenter implements NavigationToShowAll, OnClickItem {
     Repository repository;
-
-    HomePresenter(Repository repository) {
+    HomeView homeView;
+    HomePresenter(Repository repository, HomeView homeView) {
         this.repository = repository;
+        this.homeView = homeView;
         getAllCategoriesWithDetails();
-
         getRandomMeal();
         getAllCountries();
         getMealsByFirstLetter("b");
@@ -45,12 +45,15 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
     public LiveData<Meal> randomMealLiveData() {
         return randomMealLiveData;
     }
+
     public LiveData<List<Meal>> mealsByFirstLetter() {
         return mealsByFirstLetter;
     }
+
     public LiveData<List<CategoryWithDetails>> categoriesWithDetails() {
         return allCategoriesWithDetails;
     }
+
     public LiveData<List<Country>> allCountries() {
         return allCountries;
     }
@@ -121,22 +124,46 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
             Navigation.findNavController(view).navigate(
                     action
             );
-        }else  if (dataItem instanceof CategoriesItem) {
+        } else if (dataItem instanceof CategoriesItem) {
             HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
                     HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
             Navigation.findNavController(view).navigate(
                     action
             );
-        }else  if (dataItem instanceof CountriesItem) {
+        } else if (dataItem instanceof CountriesItem) {
             HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
                     HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        } else if (dataItem instanceof HeaderItem) {
+            HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((HeaderItem) dataItem).getTag().getResourcesData());
             Navigation.findNavController(view).navigate(
                     action
             );
         }
-      else if (dataItem instanceof HeaderItem) {
+    }
+
+
+
+    @Override
+    public void click(DataItem dataItem, int position, View view) {
+        if (dataItem instanceof MealsItem) {
             HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((HeaderItem)dataItem).getTag().getResourcesData());
+                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((MealsItem) dataItem).getTag().getResourcesData().get(0));
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        } else if (dataItem instanceof CategoriesItem) {
+            HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CategoriesItem) dataItem).getTag().getResourcesData().get(position).getStrCategory() + Constants.CATEGORY);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        } else if (dataItem instanceof CountriesItem) {
+            HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CountriesItem) dataItem).getTag().getResourcesData().get(position).getStrArea() + Constants.COUNTRY);
             Navigation.findNavController(view).navigate(
                     action
             );
@@ -144,27 +171,7 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
     }
 
     @Override
-    public void click(DataItem dataItem, int position, View view) {
-         if (dataItem instanceof MealsItem) {
-            HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((MealsItem)dataItem).getTag().getResourcesData().get(0));
-            Navigation.findNavController(view).navigate(
-                    action
-            );
-        }
-         else if (dataItem instanceof CategoriesItem) {
-             HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
-                     HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CategoriesItem)dataItem).getTag().getResourcesData().get(position).getStrCategory()+ Constants.CATEGORY);
-             Navigation.findNavController(view).navigate(
-                     action
-             );
-         }
-         else if (dataItem instanceof CountriesItem) {
-             HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
-                     HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CountriesItem)dataItem).getTag().getResourcesData().get(position).getStrArea()+Constants.COUNTRY);
-             Navigation.findNavController(view).navigate(
-                     action
-             );
-         }
+    public void logout() {
+        homeView.logout();
     }
 }
