@@ -23,7 +23,9 @@ import com.example.foodplanner.ui.home.adapter.NavigationToShowAll;
 import com.example.foodplanner.ui.home.adapter.OnClickItem;
 import com.example.foodplanner.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class HomePresenter implements NavigationToShowAll, OnClickItem {
     Repository repository;
@@ -34,7 +36,7 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
         getAllCategoriesWithDetails();
         getRandomMeal();
         getAllCountries();
-        getMealsByFirstLetter("b");
+        getMealsByFirstLetter();
     }
 
     private MutableLiveData<Meal> randomMealLiveData = new MutableLiveData<>();
@@ -74,12 +76,17 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
 
     }
 
-    private void getMealsByFirstLetter(String firstLetter) {
-        repository.getMealsByFirstLetter(firstLetter, new StateOfResponse<Meals>() {
+    private void getMealsByFirstLetter() {
+
+        repository.getMealsByFirstLetter(randomChar(), new StateOfResponse<Meals>() {
             @Override
             public void succeeded(Meals response) {
-                mealsByFirstLetter.setValue(response.getMeals());
-            }
+                if(response.getMeals().size()>=6) {
+                    mealsByFirstLetter.setValue(response.getMeals());
+                }else {
+                    getMealsByFirstLetter();
+                }
+                }
 
             @Override
             public void failure(String message) {
@@ -173,5 +180,16 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
     @Override
     public void logout() {
         homeView.logout();
+    }
+
+    String randomChar(){
+        ArrayList<Character> alphabets = new ArrayList<>();
+        for (char c = 'a'; c <= 'z'; c++) {
+            alphabets.add(c);
+        }
+        Random random = new Random();
+        int randomIndex = random.nextInt(alphabets.size());
+
+        return alphabets.get(randomIndex).toString();
     }
 }
