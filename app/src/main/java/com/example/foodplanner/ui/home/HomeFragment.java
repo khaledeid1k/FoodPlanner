@@ -11,17 +11,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.Tag;
 import com.example.foodplanner.data.network.NetWork;
 import com.example.foodplanner.data.repository.RepositoryIm;
-import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.ui.home.adapter.CategoriesItem;
 import com.example.foodplanner.ui.home.adapter.CountriesItem;
 import com.example.foodplanner.ui.home.adapter.HeaderItem;
@@ -41,6 +40,7 @@ public class HomeFragment extends Fragment implements HomeView {
     HomePresenter presenter;
     HomeAdapter homeAdapter;
     ArrayList<DataItem> items;
+    LottieAnimationView lottieAnimation;
     private static final String TAG = "HomeFragmentlollllllllll";
 
 
@@ -57,20 +57,22 @@ public class HomeFragment extends Fragment implements HomeView {
         addMealsByFirstLetter();
         addCategoriesWithDetails();
         addAllCountries();
-        recyclerView.setAdapter(homeAdapter);
+
     }
 
     void inti(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
+        lottieAnimation = view.findViewById(R.id.lottie_animation_home);
         presenter = new HomePresenter(
                 RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(requireActivity())),this);
         items = new ArrayList<>();
         homeAdapter = new HomeAdapter(requireActivity(), items, presenter, presenter);
-
+        recyclerView.setAdapter(homeAdapter);
     }
 
     void addRandomMeal() {
         presenter.randomMealLiveData().observe(getViewLifecycleOwner(), meal -> {
+            lottieAnimation.setVisibility(View.INVISIBLE);
             items.add(0,new HeaderItem(meal));
             homeAdapter.updateData(items);
         });
@@ -80,6 +82,8 @@ public class HomeFragment extends Fragment implements HomeView {
     void addMealsByFirstLetter() {
         presenter.mealsByFirstLetter().observe(getViewLifecycleOwner(), meals -> {
             items.add(new MealsItem(new Tag<>("Meals", meals)));
+            lottieAnimation.setVisibility(View.INVISIBLE);
+
             homeAdapter.updateData(items);
         });
     }
@@ -87,6 +91,8 @@ public class HomeFragment extends Fragment implements HomeView {
     void addCategoriesWithDetails() {
         presenter.categoriesWithDetails().observe(getViewLifecycleOwner(), categoryWithDetailsList -> {
             items.add(new CategoriesItem(new Tag<>("Categories", categoryWithDetailsList)));
+            lottieAnimation.setVisibility(View.INVISIBLE);
+
             homeAdapter.updateData(items);
         });
     }
@@ -95,6 +101,8 @@ public class HomeFragment extends Fragment implements HomeView {
 
         presenter.allCountries().observe(getViewLifecycleOwner(), countryList -> {
             items.add(new CountriesItem(new Tag<>("Countries", countryList)));
+            lottieAnimation.setVisibility(View.INVISIBLE);
+
             homeAdapter.updateData(items);
         });
 

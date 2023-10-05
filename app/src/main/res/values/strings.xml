@@ -36,5 +36,7 @@
     <string name="cooking_guide">Video</string>
     <string name="skip">As Gust</string>
     <string name="please_log_in_to_access_this_feature">Please log in to access this feature.</string>
+    <string name="no_favorites">No Favorites</string>
+    <string name="no_plan">No plan for This week</string>
 
 </resources>

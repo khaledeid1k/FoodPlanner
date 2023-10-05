@@ -246,6 +246,7 @@ public class LoginFragment extends Fragment {
                             Toast.makeText(requireActivity(), "Email not found in Firestore.", Toast.LENGTH_LONG).show();
                         }
                     } else {
+                        String message = task.getException().getMessage();
                         Log.i(TAG, "Error checking email in Firestore: " + task.getException());
                     }
                 });

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSource;
 import com.example.foodplanner.data.local.LocalSourceIm;
@@ -39,6 +40,7 @@ public class MealsFragment extends Fragment {
     MealsPresenter mealsPresenter;
     ArrayList<FilteredItem> meals;
     ImageView back;
+    LottieAnimationView lottieAnimation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class MealsFragment extends Fragment {
         recyclerViewMeals=view.findViewById(R.id.recycle_of_meals);
         nameList=view.findViewById(R.id.meals_text);
         back = view.findViewById(R.id.back_from_meals);
+        lottieAnimation = view.findViewById(R.id.lottie_animation_meals);
 
         String nameOfItem = MealsFragmentArgs.fromBundle(getArguments()).getNameOfItem();
         nameList.setText(getString(R.string.meals_of_first_item, nameOfItem.split(",")[0]));
@@ -76,6 +79,7 @@ public class MealsFragment extends Fragment {
     void setUp(){
         mealsPresenter.filteredItemsLiveData().observe(getViewLifecycleOwner(),
                 filteredItems -> {
+                    lottieAnimation.setVisibility(View.INVISIBLE);
                     mealsAdapter.updateData(filteredItems.getMeals());
                 });
 

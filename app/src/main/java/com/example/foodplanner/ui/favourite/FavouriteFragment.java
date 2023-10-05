@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.filter.FilteredItem;
@@ -31,7 +33,8 @@ public class FavouriteFragment extends Fragment implements FavouriteView {
     RecyclerView recyclerView;
     ArrayList<Meal> meals;
     FavouritePresenter favouritePresenter;
-
+    LottieAnimationView lottieAnimation;
+    TextView noFavorites;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,9 @@ public class FavouriteFragment extends Fragment implements FavouriteView {
 
     void init(View view){
         recyclerView=view.findViewById(R.id.recycle_favourite);
+        lottieAnimation=view.findViewById(R.id.lottie_animation_favourite);
+        noFavorites=view.findViewById(R.id.no_favorite_Text);
+
         meals=new ArrayList<>();
         favouritePresenter=new FavouritePresenter(
                 RepositoryIm.getInstance(NetWork.getInstance(),
@@ -63,6 +69,12 @@ public class FavouriteFragment extends Fragment implements FavouriteView {
     void setUp(){
         favouritePresenter.getFavoritesMeals().observe(getViewLifecycleOwner(), meals -> {
             favouriteAdapter.updateData(new ArrayList<>(meals));
+         if(meals.size()!=0){
+             lottieAnimation.setVisibility(View.INVISIBLE);
+             noFavorites.setVisibility(View.INVISIBLE);
+
+         }
+
         });
 
     }

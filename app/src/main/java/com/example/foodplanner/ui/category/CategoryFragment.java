@@ -1,28 +1,23 @@
 package com.example.foodplanner.ui.category;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
 import com.example.foodplanner.data.network.NetWork;
 import com.example.foodplanner.data.repository.RepositoryIm;
-import com.example.foodplanner.ui.home.HomePresenter;
 
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class CategoryFragment extends Fragment {
 
@@ -30,6 +25,7 @@ public class CategoryFragment extends Fragment {
     ArrayList<CategoryWithDetails> categoryWithDetails;
     RecyclerView recycleCategory;
     CategoryAdapter categoryAdapter;
+    LottieAnimationView lottieAnimation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +47,7 @@ public class CategoryFragment extends Fragment {
     }
     void  inti(View view){
         recycleCategory=view.findViewById(R.id.recycle_category);
+        lottieAnimation=view.findViewById(R.id.lottie_animation_category);
         categoryWithDetails=new ArrayList<>();
         categoryPresenter = new CategoryPresenter(
                 RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())));
@@ -59,6 +56,11 @@ public class CategoryFragment extends Fragment {
 
     }
     void setUp(){
-        categoryPresenter.categoriesWithDetails().observe(getViewLifecycleOwner(), categoryWithDetailsList -> categoryAdapter.updateData(new ArrayList<>(categoryWithDetailsList)));
+        categoryPresenter.categoriesWithDetails().observe(getViewLifecycleOwner(),
+                categoryWithDetailsList -> {
+                    categoryAdapter.updateData(new ArrayList<>(categoryWithDetailsList));
+                    lottieAnimation.setVisibility(View.INVISIBLE);
+                }
+        );
     }
 }

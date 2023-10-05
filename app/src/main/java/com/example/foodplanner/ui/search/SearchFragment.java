@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.filter.FilteredItem;
@@ -41,6 +42,8 @@ public class SearchFragment extends Fragment {
     RecyclerView recyclerViewOfSearch;
     ArrayList<FilteredItem> filteredItemArrayList;
     MealsAdapter mealsAdapter;
+    LottieAnimationView lottieAnimation;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,8 @@ public class SearchFragment extends Fragment {
         chip3 = view.findViewById(R.id.ingredients_search);
         searchText = view.findViewById(R.id.search_text_value);
         recyclerViewOfSearch = view.findViewById(R.id.recycler_view_search);
+        lottieAnimation = view.findViewById(R.id.lottie_animation_search);
+
         searchPresenter = new SearchPresenter(
                 RepositoryIm.getInstance(NetWork.getInstance(),
                         LocalSourceIm.getInstance(getActivity())));
@@ -121,12 +126,15 @@ public class SearchFragment extends Fragment {
                 filteredItems -> {
                     Log.i(TAG, "afdsdfsdf: "+filteredItems);
                     ArrayList<FilteredItem> collect =
-
                             (ArrayList<FilteredItem>) filteredItems.stream().distinct()
-                                    .sorted(Comparator.comparing(FilteredItem::getStrMeal)) // Sort by strMeal
-
+                                    .sorted(Comparator.comparing(FilteredItem::getStrMeal))
                                     .collect(Collectors.toList());
 
+                    if(collect.size()!=0){
+                        lottieAnimation.setVisibility(View.INVISIBLE);
+                    }else {
+                        lottieAnimation.setVisibility(View.VISIBLE);
+                    }
 
                     mealsAdapter.updateData(collect);
                 });

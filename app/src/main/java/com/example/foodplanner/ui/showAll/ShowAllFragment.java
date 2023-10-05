@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
@@ -39,6 +40,7 @@ public class ShowAllFragment extends Fragment {
     ImageView back;
     DataItem dataItem;
     ShowAllPresenter showAllPresenter;
+    LottieAnimationView lottieAnimation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class ShowAllFragment extends Fragment {
         tileOfShowAll = view.findViewById(R.id.tile_of_list_of_show_all);
         recyclerViewShowAll = view.findViewById(R.id.recycle_of_show_aLl);
         back = view.findViewById(R.id.back_from_show_all);
+        lottieAnimation = view.findViewById(R.id.lottie_animation_show_all);
+
         showAllPresenter = new ShowAllPresenter();
         back.setOnClickListener(Extensions::closeFragment);
 
@@ -81,7 +85,7 @@ public class ShowAllFragment extends Fragment {
                     dataItem,
                     showAllPresenter,
                     Constants.VIEW_TYPE_GRID);
-
+            lottieAnimation.setVisibility(View.INVISIBLE);
             recyclerViewShowAll.setAdapter(itemsAdapter);
             tileOfShowAll.setText(tag.getTitle());
         } else if (dataItem instanceof CategoriesItem) {
@@ -91,7 +95,7 @@ public class ShowAllFragment extends Fragment {
                     dataItem,
                     showAllPresenter,
                     Constants.VIEW_TYPE_GRID);
-
+            lottieAnimation.setVisibility(View.INVISIBLE);
             recyclerViewShowAll.setAdapter(itemsAdapter);
             tileOfShowAll.setText(tag.getTitle());
         } else if (dataItem instanceof CountriesItem) {
@@ -101,7 +105,7 @@ public class ShowAllFragment extends Fragment {
                     dataItem,
                     showAllPresenter,
                     Constants.VIEW_TYPE_GRID);
-
+            lottieAnimation.setVisibility(View.INVISIBLE);
             recyclerViewShowAll.setAdapter(itemsAdapter);
             tileOfShowAll.setText(tag.getTitle());
         }
