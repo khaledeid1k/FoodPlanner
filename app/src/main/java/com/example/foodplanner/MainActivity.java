@@ -1,5 +1,7 @@
 package com.example.foodplanner;
 
+import static com.example.foodplanner.utils.Extensions.showRequestLogDialog;
+
 import android.os.Bundle;
 import android.view.View;
 
@@ -25,7 +27,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
-        controlToBottomNavigationClicks();
+        if(!Constants.isLogin) {
+            NavigationUI.setupWithNavController(bottomNavigationView, controller);
+            controlToBottomNavigationClicks();
+        }else {
+            controller.popBackStack(R.id.loginFragment, false);
+            NavigationUI.setupWithNavController(bottomNavigationView, controller);
+
+        }
         disappearAndShowBottomNavigation();
 
     }
@@ -51,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
     void  controlToBottomNavigationClicks(){
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.favourite||itemId==R.id.plan) {
-                if(!Constants.isLogin){
-                    Extensions.showRequestLogDialog(controller,this);
+                 showRequestLogDialog(controller,this);
                     return false;
-                }
             }
                 return NavigationUI.onNavDestinationSelected(item, controller);
 
