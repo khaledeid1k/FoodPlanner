@@ -113,7 +113,10 @@
         android:label="SingUpFragment" >
         <action
             android:id="@+id/action_singUpFragment_to_homeF"
-            app:destination="@id/homeF" />
+            app:destination="@id/homeF"
+            app:popUpTo="@id/singUpFragment"
+            app:popUpToInclusive="true"
+            />
         <action
             android:id="@+id/action_singUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />

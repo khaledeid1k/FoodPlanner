@@ -23,6 +23,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.User;
 import com.example.foodplanner.data.models.Validation;
+import com.example.foodplanner.ui.auth.AuthView;
 import com.example.foodplanner.ui.auth.validation.AuthInputValidatorImpl;
 import com.example.foodplanner.ui.auth.validation.AuthenticationImpl;
 import com.example.foodplanner.utils.Constants;
@@ -66,6 +67,7 @@ public class LoginFragment extends Fragment {
     private static final String TAG = "LoginFragmentlollllllllll";
     FirebaseFirestore firebaseDatabase;
     private ProgressDialog progressDialog;
+    AuthView authView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class LoginFragment extends Fragment {
         loginAsGust = view.findViewById(R.id.login_as_gust);
         loginBYGoogle = view.findViewById(R.id.google_login);
         progressDialog = new ProgressDialog(requireActivity());
+        authView=(AuthView)requireActivity() ;
 
         firebaseDatabase = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -171,13 +174,15 @@ public class LoginFragment extends Fragment {
     void checkIfUserLoginBefore() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
-            navigateToHome();
+            Constants.isLogin=true;
+            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
         }
     }
 
     void navigateToHome() {
         Constants.isLogin=true;
         Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
+        authView.IsLogin(true);
     }
 
     void navigateToRegister() {
@@ -188,14 +193,14 @@ public class LoginFragment extends Fragment {
     public void onStart() {
         super.onStart();
         checkIfUserLoginBefore();
-
     }
 
     void setLoginAsGust() {
         loginAsGust.setOnClickListener(view -> {
                 navigateToHome();
                 Constants.isLogin=false;
-    }
+                    authView.IsLogin(false);
+        }
         );
     }
 

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.User;
 import com.example.foodplanner.data.models.Validation;
+import com.example.foodplanner.ui.auth.AuthView;
 import com.example.foodplanner.ui.auth.validation.AuthInputValidatorImpl;
 import com.example.foodplanner.ui.auth.validation.AuthenticationImpl;
 import com.example.foodplanner.utils.Constants;
@@ -62,6 +63,7 @@ public class SingUpFragment extends Fragment {
     GoogleSignInClient mGoogleSignInClient;
     String TAG="SingUpFragmentlollllllllll";
     private ProgressDialog progressDialog;
+    AuthView authView;
 
 
     @Override
@@ -100,6 +102,7 @@ public class SingUpFragment extends Fragment {
         repeatedPasswordText_P = view.findViewById(R.id.confirm_password_p_register);
         googleRegister = view.findViewById(R.id.google_register);
         progressDialog = new ProgressDialog(requireActivity());
+        authView=(AuthView)requireActivity() ;
 
         firebaseDatabase = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -140,10 +143,8 @@ public class SingUpFragment extends Fragment {
                                 requireActivity(), task -> {
                                     if (task.isSuccessful()) {
                                         checkIfEmailExists(email,password);
-
                                     }else {
                                         Toast.makeText(requireActivity(), "Email is register before, Please Login in ", Toast.LENGTH_LONG).show();
-
                                     }
                                     progressDialog.dismiss();
                                 }
@@ -181,6 +182,7 @@ public class SingUpFragment extends Fragment {
 
     void navigateToHome() {
         Constants.isLogin=true;
+        authView.IsLogin(true);
         Navigation.findNavController(requireView()).navigate(R.id.action_singUpFragment_to_homeF);
 
     }
