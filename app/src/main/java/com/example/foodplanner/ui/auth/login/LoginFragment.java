@@ -2,6 +2,7 @@ package com.example.foodplanner.ui.auth.login;
 
 import static com.example.foodplanner.utils.Extensions.moveToLoginScreen;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
+import java.util.Objects;
 
 public class LoginFragment extends Fragment {
     TextInputEditText emailText, passwordText;
@@ -63,7 +65,7 @@ public class LoginFragment extends Fragment {
     private  final int RC_SIGN_IN = 1;
     private static final String TAG = "LoginFragmentlollllllllll";
     FirebaseFirestore firebaseDatabase;
-
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,8 @@ public class LoginFragment extends Fragment {
         register = view.findViewById(R.id.go_to_register);
         loginAsGust = view.findViewById(R.id.login_as_gust);
         loginBYGoogle = view.findViewById(R.id.google_login);
+        progressDialog = new ProgressDialog(requireActivity());
+
         firebaseDatabase = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         loginPresenter = new LoginPresenter(new AuthenticationImpl(new AuthInputValidatorImpl()));
@@ -124,18 +128,21 @@ public class LoginFragment extends Fragment {
         loginPresenter.validationLiveDataLogin().observe(getViewLifecycleOwner(),
                 validation -> {
                     if (validation.isValid()) {
+                        progressDialog.setMessage("Logging in...");
+                        progressDialog.show();
                         emailP.setErrorEnabled(false);
                         passwordP.setErrorEnabled(false);
                         firebaseAuth.signInWithEmailAndPassword(
                                 emailText.getText().toString().trim(),
-                                passwordText.getText().toString().trim()).addOnCompleteListener(
+                                passwordText.getText().toString().trim()).
+                                addOnCompleteListener(
                                 requireActivity(), task -> {
                                     if (task.isSuccessful()) {
                                         navigateToHome();
                                     } else {
-
-
+                                        Toast.makeText(requireActivity(), "Email not register", Toast.LENGTH_LONG).show();
                                     }
+                                    progressDialog.dismiss();
 
                                 }
                         );
@@ -238,17 +245,16 @@ public class LoginFragment extends Fragment {
                     if (task.isSuccessful()) {
                         QuerySnapshot result = task.getResult();
                         boolean isEmailExists = !result.isEmpty();
-
                         if (isEmailExists) {
                             navigateToHome();
                         } else {
                             logout();
-                            Toast.makeText(requireActivity(), "Email not found in Firestore.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(requireActivity(), "Email not register", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        String message = task.getException().getMessage();
-                        Log.i(TAG, "Error checking email in Firestore: " + task.getException());
+                        Toast.makeText(requireActivity(), "Error checking email in fireStore", Toast.LENGTH_LONG).show();
                     }
+                    progressDialog.dismiss();
                 });
     }
 
@@ -261,6 +267,8 @@ public class LoginFragment extends Fragment {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                progressDialog.setMessage("Logging in...");
+                progressDialog.show();
                 if (account != null) {
                     // Get the ID token and proceed with Firebase authentication
                    firebaseAuthWithGoogle(account.getIdToken());

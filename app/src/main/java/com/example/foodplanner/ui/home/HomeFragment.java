@@ -26,6 +26,7 @@ import com.example.foodplanner.ui.home.adapter.CountriesItem;
 import com.example.foodplanner.ui.home.adapter.HeaderItem;
 import com.example.foodplanner.ui.home.adapter.HomeAdapter;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
+import com.example.foodplanner.utils.Constants;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -112,7 +113,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void logout() {
-
+        Constants.isLogin=false;
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);
 

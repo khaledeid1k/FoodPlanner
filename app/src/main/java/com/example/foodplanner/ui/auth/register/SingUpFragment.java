@@ -2,6 +2,7 @@ package com.example.foodplanner.ui.auth.register;
 
 import static com.example.foodplanner.utils.Extensions.moveToLoginScreen;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -60,6 +61,7 @@ public class SingUpFragment extends Fragment {
     private  final int RC_SIGN_IN = 2;
     GoogleSignInClient mGoogleSignInClient;
     String TAG="SingUpFragmentlollllllllll";
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -97,6 +99,8 @@ public class SingUpFragment extends Fragment {
         passwordText_P = view.findViewById(R.id.password_p_register);
         repeatedPasswordText_P = view.findViewById(R.id.confirm_password_p_register);
         googleRegister = view.findViewById(R.id.google_register);
+        progressDialog = new ProgressDialog(requireActivity());
+
         firebaseDatabase = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         registerPresenter = new SingUpPresenter(new AuthenticationImpl(new AuthInputValidatorImpl()));
@@ -123,6 +127,8 @@ public class SingUpFragment extends Fragment {
         registerPresenter.validationLiveDataRegister().observe(getViewLifecycleOwner(),
                 validation -> {
                     if (validation.isValid()) {
+                        progressDialog.setMessage("Create an account...");
+                        progressDialog.show();
                         emailText_P.setErrorEnabled(false);
                         passwordText_P.setErrorEnabled(false);
                         repeatedPasswordText_P.setErrorEnabled(false);
@@ -135,9 +141,13 @@ public class SingUpFragment extends Fragment {
                                     if (task.isSuccessful()) {
                                         checkIfEmailExists(email,password);
 
-                                    }
+                                    }else {
+                                        Toast.makeText(requireActivity(), "Email is register before, Please Login in ", Toast.LENGTH_LONG).show();
 
+                                    }
+                                    progressDialog.dismiss();
                                 }
+
                         );
                     } else {
                         printError(validation);
@@ -220,6 +230,7 @@ public class SingUpFragment extends Fragment {
                 Toast.makeText(requireActivity(), "Failed to sign in with Google.", Toast.LENGTH_LONG).show();
                 firebaseAuth.getCurrentUser().delete();
             }
+            progressDialog.dismiss();
         });
     }
 
@@ -241,6 +252,8 @@ public class SingUpFragment extends Fragment {
                     } else {
                         Log.i(TAG, "Error checking email in FireStore: " + task.getException());
                     }
+
+
                 });
     }
 
@@ -253,6 +266,8 @@ public class SingUpFragment extends Fragment {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                progressDialog.setMessage("Create an account...");
+                progressDialog.show();
                 if (account != null) {
                     // Get the ID token and proceed with Firebase authentication
                     firebaseAuthWithGoogle(account.getIdToken());
