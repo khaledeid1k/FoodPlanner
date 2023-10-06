@@ -20,10 +20,10 @@ import com.example.foodplanner.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SearchPresenter implements OnClickListener {
-    String selectedChip=Constants.Meal;
     Repository repository;
     ArrayList<FilteredItem> filteredItemArrayList=new ArrayList<>();
     ArrayList<FilteredItem> filtered=new ArrayList<>();
@@ -91,13 +91,18 @@ public class SearchPresenter implements OnClickListener {
             repository.getMealsByFirstLetter(charOfMeal, new StateOfResponse<>() {
                 @Override
                 public void succeeded(Meals response) {
-                    List<Meal> meals = response.getMeals();
-                    for (Meal meal : meals) {
-                        filtered.add(new FilteredItem
-                                (meal.getStrMeal(),
-                                        meal.getStrMealThumb(),
-                                        meal.getIdMeal()));}
-                    filteredItemsMutableLiveData.setValue(filtered);
+                    List<Meal> meals = response != null ? response.getMeals() : null;
+                    if (meals != null) {
+                        ArrayList<FilteredItem> filtered = new ArrayList<>();
+                        for (Meal meal : meals) {
+                            filtered.add(new FilteredItem(
+                                    meal.getStrMeal(),
+                                    meal.getStrMealThumb(),
+                                    meal.getIdMeal()
+                            ));
+                        }
+                        filteredItemsMutableLiveData.setValue(filtered);
+                    }
                 }
 
                 @Override
@@ -118,32 +123,8 @@ public class SearchPresenter implements OnClickListener {
     }
 
 
-    void getTextOfSelectedChip(String selectedChipText) {
+    void getTextOfSelectedChip(String selectedChipText,String wordOfSearch) {
         switch (selectedChipText) {
-            case Constants.Category: {
-                selectedChip = Constants.Category;
-            }
-            break;
-
-            case Constants.Country: {
-                selectedChip = Constants.Country;
-            }
-            break;
-
-            case Constants.Ingredients: {
-                selectedChip = Constants.Ingredients;
-            }
-            break;
-            case Constants.Meal: {
-                selectedChip = Constants.Meal;
-            }
-            break;
-        }
-
-    }
-
-    public void getTextOfSearch(String wordOfSearch) {
-        switch (selectedChip) {
             case Constants.Category: {
                 searchOfCategory(wordOfSearch);
             }
@@ -151,25 +132,29 @@ public class SearchPresenter implements OnClickListener {
 
             case Constants.Country: {
                 searchByCountry(wordOfSearch);
+
             }
             break;
 
             case Constants.Ingredients: {
                 searchByIngredient(wordOfSearch);
+
             }
             break;
             case Constants.Meal: {
                 searchByMeal(wordOfSearch);
             }
             break;
-            case Constants.Empty: {
-                Log.i("TAG", "getTextOfSearch: " + selectedChip.length());
-                filteredItemArrayList.clear();
-                filteredItemsMutableLiveData.setValue(filteredItemArrayList);
-            }
+
+
+        }
+        if(Objects.equals(wordOfSearch, Constants.Empty)){
+            filteredItemArrayList.clear();
+            filteredItemsMutableLiveData.setValue(filteredItemArrayList);
         }
 
     }
+
 
 
 

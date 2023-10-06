@@ -43,6 +43,8 @@ public class SearchFragment extends Fragment {
     ArrayList<FilteredItem> filteredItemArrayList;
     MealsAdapter mealsAdapter;
     LottieAnimationView lottieAnimation;
+    String wordOfSearch=Constants.Empty;
+    String selectedChipText;
 
 
     @Override
@@ -94,10 +96,11 @@ public class SearchFragment extends Fragment {
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             Chip selectedChip = requireActivity().findViewById(checkedId);
             if (selectedChip != null) {
-                String selectedWord = selectedChip.getText().toString();
-                searchPresenter.getTextOfSelectedChip(selectedWord);
+                selectedChipText = selectedChip.getText().toString();
+                searchPresenter.getTextOfSelectedChip(selectedChipText,wordOfSearch);
             } else {
-                searchPresenter.getTextOfSelectedChip(Constants.Meal);
+                selectedChipText=Constants.Meal;
+                searchPresenter.getTextOfSelectedChip(selectedChipText,wordOfSearch);
             }
 
         });
@@ -110,9 +113,12 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length()>0) {
-                    searchPresenter.getTextOfSearch(charSequence.toString());
+                    wordOfSearch=charSequence.toString();
+                    searchPresenter.getTextOfSelectedChip(selectedChipText,wordOfSearch);
                 }else {
-                    searchPresenter.getTextOfSearch(Constants.Empty);
+                    wordOfSearch=Constants.Empty;
+                    searchPresenter.getTextOfSelectedChip(selectedChipText,wordOfSearch);
+
 
                 }
             }
@@ -124,19 +130,22 @@ public class SearchFragment extends Fragment {
         });
         searchPresenter.filteredItemsLiveData().observe(getViewLifecycleOwner(),
                 filteredItems -> {
-                    Log.i(TAG, "afdsdfsdf: "+filteredItems);
-                    ArrayList<FilteredItem> collect =
+                    ArrayList<FilteredItem> collect=new ArrayList<>();
+                    if (filteredItems != null){
+                        Log.i(TAG, "afdsdfsdf: " + filteredItems);
+                  collect =
                             (ArrayList<FilteredItem>) filteredItems.stream().distinct()
                                     .sorted(Comparator.comparing(FilteredItem::getStrMeal))
-                                    .collect(Collectors.toList());
+                                    .collect(Collectors.toList());}
 
-                    if(collect.size()!=0){
+                    if (collect.size() != 0) {
                         lottieAnimation.setVisibility(View.INVISIBLE);
-                    }else {
+                    } else {
                         lottieAnimation.setVisibility(View.VISIBLE);
                     }
 
                     mealsAdapter.updateData(collect);
+
                 });
 
     }
