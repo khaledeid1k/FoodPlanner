@@ -1,5 +1,7 @@
 package com.example.foodplanner.ui.home;
 
+import static com.example.foodplanner.utils.Extensions.getRandomChar;
+
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -11,6 +13,7 @@ import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
 import com.example.foodplanner.data.models.country.Countries;
 import com.example.foodplanner.data.models.country.Country;
+import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.StateOfResponse;
@@ -78,10 +81,10 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
 
     private void getMealsByFirstLetter() {
 
-        repository.getMealsByFirstLetter(randomChar(), new StateOfResponse<Meals>() {
+        repository.getMealsByFirstLetter(getRandomChar(), new StateOfResponse<Meals>() {
             @Override
             public void succeeded(Meals response) {
-                if(response.getMeals().size()>=6) {
+                if(response.getMeals()!=null&&response.getMeals().size()>4) {
                     mealsByFirstLetter.setValue(response.getMeals());
                 }else {
                     getMealsByFirstLetter();
@@ -182,14 +185,4 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
         homeView.logout();
     }
 
-    String randomChar(){
-        ArrayList<Character> alphabets = new ArrayList<>();
-        for (char c = 'a'; c <= 'z'; c++) {
-            alphabets.add(c);
-        }
-        Random random = new Random();
-        int randomIndex = random.nextInt(alphabets.size());
-
-        return alphabets.get(randomIndex).toString();
-    }
 }

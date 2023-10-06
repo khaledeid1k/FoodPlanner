@@ -10,6 +10,11 @@ import androidx.navigation.Navigation;
 import com.example.foodplanner.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 public class Extensions {
     public static void closeFragment(View view) {
         Navigation.findNavController(view).popBackStack();
@@ -33,6 +38,28 @@ public class Extensions {
         controller.navigate(R.id.loginFragment);
     }
 
+
+
+    public static  String getRandomChar(){
+        ArrayList<Character> alphabets = new ArrayList<>();
+        for (char c = 'a'; c <= 'z'; c++) {
+            alphabets.add(c);
+        }
+        Random random = new Random();
+        int randomIndex = random.nextInt(alphabets.size());
+
+        return alphabets.get(randomIndex).toString();
+    }
+    void  tightImageOfFlag(){
+        Map<String,Integer> imagesOfFlag; imagesOfFlag=new HashMap<>();
+//        imagesOfFlag.put("chinese",R.drawable.chinese);
+//        imagesOfFlag.put("canidian",R.drawable.canidian);
+//        imagesOfFlag.put("croatian",R.drawable.croatian);
+//        imagesOfFlag.put("dutch",R.drawable.dutch);
+//        imagesOfFlag.put("egyptian",R.drawable.egyptian);
+
+
+    }
 
 
 }

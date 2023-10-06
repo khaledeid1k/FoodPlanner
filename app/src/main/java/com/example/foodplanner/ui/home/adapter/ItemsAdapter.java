@@ -21,7 +21,10 @@ import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHolder> {
@@ -52,7 +55,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
         }
 
     }
-
     public int getItemViewType(int position) {
         if (type == Constants.VIEW_TYPE_LINER) {
             return Constants.VIEW_TYPE_LINER;
@@ -144,7 +146,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
 
     @Override
     public int getItemCount() {
-        return items == null ? 0 : 6;
+        return items == null ? 0 : items.size();
     }
 
     class ItemsViewHolder extends RecyclerView.ViewHolder {
