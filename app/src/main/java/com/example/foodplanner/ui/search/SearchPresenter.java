@@ -136,7 +136,7 @@ public class SearchPresenter implements OnClickListener {
             }
             break;
 
-            case Constants.Ingredients: {
+            case Constants.Ingredient: {
                 searchByIngredient(wordOfSearch);
 
             }

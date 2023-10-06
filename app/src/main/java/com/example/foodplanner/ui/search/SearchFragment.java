@@ -44,7 +44,7 @@ public class SearchFragment extends Fragment {
     MealsAdapter mealsAdapter;
     LottieAnimationView lottieAnimation;
     String wordOfSearch=Constants.Empty;
-    String selectedChipText;
+    String selectedChipText=Constants.Meal;
 
 
     @Override
