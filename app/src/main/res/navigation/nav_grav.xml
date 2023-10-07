@@ -93,7 +93,14 @@
         android:id="@+id/plan"
         android:name="com.example.foodplanner.ui.plan.PlanFragment"
         android:label="fragment_plan"
-        tools:layout="@layout/fragment_plan" />
+        tools:layout="@layout/fragment_plan" >
+        <action
+            android:id="@+id/action_plan_to_plannedMealFragment"
+            app:destination="@id/plannedMealFragment" />
+        <action
+            android:id="@+id/action_plan_to_mealFragment"
+            app:destination="@id/mealFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.foodplanner.ui.auth.login.LoginFragment"
@@ -120,6 +127,20 @@
         <action
             android:id="@+id/action_singUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/plannedMealFragment"
+        android:name="com.example.foodplanner.ui.plan.details.PlannedMealsFragment"
+        android:label="PlannedMealFragment" >
+        <action
+            android:id="@+id/action_plannedMealFragment_to_mealFragment"
+            app:destination="@id/mealFragment" />
+        <argument
+            android:name="day"
+            app:argType="string" />
+        <argument
+            android:name="timeOfMeal"
+            app:argType="string" />
     </fragment>
 
 </navigation>

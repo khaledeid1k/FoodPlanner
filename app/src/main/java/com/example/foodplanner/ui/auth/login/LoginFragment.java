@@ -175,13 +175,19 @@ public class LoginFragment extends Fragment {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             Constants.isLogin=true;
+            Constants.UserId=firebaseAuth.getCurrentUser().getUid();
             Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
         }
     }
 
     void navigateToHome() {
+
         Constants.isLogin=true;
         Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            Constants.UserId=currentUser.getUid();
+        }
         authView.IsLogin(true);
     }
 
@@ -198,7 +204,8 @@ public class LoginFragment extends Fragment {
     void setLoginAsGust() {
         loginAsGust.setOnClickListener(view -> {
                 navigateToHome();
-                Constants.isLogin=false;
+                    Constants.UserId="";
+                    Constants.isLogin=false;
                     authView.IsLogin(false);
         }
         );
@@ -285,6 +292,7 @@ public class LoginFragment extends Fragment {
     }
 
     public void logout() {
+        Constants.UserId="";
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_SIGN_IN)

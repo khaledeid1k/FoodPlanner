@@ -1,35 +1,932 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     tools:context=".ui.plan.PlanFragment">
 
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_animation_favourite"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-
-        app:lottie_rawRes="@raw/no_plan"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
-    <TextView
-        android:id="@+id/no_plan_Text"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/lottie_animation_favourite"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/no_plan"
-        android:textAlignment="center"
-        style="@style/TextAppearance.Material3.TitleLarge"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="match_parent">
 
-        />
+        <TextView
+            android:id="@+id/tile_of_list_plan"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_16"
+            android:text="@string/plan_for_this_week"
+            android:translationY="-1.11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/saturday_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:backgroundTint="?backgroundColor"
+            app:cardCornerRadius="@dimen/margin_16"
+            app:layout_constraintTop_toBottomOf="@+id/tile_of_list_plan">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_4">
+
+                <TextView
+                    android:id="@+id/saturday_day"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_16"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:drawableStart="@drawable/time"
+                    android:drawablePadding="@dimen/margin_8"
+                    android:text="@string/saturday"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/show_saturday"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:button="@drawable/show_or_hidden_list"
+                    app:layout_constraintBottom_toBottomOf="@+id/saturday_day"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/saturday_day" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meals_of_saturday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/saturday_day">
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_lunch_saturday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/food_image_eleven"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_breakfast_saturday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:id="@+id/text_lunch_saturday_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunch"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_lunch_saturday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_lunch_saturday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_lunch_saturday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_lunch_saturday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_breakfast_saturday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/breakfast"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/breakfast"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_breakfast_saturday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_breakfast_saturday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_breakfast_saturday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_breakfast_saturday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_dinner_saturday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dinner"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_lunch_saturday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dinner"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_dinner_saturday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_dinner_saturday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_dinner_saturday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_dinner_saturday_item" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/sunday_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:backgroundTint="?backgroundColor"
+            app:cardCornerRadius="@dimen/margin_16"
+            app:layout_constraintTop_toBottomOf="@+id/saturday_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_4">
+
+                <TextView
+                    android:id="@+id/sunday_day"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_16"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:drawableStart="@drawable/time"
+                    android:drawablePadding="@dimen/margin_8"
+                    android:text="@string/sunday"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/show_sunday"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:button="@drawable/show_or_hidden_list"
+                    app:layout_constraintBottom_toBottomOf="@+id/sunday_day"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/sunday_day" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meals_of_sunday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sunday_day">
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_lunch_sunday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/food_image_eleven"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_breakfast_sunday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:id="@+id/text_lunch_sunday_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunch"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_lunch_sunday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_lunch_sunday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_lunch_sunday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_lunch_sunday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_breakfast_sunday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/breakfast"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/breakfast"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_breakfast_sunday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_breakfast_sunday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_breakfast_sunday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_breakfast_sunday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_sunday_dinner_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dinner"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_lunch_sunday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dinner"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_sunday_dinner_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_sunday_dinner_item"
+                        app:layout_constraintStart_toStartOf="@id/image_sunday_dinner_item"
+                        app:layout_constraintTop_toTopOf="@id/image_sunday_dinner_item" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/monday_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:backgroundTint="?backgroundColor"
+            app:cardCornerRadius="@dimen/margin_16"
+            app:layout_constraintTop_toBottomOf="@+id/sunday_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_4">
+
+                <TextView
+                    android:id="@+id/monday_day"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_16"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:drawableStart="@drawable/time"
+                    android:drawablePadding="@dimen/margin_8"
+                    android:text="@string/monday"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/show_monday"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:button="@drawable/show_or_hidden_list"
+                    app:layout_constraintBottom_toBottomOf="@+id/monday_day"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/monday_day" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meals_of_monday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/monday_day">
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_lunch_monday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/food_image_eleven"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_breakfast_monday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:id="@+id/text_lunch_monday_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunch"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_lunch_monday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_lunch_monday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_lunch_monday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_lunch_monday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_breakfast_monday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/breakfast"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/breakfast"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_breakfast_monday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_breakfast_monday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_breakfast_monday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_breakfast_monday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_dinner_monday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dinner"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_lunch_monday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dinner"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_dinner_monday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_dinner_monday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_dinner_monday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_dinner_monday_item" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/tuesday_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:backgroundTint="?backgroundColor"
+            app:cardCornerRadius="@dimen/margin_16"
+            app:layout_constraintTop_toBottomOf="@+id/monday_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_4">
+
+                <TextView
+                    android:id="@+id/tuesday_day"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_16"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:drawableStart="@drawable/time"
+                    android:drawablePadding="@dimen/margin_8"
+                    android:text="@string/tuesday"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/show_tuesday"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:button="@drawable/show_or_hidden_list"
+                    app:layout_constraintBottom_toBottomOf="@+id/tuesday_day"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tuesday_day" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meals_of_tuesday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tuesday_day">
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_lunch_tuesday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/food_image_eleven"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_breakfast_tuesday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:id="@+id/text_lunch_tuesday_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunch"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_lunch_tuesday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_lunch_tuesday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_lunch_tuesday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_lunch_tuesday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_breakfast_tuesday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/breakfast"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/breakfast"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_breakfast_tuesday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_breakfast_tuesday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_breakfast_tuesday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_breakfast_tuesday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_dinner_tuesday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dinner"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_lunch_tuesday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dinner"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_dinner_tuesday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_dinner_tuesday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_dinner_tuesday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_dinner_tuesday_item" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/wednesday_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:backgroundTint="?backgroundColor"
+            app:cardCornerRadius="@dimen/margin_16"
+            app:layout_constraintTop_toBottomOf="@+id/tuesday_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_4">
+
+                <TextView
+                    android:id="@+id/wednesday_day"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_16"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:drawableStart="@drawable/time"
+                    android:drawablePadding="@dimen/margin_8"
+                    android:text="@string/wednesday"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/show_wednesday"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:button="@drawable/show_or_hidden_list"
+                    app:layout_constraintBottom_toBottomOf="@+id/wednesday_day"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/wednesday_day" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meals_of_wednesday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/wednesday_day">
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_lunch_wednesday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/food_image_eleven"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_breakfast_wednesday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:id="@+id/text_lunch_wednesday_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunch"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_lunch_wednesday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_lunch_wednesday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_lunch_wednesday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_lunch_wednesday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_breakfast_wednesday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/breakfast"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/breakfast"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_breakfast_wednesday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_breakfast_wednesday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_breakfast_wednesday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_breakfast_wednesday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_dinner_wednesday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dinner"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_lunch_wednesday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dinner"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_dinner_wednesday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_dinner_wednesday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_dinner_wednesday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_dinner_wednesday_item" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/thursday_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:backgroundTint="?backgroundColor"
+            app:cardCornerRadius="@dimen/margin_16"
+            app:layout_constraintTop_toBottomOf="@+id/wednesday_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_4">
+
+                <TextView
+                    android:id="@+id/thursday_day"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_16"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:drawableStart="@drawable/time"
+                    android:drawablePadding="@dimen/margin_8"
+                    android:text="@string/thursday"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/show_thursday"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:button="@drawable/show_or_hidden_list"
+                    app:layout_constraintBottom_toBottomOf="@+id/thursday_day"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/thursday_day" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meals_of_thursday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/thursday_day">
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_lunch_thursday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/food_image_eleven"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_breakfast_thursday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:id="@+id/text_lunch_thursday_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunch"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_lunch_thursday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_lunch_thursday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_lunch_thursday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_lunch_thursday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_breakfast_thursday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/breakfast"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/breakfast"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_breakfast_thursday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_breakfast_thursday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_breakfast_thursday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_breakfast_thursday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_dinner_thursday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dinner"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_lunch_thursday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dinner"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_dinner_thursday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_dinner_thursday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_dinner_thursday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_dinner_thursday_item" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/friday_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:backgroundTint="?backgroundColor"
+            app:cardCornerRadius="@dimen/margin_16"
+            app:layout_constraintTop_toBottomOf="@+id/thursday_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_4">
+
+                <TextView
+                    android:id="@+id/friday_day"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_16"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:drawableStart="@drawable/time"
+                    android:drawablePadding="@dimen/margin_8"
+                    android:text="@string/friday"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/show_friday"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:button="@drawable/show_or_hidden_list"
+                    app:layout_constraintBottom_toBottomOf="@+id/friday_day"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/friday_day" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meals_of_friday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/friday_day">
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_lunch_friday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/food_image_eleven"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_breakfast_friday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:id="@+id/text_lunch_friday_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lunch"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_lunch_friday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_lunch_friday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_lunch_friday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_lunch_friday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/image_breakfast_friday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/breakfast"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/breakfast"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_breakfast_friday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_breakfast_friday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_breakfast_friday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_breakfast_friday_item" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+
+                        android:id="@+id/image_dinner_friday_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_90"
+                        android:layout_margin="@dimen/font_size_20"
+                        android:background="@drawable/food_image_eleven"
+                        android:foreground="@drawable/foreground_card_category"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dinner"
+                        app:circularflow_defaultRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/image_lunch_friday_item"
+                        app:roundPercent=".2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dinner"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/image_dinner_friday_item"
+                        app:layout_constraintEnd_toEndOf="@id/image_dinner_friday_item"
+                        app:layout_constraintStart_toStartOf="@id/image_dinner_friday_item"
+                        app:layout_constraintTop_toTopOf="@id/image_dinner_friday_item" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

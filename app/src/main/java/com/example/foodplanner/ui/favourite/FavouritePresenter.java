@@ -3,16 +3,14 @@ package com.example.foodplanner.ui.favourite;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 
-import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.repository.Repository;
 
 import java.util.List;
 
-public class FavouritePresenter implements OnClickFavorite {
+public class FavouritePresenter implements OnClickFavoriteOrPlanned {
     Repository repository;
     FavouriteView favouriteView;
 

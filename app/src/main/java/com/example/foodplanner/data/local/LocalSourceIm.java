@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.data.local.dp.FoodDao;
 import com.example.foodplanner.data.local.dp.FoodDataBase;
+import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
 
 import java.util.List;
@@ -51,4 +52,22 @@ public class LocalSourceIm implements LocalSource {
     public LiveData<Boolean> getFavoriteMealById(String mealId) {
         return foodDao.getFavoriteMealById(mealId);
     }
+
+    @Override
+    public LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId) {
+        return foodDao.getPlanedMeals(day, timeOfMeal, userId);
+    }
+
+
+    @Override
+    public void deletePlanedMeal(PlanedMeal planedMeal) {
+        new Thread(() -> foodDao.deletePlanedMeal(planedMeal)).start();
+    }
+
+    @Override
+    public void savePlanedMeal(PlanedMeal planedMeal) {
+        new Thread(() -> foodDao.savePlanedMeal(planedMeal)).start();
+    }
+
+
 }

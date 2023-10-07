@@ -8,6 +8,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
 
 import java.util.List;
@@ -27,5 +28,15 @@ public interface FoodDao {
     @Delete
     void deleteMeal(Meal meal);
 
+
+
+    @Query("SELECT * FROM plan_table WHERE day = :day AND timeOfMeal = :timeOfMeal AND userId = :userId")
+    LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId);
+    @Delete
+    void deletePlanedMeal(PlanedMeal planedMeal);
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void savePlanedMeal(PlanedMeal planedMeal);
 
 }

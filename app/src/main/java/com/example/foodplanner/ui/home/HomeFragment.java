@@ -113,6 +113,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void logout() {
+        Constants.UserId="";
         Constants.isLogin=false;
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);

@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements AuthView {
             NavigationUI.setupWithNavController(bottomNavigationView, controller);
             controlToBottomNavigationClicks();
             controller.popBackStack(R.id.loginFragment, false);
+        }else {
+            NavigationUI.setupWithNavController(bottomNavigationView, controller);
         }
 
     }

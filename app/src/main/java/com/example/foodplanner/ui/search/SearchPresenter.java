@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class SearchPresenter implements OnClickListener {
     Repository repository;
     ArrayList<FilteredItem> filteredItemArrayList=new ArrayList<>();
-    ArrayList<FilteredItem> filtered=new ArrayList<>();
+    ArrayList<FilteredItem> filtered;
 
 
     private MutableLiveData<ArrayList<FilteredItem>> filteredItemsMutableLiveData =
@@ -93,7 +93,7 @@ public class SearchPresenter implements OnClickListener {
                 public void succeeded(Meals response) {
                     List<Meal> meals = response != null ? response.getMeals() : null;
                     if (meals != null) {
-                        ArrayList<FilteredItem> filtered = new ArrayList<>();
+                      filtered = new ArrayList<>();
                         for (Meal meal : meals) {
                             filtered.add(new FilteredItem(
                                     meal.getStrMeal(),
@@ -141,10 +141,10 @@ public class SearchPresenter implements OnClickListener {
 
             }
             break;
-            case Constants.Meal: {
+            default:{
                 searchByMeal(wordOfSearch);
             }
-            break;
+
 
 
         }

@@ -1,12 +1,12 @@
 package com.example.foodplanner.ui.meal;
 
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
+import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.repository.Repository;
 
@@ -87,6 +87,11 @@ Repository repository;
     }
     LiveData<Boolean> checkMealInFavoriteOrNot(String mealId){
        return repository.getFavoriteMealById(mealId);
+    }
+    void savePlanedMeal(
+            PlanedMeal planedMeal
+    ){
+        repository.savePlanedMeal(planedMeal);
     }
 
 }

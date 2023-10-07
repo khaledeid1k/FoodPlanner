@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/back_from_plan_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        app:layout_constraintBottom_toBottomOf="@+id/tile_of_list_planned_meals"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tile_of_list_planned_meals"
+        app:srcCompat="@drawable/arrow_back" />
+    <TextView
+        android:id="@+id/tile_of_list_planned_meals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_16"
+        android:translationY="-1.11sp"
+        style="@style/TextAppearance.Material3.TitleLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Meals Of Saturday BreakFast" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_planed_meals"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_0"
+        android:layout_marginHorizontal="@dimen/margin_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/margin_16"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_planed_meal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tile_of_list_planned_meals"
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_animation_planned"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tile_of_list_planned_meals"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/no_plan" />
+
+    <TextView
+        android:id="@+id/no_plan_Text"
+        style="@style/TextAppearance.Material3.TitleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_plan"
+        android:visibility="visible"
+
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lottie_animation_planned"
+
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

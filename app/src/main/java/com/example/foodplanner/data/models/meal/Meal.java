@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class Meal implements Parcelable {
     @PrimaryKey
     @NotNull
-    String idMeal;
+    public String idMeal;
     String strArea;
     String strCategory;
     String strMeal;

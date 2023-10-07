@@ -184,6 +184,7 @@ public class SingUpFragment extends Fragment {
         Constants.isLogin=true;
         authView.IsLogin(true);
         Navigation.findNavController(requireView()).navigate(R.id.action_singUpFragment_to_homeF);
+        Constants.UserId=firebaseAuth.getCurrentUser().getUid();
 
     }
 
@@ -280,6 +281,7 @@ public class SingUpFragment extends Fragment {
         }
     }
     public void logout() {
+        Constants.UserId="";
 
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);

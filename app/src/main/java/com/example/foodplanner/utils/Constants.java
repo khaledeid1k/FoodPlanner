@@ -19,6 +19,22 @@ public class Constants {
     public final static String email = "email";
     public final static String password = "password";
     public final static String CollectionPath = "users";
+    public static String UserId = "";
     public static boolean isLogin = false;
+    public static final int Favorite = 23;
+    public static final int Planed = 24;
+
+
+    public final static String Saturday = "Saturday";
+    public final static String Sunday = "Sunday";
+    public final static String Monday = "Monday";
+    public final static String Tuesday = "Tuesday";
+    public final static String Wednesday = "Wednesday";
+    public final static String Thursday = "Thursday";
+    public final static String Friday = "Friday";
+    public final static String BreakFast = "Breakfast";
+    public final static String Dinner = "Dinner";
+    public final static String Lunch = "Lunch";
+
 
 }

@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.example.foodplanner.data.models.meal.Meal;
 
-public interface OnClickFavorite {
+public interface OnClickFavoriteOrPlanned {
     void onClick(Meal meal, View view);
     void deleteMeal(Meal meal);
 }

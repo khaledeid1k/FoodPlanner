@@ -1,5 +1,7 @@
 package com.example.foodplanner.ui.favourite;
 
+import static com.example.foodplanner.utils.Constants.Favorite;
+
 import android.content.Context;
 import android.os.Bundle;
 
@@ -63,7 +65,7 @@ public class FavouriteFragment extends Fragment implements FavouriteView {
         favouritePresenter=new FavouritePresenter(
                 RepositoryIm.getInstance(NetWork.getInstance(),
                         LocalSourceIm.getInstance(getActivity())),this);
-        favouriteAdapter=new FavouriteAdapter(meals,getActivity(),favouritePresenter);
+        favouriteAdapter=new FavouriteAdapter(meals,getActivity(),favouritePresenter,Favorite);
         recyclerView.setAdapter(favouriteAdapter);
     }
     void setUp(){
@@ -72,7 +74,9 @@ public class FavouriteFragment extends Fragment implements FavouriteView {
          if(meals.size()!=0){
              lottieAnimation.setVisibility(View.INVISIBLE);
              noFavorites.setVisibility(View.INVISIBLE);
-
+         }else {
+             lottieAnimation.setVisibility(View.VISIBLE);
+             noFavorites.setVisibility(View.VISIBLE);
          }
 
         });

@@ -12,11 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.models.IngredientMeasurePair;
-import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
-import com.example.foodplanner.data.models.filter.FilteredItem;
-import com.example.foodplanner.ui.meal.dapter.IngredientAdapter;
 import com.example.foodplanner.utils.Constants;
 
 import java.util.ArrayList;
@@ -67,7 +63,7 @@ public class CategoryAdapter extends
             super(itemView);
         }
         TextView textViewOfCategory=itemView.findViewById(R.id.text_category_item);
-        ImageView imageViewOfCategory=itemView.findViewById(R.id.image_category_item);
+        ImageView imageViewOfCategory=itemView.findViewById(R.id.image_breakfast_saturday_item);
 
 
     }

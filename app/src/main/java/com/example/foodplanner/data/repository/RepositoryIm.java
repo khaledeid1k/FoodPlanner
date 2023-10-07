@@ -3,6 +3,7 @@ package com.example.foodplanner.data.repository;
 import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.data.local.LocalSource;
+import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.category.Categories;
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.country.Countries;
@@ -115,6 +116,21 @@ public class RepositoryIm implements Repository {
     @Override
     public LiveData<Boolean> getFavoriteMealById(String mealId) {
        return localSource.getFavoriteMealById(mealId);
+    }
+
+    @Override
+    public LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId) {
+        return localSource.getPlanedMeals(day, timeOfMeal, userId);
+    }
+
+    @Override
+    public void deletePlanedMeal(PlanedMeal planedMeal) {
+        localSource.deletePlanedMeal(planedMeal);
+    }
+
+    @Override
+    public void savePlanedMeal(PlanedMeal planedMeal) {
+        localSource.savePlanedMeal(planedMeal);
     }
 
 
