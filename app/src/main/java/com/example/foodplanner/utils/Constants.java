@@ -23,8 +23,7 @@ public class Constants {
     public static boolean isLogin = false;
     public static final int Favorite = 23;
     public static final int Planed = 24;
-
-
+    public static final int RC_SIGN_IN = 1;
     public final static String Saturday = "Saturday";
     public final static String Sunday = "Sunday";
     public final static String Monday = "Monday";

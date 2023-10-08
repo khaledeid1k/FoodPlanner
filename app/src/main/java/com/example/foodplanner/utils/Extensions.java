@@ -50,16 +50,8 @@ public class Extensions {
 
         return alphabets.get(randomIndex).toString();
     }
-    void  tightImageOfFlag(){
-        Map<String,Integer> imagesOfFlag; imagesOfFlag=new HashMap<>();
-//        imagesOfFlag.put("chinese",R.drawable.chinese);
-//        imagesOfFlag.put("canidian",R.drawable.canidian);
-//        imagesOfFlag.put("croatian",R.drawable.croatian);
-//        imagesOfFlag.put("dutch",R.drawable.dutch);
-//        imagesOfFlag.put("egyptian",R.drawable.egyptian);
 
 
-    }
 
 
 }
