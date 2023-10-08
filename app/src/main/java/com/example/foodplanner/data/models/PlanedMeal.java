@@ -9,6 +9,7 @@ import com.example.foodplanner.data.models.meal.Meal;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(tableName = "plan_table", primaryKeys = {"day", "timeOfMeal"})
+
 public class PlanedMeal {
     public String userId;
     @NotNull

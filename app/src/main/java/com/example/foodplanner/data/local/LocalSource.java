@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface LocalSource {
 
-    LiveData<List<Meal>> getFavoritesMeals();
+    LiveData<List<Meal>> getFavoritesMeals(String userId);
     void saveMeal(Meal meal);
     void deleteMeal(Meal meal);
     LiveData<Boolean> getFavoriteMealById(String mealId);

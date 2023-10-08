@@ -1,5 +1,7 @@
 package com.example.foodplanner.ui.favourite;
 
+import static com.example.foodplanner.utils.Constants.UserId;
+
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -37,6 +39,6 @@ public class FavouritePresenter implements OnClickFavoriteOrPlanned {
     }
 
     LiveData<List<Meal>> getFavoritesMeals(){
-        return repository.getFavoritesMeals();
+        return repository.getFavoritesMeals(UserId);
     }
 }

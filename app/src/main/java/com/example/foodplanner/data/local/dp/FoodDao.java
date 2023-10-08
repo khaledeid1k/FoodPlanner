@@ -16,8 +16,8 @@ import java.util.List;
 @Dao
 public interface FoodDao {
 
-    @Query("SELECT * FROM favorite_table")
-    LiveData<List<Meal>> getAllFavoritesMeals();
+    @Query("SELECT * FROM favorite_table  WHERE userId = :userId ")
+    LiveData<List<Meal>> getAllFavoritesMeals(String userId);
 
     @Query("SELECT EXISTS (SELECT 1 FROM favorite_table WHERE idMeal = :mealId LIMIT 1)")
     LiveData<Boolean> getFavoriteMealById(String mealId);
@@ -27,8 +27,6 @@ public interface FoodDao {
 
     @Delete
     void deleteMeal(Meal meal);
-
-
 
     @Query("SELECT * FROM plan_table WHERE day = :day AND timeOfMeal = :timeOfMeal AND userId = :userId")
     LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId);

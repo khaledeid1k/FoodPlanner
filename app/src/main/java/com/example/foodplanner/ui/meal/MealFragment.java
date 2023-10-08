@@ -229,6 +229,7 @@ public class MealFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if(favouriteIconSingleMeal.isChecked()){
+            meal.setUserId(UserId);
             mealPresenter.saveToFavorite(meal);
         }else {
             mealPresenter.deleteFromFavorite(meal);

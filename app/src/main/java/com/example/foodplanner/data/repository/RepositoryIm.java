@@ -99,8 +99,8 @@ public class RepositoryIm implements Repository {
     }
 
     @Override
-    public LiveData<List<Meal>> getFavoritesMeals() {
-        return localSource.getFavoritesMeals();
+    public LiveData<List<Meal>> getFavoritesMeals(String userId) {
+        return localSource.getFavoritesMeals(userId);
     }
 
     @Override

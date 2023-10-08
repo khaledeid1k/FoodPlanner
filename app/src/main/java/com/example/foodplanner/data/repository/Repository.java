@@ -38,7 +38,7 @@ public interface Repository {
 
     StateOfResponse<FilteredItems> filterByArea(String nameOfArea, StateOfResponse<FilteredItems> stateOfResponse);
 
-    LiveData<List<Meal>> getFavoritesMeals();
+    LiveData<List<Meal>> getFavoritesMeals(String userId);
 
     void saveMeal(Meal meal);
 

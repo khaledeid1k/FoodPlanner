@@ -32,8 +32,8 @@ public class LocalSourceIm implements LocalSource {
     }
 
     @Override
-    public LiveData<List<Meal>> getFavoritesMeals() {
-        return foodDao.getAllFavoritesMeals();
+    public LiveData<List<Meal>> getFavoritesMeals(String userId) {
+        return foodDao.getAllFavoritesMeals( userId);
     }
 
     @Override
