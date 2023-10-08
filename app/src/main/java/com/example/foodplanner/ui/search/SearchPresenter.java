@@ -111,6 +111,7 @@ public class SearchPresenter implements OnClickListener {
                 }
             });
         }else {
+            if(filtered!=null){
             filtered= (ArrayList<FilteredItem>) filtered.stream()
 
                  .filter(s -> s.getStrMeal().toLowerCase(Locale.ROOT)
@@ -119,6 +120,7 @@ public class SearchPresenter implements OnClickListener {
             filteredItemsMutableLiveData.setValue(filtered);
 
            }
+        }
 
     }
 

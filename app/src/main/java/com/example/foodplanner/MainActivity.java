@@ -3,22 +3,17 @@ package com.example.foodplanner;
 import static com.example.foodplanner.utils.Extensions.showRequestLogDialog;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.foodplanner.ui.auth.AuthView;
-import com.example.foodplanner.utils.Constants;
-import com.example.foodplanner.utils.Extensions;
+import com.example.foodplanner.ui.auth.login.StateOfAuth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class MainActivity extends AppCompatActivity implements AuthView {
+public class MainActivity extends AppCompatActivity implements StateOfAuth {
     NavController controller;
     BottomNavigationView bottomNavigationView;
     NavHostFragment navHostFragment;
@@ -72,8 +67,7 @@ public class MainActivity extends AppCompatActivity implements AuthView {
     }
 
     @Override
-    public void IsLogin(boolean isLogin) {
-        Log.i("MainActivitylolo", "IsLogin: "+isLogin);
+    public void isLogin(boolean isLogin) {
         if(!isLogin) {
             NavigationUI.setupWithNavController(bottomNavigationView, controller);
             controlToBottomNavigationClicks();

@@ -94,7 +94,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 ((HeaderViewHolder) holder).logout.setOnClickListener(
                         view -> navigationToShowAll.logout()
                 );
-                if(!Constants.isLogin){((HeaderViewHolder) holder).logout.setVisibility(View.GONE);}
+                if(Constants.UserId.equals("")){((HeaderViewHolder) holder).logout.setVisibility(View.GONE);}
 
             }
         } else if(holder instanceof ItemViewHolder){

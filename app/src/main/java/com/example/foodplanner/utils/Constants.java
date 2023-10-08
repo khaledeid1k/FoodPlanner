@@ -20,7 +20,6 @@ public class Constants {
     public final static String password = "password";
     public final static String CollectionPath = "users";
     public static String UserId = "";
-    public static boolean isLogin = false;
     public static final int Favorite = 23;
     public static final int Planed = 24;
     public static final int RC_SIGN_IN = 1;

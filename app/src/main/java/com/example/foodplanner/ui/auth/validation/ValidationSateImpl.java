@@ -3,14 +3,11 @@ package com.example.foodplanner.ui.auth.validation;
 
 import com.example.foodplanner.data.models.User;
 import com.example.foodplanner.data.models.Validation;
-import com.example.foodplanner.utils.Constants;
 
-import java.util.Objects;
-
-public class AuthenticationImpl implements Authentication {
+public class ValidationSateImpl implements ValidationSate {
     AuthInputValidator authInputValidator;
 
-    public AuthenticationImpl(AuthInputValidator authInputValidator) {
+    public ValidationSateImpl(AuthInputValidator authInputValidator) {
         this.authInputValidator = authInputValidator;
     }
 

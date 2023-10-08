@@ -118,17 +118,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/go_to_register" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/facebook_register"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/facebook"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/google_login"-->
-<!--            app:layout_constraintHorizontal_bias=".8"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/or"-->
-<!--            app:layout_constraintVertical_bias=".1" />-->
+
 
         <ImageView
             android:id="@+id/google_login"

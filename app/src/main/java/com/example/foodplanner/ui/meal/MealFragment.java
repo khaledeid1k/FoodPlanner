@@ -123,7 +123,7 @@ public class MealFragment extends Fragment {
         countrySingleMeal.setText(meal.getStrArea());
 
         favouriteIconSingleMeal.setOnClickListener(view -> {
-            if (!Constants.isLogin) {
+            if (Constants.UserId.equals("")) {
                 favouriteIconSingleMeal.setChecked(false);
                 NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
 
@@ -194,7 +194,7 @@ public class MealFragment extends Fragment {
     void showDaysOfWeekDialog() {
 
         addMealToPlan.setOnClickListener(view -> {
-            if (Constants.isLogin) {
+            if (!Constants.UserId.equals("")) {
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Select day For add your meal ")
                         .setItems(R.array.days_of_week, (dialog, which) -> {
