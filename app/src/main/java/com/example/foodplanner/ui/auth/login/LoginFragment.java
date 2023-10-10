@@ -38,12 +38,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private AppCompatButton login;
     private ImageView loginByGoogle;
     private ProgressDialog progressDialog;
-
-
     private LoginPresenter loginPresenter;
-    private StateOfAuth stateOfAuth;
-    String idToken;
-
+    private StateOfBottomNav stateOfBottomNav;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected int getLayout() {
@@ -66,14 +63,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
         loginAsGust = view.findViewById(R.id.login_as_gust);
         loginByGoogle = view.findViewById(R.id.google_login);
         progressDialog = new ProgressDialog(requireActivity());
-        stateOfAuth = (StateOfAuth) requireActivity();
+        stateOfBottomNav = (StateOfBottomNav) requireActivity();
     }
 
 
     void loginWithEmail() {
         login.setOnClickListener(view -> {
-        //    loginPresenter.loginWithEmail(getUserData());
-
+            loginPresenter.loginWithEmail(getUserData());
         });
     }
 
@@ -94,16 +90,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 passwordText.getText().toString().trim());
     }
 
-    void logoutFormGoogleLogin(){
-        Constants.UserId = "";
-        configureGoogleAuth().signOut();
-    }
 
     @Override
     public void onStart() {
         super.onStart();
-        loginPresenter = new LoginPresenter(this,new ValidationSateImpl(
-                new AuthInputValidatorImpl()),stateOfAuth);
+        stateOfBottomNav.isGust(false);
+        loginPresenter = new LoginPresenter(this, new ValidationSateImpl(
+                new AuthInputValidatorImpl()), stateOfBottomNav);
         loginWithEmail();
         navigateToRegister();
         setLoginAsGust();
@@ -112,39 +105,24 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     void loginByGoogle() {
         loginByGoogle.setOnClickListener(v -> {
-            Intent signInIntent = configureGoogleAuth().getSignInIntent();
+            googleSignInClient=configureGoogleAuth();
+            Intent signInIntent =googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
+
     void navigateToRegister() {
         register.setOnClickListener(view ->
                 Navigation.findNavController(view)
                         .navigate(R.id.action_loginFragment_to_singUpFragment));
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.
-                    getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                progressDialog.setMessage(getString(R.string.loading_login));
-                progressDialog.show();
-                if (account != null) {
-                     idToken = account.getIdToken();
-                     loginPresenter.loginWithGoogle(idToken);
-                }
-            } catch (ApiException ignored) {
-            }
-        }
-    }
 
     void setLoginAsGust() {
         loginAsGust.setOnClickListener(view -> {
-            stateOfAuth.isLogin(false);
-            loginPresenter.loginAsGust();
+                    stateOfBottomNav.isGust(true);
+                    loginPresenter.loginAsGust();
+
                 }
         );
     }
@@ -159,6 +137,23 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.
+                    getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                progressDialog.setMessage(getString(R.string.loading_login));
+                progressDialog.show();
+                if (account != null) {
+                    loginPresenter.loginWithGoogle(account.getIdToken());
+                }
+            } catch (ApiException ignored) {
+            }
+        }
+    }
 
     @Override
     public void succeedLogin() {
@@ -169,18 +164,35 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void failureLogin(String message) {
+        if(googleSignInClient!=null){
+            googleSignInClient.signOut();
+        }
         progressDialog.dismiss();
-        if (!message.isEmpty()) {
-            Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
-        }
-        }
+           if (!message.isEmpty()) {
+               Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+
+       }
+    }
 
     @Override
     public void loginAsGust() {
         moveToHome();
     }
-    void  moveToHome(){
-        Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
 
+    @Override
+    public void resultValidate(Validation validation) {
+        if(validation.isValid()){
+            progressDialog.setMessage(getString(R.string.loading_login));
+            progressDialog.show();
+            emailP.setErrorEnabled(false);
+            passwordP.setErrorEnabled(false);
+        }else {
+            printError(validation);
+        }
+
+    }
+
+    void moveToHome() {
+      Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
     }
 }

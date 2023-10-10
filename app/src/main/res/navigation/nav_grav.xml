@@ -116,7 +116,7 @@
     </fragment>
     <fragment
         android:id="@+id/singUpFragment"
-        android:name="com.example.foodplanner.ui.auth.register.SingUpFragment"
+        android:name="com.example.foodplanner.ui.auth.register.RegisterFragment"
         android:label="SingUpFragment" >
         <action
             android:id="@+id/action_singUpFragment_to_homeF"

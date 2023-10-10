@@ -1,43 +1,33 @@
 package com.example.foodplanner.ui.auth.login;
 
-import android.view.View;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.Navigation;
-
-import com.airbnb.lottie.L;
-import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.User;
 import com.example.foodplanner.data.models.Validation;
 import com.example.foodplanner.data.network.auth.AuthView;
-import com.example.foodplanner.data.network.auth.AuthWithEmail;
-import com.example.foodplanner.data.network.auth.AuthWithGoogle;
+import com.example.foodplanner.data.network.auth.SigInWithEmail;
+import com.example.foodplanner.data.network.auth.SignInWithGoogle;
 import com.example.foodplanner.ui.auth.validation.ValidationSate;
-import com.example.foodplanner.utils.Constants;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginPresenter implements AuthView {
 
     ValidationSate validationSate;
     LoginView loginView;
-    AuthWithGoogle authWithGoogle;
-     StateOfAuth stateOfAuth;
-    //AuthWithEmail authWithEmail;
+    SignInWithGoogle authWithGoogle;
+     StateOfBottomNav stateOfBottomNav;
+    SigInWithEmail sigInWithEmail;
     public LoginPresenter(LoginView loginView,
             ValidationSate validationSate,
-                          StateOfAuth stateOfAuth ) {
+                          StateOfBottomNav stateOfBottomNav) {
         this.validationSate = validationSate;
-        this.stateOfAuth = stateOfAuth;
+        this.stateOfBottomNav = stateOfBottomNav;
         this.loginView = loginView;
 
-         authWithGoogle = new AuthWithGoogle(this);
-      //  authWithEmail = new AuthWithEmail(this,validationSate);
+         authWithGoogle = new SignInWithGoogle(this);
+       sigInWithEmail = new SigInWithEmail(this,validationSate);
 
     }
-//    void loginWithEmail(User user){
-//        authWithEmail.checkStateOfUser(user);
-//    }
+    void loginWithEmail(User user){
+        sigInWithEmail.checkStateOfUser(user);
+    }
     void loginWithGoogle(String idToken){
         authWithGoogle.signInWithGoogle(idToken);
     }
@@ -45,13 +35,8 @@ public class LoginPresenter implements AuthView {
 
     void loginAsGust() {
        loginView.loginAsGust();
-        Constants.UserId = "";
     }
 
-    public void logoutFormEmailLogin() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
-    }
 
 
     @Override
@@ -70,7 +55,7 @@ public class LoginPresenter implements AuthView {
     }
 
     @Override
-    public void validate(Validation validation) {
-
+    public void resultValidate(Validation validation) {
+        loginView.resultValidate(validation);
     }
 }

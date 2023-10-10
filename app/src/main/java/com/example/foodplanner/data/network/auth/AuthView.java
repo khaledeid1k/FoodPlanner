@@ -6,5 +6,5 @@ public interface AuthView {
     void succeed();
     void failure(String message);
     void checkIfUserLoginBefore(boolean state);
-    void validate(Validation validation);
+    void resultValidate(Validation validation);
 }

@@ -114,7 +114,8 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public void logout() {
         Constants.UserId="";
-        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager()
+        NavHostFragment navHostFragment = (NavHostFragment)
+                requireActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(

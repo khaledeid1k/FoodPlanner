@@ -10,10 +10,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.foodplanner.ui.auth.login.StateOfAuth;
+import com.example.foodplanner.ui.auth.login.StateOfBottomNav;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements StateOfAuth {
+public class MainActivity extends AppCompatActivity implements StateOfBottomNav {
     NavController controller;
     BottomNavigationView bottomNavigationView;
     NavHostFragment navHostFragment;
@@ -67,13 +67,13 @@ public class MainActivity extends AppCompatActivity implements StateOfAuth {
     }
 
     @Override
-    public void isLogin(boolean isLogin) {
+    public void isGust(boolean isLogin) {
         if(!isLogin) {
+            NavigationUI.setupWithNavController(bottomNavigationView, controller);
+        }else {
             NavigationUI.setupWithNavController(bottomNavigationView, controller);
             controlToBottomNavigationClicks();
             controller.popBackStack(R.id.loginFragment, false);
-        }else {
-            NavigationUI.setupWithNavController(bottomNavigationView, controller);
         }
 
     }

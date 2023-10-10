@@ -1,19 +1,7 @@
 package com.example.foodplanner.data.network.auth;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.widget.Toast;
-
-import androidx.navigation.Navigation;
-
-import com.example.foodplanner.R;
 import com.example.foodplanner.utils.Constants;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -21,11 +9,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class AuthWithGoogle {
+public class SignInWithGoogle {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseDatabase;
     AuthView authView;
-    public AuthWithGoogle( AuthView authView){
+    public SignInWithGoogle(AuthView authView){
         this.authView=authView;
         init();
         checkIfUserLoginBefore();
@@ -45,7 +33,6 @@ public class AuthWithGoogle {
                 checkIfEmailExists(currentUser);
             } else {
                 authView.failure("Failed to sign in with Google.");
-          //      firebaseAuth.getCurrentUser().delete();
             }
         });
     }
@@ -62,9 +49,11 @@ public class AuthWithGoogle {
                             putValueOfUserId(currentUser.getUid());
                             authView.succeed();
                         } else {
+                            currentUser.delete();
                             authView.failure("Email not register");
                         }
                     } else {
+                        currentUser.delete();
                         authView.failure("Error checking email in fireStore");
                     }
 
