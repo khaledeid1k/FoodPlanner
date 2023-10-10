@@ -20,13 +20,13 @@ import java.util.ArrayList;
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.MainFavouriteViewHolder> {
     ArrayList<Meal> meals;
     Context context;
-    OnClickFavoriteOrPlanned onClickFavoriteOrPlanned;
+    OnClickFavorites onClickFavorites;
     int type;
     public FavouriteAdapter(ArrayList<Meal> meals, Context context,
-                            OnClickFavoriteOrPlanned onClickFavoriteOrPlanned, int  type) {
+                            OnClickFavorites onClickFavorites, int  type) {
         this.meals = meals;
         this.context = context;
-        this.onClickFavoriteOrPlanned = onClickFavoriteOrPlanned;
+        this.onClickFavorites = onClickFavorites;
         this.type = type;
     }
 
@@ -64,8 +64,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Main
             ).into(plannedViewHolder.imgOfMeal);
             plannedViewHolder.categoryOfMeal.setText(meal.getStrCategory());
             plannedViewHolder.nameOfMeal.setText(meal.getStrMeal());
-            plannedViewHolder.itemView.setOnClickListener(view -> onClickFavoriteOrPlanned.onClick(meal,view));
-            plannedViewHolder.delete.setOnClickListener(view -> onClickFavoriteOrPlanned.deleteMeal(meal));
+            plannedViewHolder.itemView.setOnClickListener(view -> onClickFavorites.onClickFavorite(meal,view));
+            plannedViewHolder.delete.setOnClickListener(view -> onClickFavorites.deleteFavorite(meal));
 
         }
         if(holder instanceof  FavouriteViewHolder){
@@ -75,8 +75,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Main
             ).into(favouriteViewHolder.imgOfMeal);
             favouriteViewHolder.categoryOfMeal.setText(meal.getStrCategory());
             favouriteViewHolder.nameOfMeal.setText(meal.getStrMeal());
-            favouriteViewHolder.itemView.setOnClickListener(view -> onClickFavoriteOrPlanned.onClick(meal,view));
-            favouriteViewHolder.unFavorite.setOnClickListener(view -> onClickFavoriteOrPlanned.deleteMeal(meal));
+            favouriteViewHolder.itemView.setOnClickListener(view -> onClickFavorites.onClickFavorite(meal,view));
+            favouriteViewHolder.unFavorite.setOnClickListener(view -> onClickFavorites.deleteFavorite(meal));
 
         }
 

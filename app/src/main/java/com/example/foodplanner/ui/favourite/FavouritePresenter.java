@@ -12,7 +12,7 @@ import com.example.foodplanner.data.repository.Repository;
 
 import java.util.List;
 
-public class FavouritePresenter implements OnClickFavoriteOrPlanned {
+public class FavouritePresenter implements OnClickFavorites {
     Repository repository;
     FavouriteView favouriteView;
 
@@ -22,7 +22,7 @@ public class FavouritePresenter implements OnClickFavoriteOrPlanned {
         this.favouriteView = favouriteView;
     }
     @Override
-    public void onClick(Meal meal, View view) {
+    public void onClickFavorite(Meal meal, View view) {
         FavouriteFragmentDirections.ActionFavouriteFragmentToMealFragment action =
                 FavouriteFragmentDirections.actionFavouriteFragmentToMealFragment(
                         meal);
@@ -33,7 +33,7 @@ public class FavouritePresenter implements OnClickFavoriteOrPlanned {
     }
 
     @Override
-    public void deleteMeal(Meal meal) {
+    public void deleteFavorite(Meal meal) {
         repository.deleteMeal(meal);
         favouriteView.deleteItem();
     }

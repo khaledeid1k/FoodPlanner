@@ -11,11 +11,11 @@ import androidx.navigation.Navigation;
 import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.repository.Repository;
-import com.example.foodplanner.ui.favourite.OnClickFavoriteOrPlanned;
+import com.example.foodplanner.ui.favourite.OnClickFavorites;
 
 import java.util.List;
 
-public class PlannedMealsPresenter implements OnClickFavoriteOrPlanned {
+public class PlannedMealsPresenter implements OnClickFavorites {
 
     Repository repository;
     PlannedMealView plannedMealView;
@@ -31,7 +31,7 @@ public class PlannedMealsPresenter implements OnClickFavoriteOrPlanned {
     }
 
     @Override
-    public void onClick(Meal meal, View view) {
+    public void onClickFavorite(Meal meal, View view) {
         PlannedMealsFragmentDirections.ActionPlannedMealFragmentToMealFragment action =
                 PlannedMealsFragmentDirections.actionPlannedMealFragmentToMealFragment(
                         meal);
@@ -41,7 +41,7 @@ public class PlannedMealsPresenter implements OnClickFavoriteOrPlanned {
     }
 
     @Override
-    public void deleteMeal(Meal meal) {
+    public void deleteFavorite(Meal meal) {
         repository.deletePlanedMeal(new PlanedMeal(UserId,day,timeOfMeal,
                 meal
                 ));
