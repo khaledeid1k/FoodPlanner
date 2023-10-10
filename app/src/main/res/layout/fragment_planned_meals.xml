@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,26 +26,77 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Meals Of Saturday BreakFast" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_planed_meals"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_of_planed_meal"
         android:layout_width="match_parent"
+        android:visibility="invisible"
         android:layout_height="@dimen/height_0"
         android:layout_marginHorizontal="@dimen/margin_16"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginVertical="@dimen/margin_16"
+        app:cardCornerRadius="@dimen/radius_16"
+        app:layout_constraintBottom_toTopOf="@+id/delete_meal"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/margin_16"
-        android:clipToPadding="false"
-        tools:listitem="@layout/item_planed_meal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tile_of_list_planned_meals">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/margin_16"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:id="@+id/photo_meal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_0"
+                android:layout_marginBottom="@dimen/margin_28"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_launcher_background"
+                app:layout_constraintBottom_toTopOf="@+id/title_meal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:roundPercent=".16" />
+
+
+            <TextView
+                android:id="@+id/title_meal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_28"
+                android:ellipsize="end"
+                android:textSize="@dimen/font_size_50"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Spicy Arrabiata Penne" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:id="@+id/delete_meal"
+        android:layout_width="match_parent"
+        android:text="@string/delete"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="@dimen/margin_16"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_16"
+        android:padding="@dimen/padding_8"
+        android:visibility="invisible"
+        android:backgroundTint="@color/delete_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tile_of_list_planned_meals"
         />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_animation_planned"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="@dimen/width_250"
+        android:layout_height="@dimen/height_250"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

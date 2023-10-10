@@ -30,7 +30,7 @@ public interface FoodDao {
 
 
     @Query("SELECT * FROM plan_table WHERE day = :day AND timeOfMeal = :timeOfMeal AND userId = :userId")
-    LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId);
+    LiveData<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId);
 
 
     @Delete

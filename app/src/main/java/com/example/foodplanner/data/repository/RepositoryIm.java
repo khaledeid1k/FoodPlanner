@@ -124,7 +124,7 @@ public class RepositoryIm implements Repository {
     }
 
     @Override
-    public LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId) {
+    public LiveData<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId) {
         return localSource.getPlanedMeals(day, timeOfMeal, userId);
     }
 

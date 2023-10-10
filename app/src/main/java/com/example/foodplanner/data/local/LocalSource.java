@@ -17,7 +17,7 @@ public interface LocalSource {
     void deleteMeal(Meal meal);
     LiveData<Boolean> getFavoriteMealById(String mealId);
 
-    LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId);
+    LiveData<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId);
     void deletePlanedMeal(PlanedMeal planedMeal);
     void savePlanedMeal(PlanedMeal planedMeal);
     ArrayList<IngredientMeasurePair> getIngredientAndMeasure(Meal meal);

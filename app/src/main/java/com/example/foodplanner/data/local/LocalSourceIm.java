@@ -58,7 +58,7 @@ public class LocalSourceIm implements LocalSource {
     }
 
     @Override
-    public LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId) {
+    public LiveData<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId) {
         return foodDao.getPlanedMeals(day, timeOfMeal, userId);
     }
 

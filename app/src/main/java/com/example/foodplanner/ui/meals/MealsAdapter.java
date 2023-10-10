@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.filter.FilteredItem;
-import com.example.foodplanner.data.models.meal.Meals;
-import com.example.foodplanner.ui.home.adapter.OnClickItem;
 
 import java.util.ArrayList;
 
@@ -45,7 +42,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
                 R.drawable.ic_launcher_background
         ).into(holder.ImageOfMeal);
 
-       holder.itemView.setOnClickListener(view -> onClickItem.onclick(filteredItem.getStrMeal(),view));
+       holder.itemView.setOnClickListener(view -> onClickItem.onclickMeal(filteredItem.getStrMeal(),view));
 
     }
 

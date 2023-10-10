@@ -53,6 +53,7 @@
     <string name="loading_sign_Up">Create an account...</string>
     <string name="selected_planned_meal">\"Select day For add your meal \"</string>
     <string name="choose_type_of_meal">Choose time of your meal</string>
+    <string name="delete">Delete</string>
     <string-array name="days_of_week">
         <item>Saturday</item>
         <item>Sunday</item>

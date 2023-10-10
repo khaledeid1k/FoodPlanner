@@ -180,7 +180,7 @@ public class SearchPresenter implements OnClickListener {
     }
 
     @Override
-    public void onclick(String nameOfMeal, View view) {
+    public void onclickMeal(String nameOfMeal, View view) {
 
         moveToMealScreen(nameOfMeal,view);
 

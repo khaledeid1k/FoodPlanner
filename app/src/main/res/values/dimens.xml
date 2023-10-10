@@ -4,9 +4,12 @@
     <dimen name="font_size_20">20sp</dimen>
     <dimen name="font_size_24">24sp</dimen>
     <dimen name="font_size_60">60sp</dimen>
+    <dimen name="font_size_50">50sp</dimen>
 
 
     <dimen name="height_0">0dp</dimen>
+    <dimen name="height_250">250dp</dimen>
+    <dimen name="width_250">250dp</dimen>
 
 
 
@@ -40,4 +43,5 @@
     <dimen name="margin_208">208dp</dimen>
     <dimen name="width_0">0dp</dimen>
     <dimen name="padding_7">7dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
 </resources>

@@ -66,7 +66,7 @@ public class MealsPresenter implements OnClickListener {
 
 
     @Override
-    public void onclick(String nameOfMeal,View view) {
+    public void onclickMeal(String nameOfMeal, View view) {
         repository.getMealByName(nameOfMeal, new StateOfResponse<>() {
             @Override
             public void succeeded(Meals response) {

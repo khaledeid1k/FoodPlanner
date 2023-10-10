@@ -15,10 +15,11 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.utils.Constants;
 
 
-public class PlanFragment extends Fragment {
+public class PlanFragment extends BaseFragment {
 
     CheckBox showSaturday;
     ConstraintLayout mealsOfSaturday;
@@ -52,17 +53,10 @@ public class PlanFragment extends Fragment {
     ConstraintLayout mealsOfFriday;
     ImageView breakfastFriday, dinnerFriday, lunchFriday;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_plan, container, false);
+    protected int getLayout() {
+        return R.layout.fragment_plan;
     }
 
     @Override

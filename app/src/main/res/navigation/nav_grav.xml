@@ -130,7 +130,7 @@
     </fragment>
     <fragment
         android:id="@+id/plannedMealFragment"
-        android:name="com.example.foodplanner.ui.plan.details.PlannedMealsFragment"
+        android:name="com.example.foodplanner.ui.plan.details.PlannedMealFragment"
         android:label="PlannedMealFragment" >
         <action
             android:id="@+id/action_plannedMealFragment_to_mealFragment"
