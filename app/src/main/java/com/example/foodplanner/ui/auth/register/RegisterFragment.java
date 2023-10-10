@@ -24,6 +24,7 @@ import com.example.foodplanner.data.models.User;
 import com.example.foodplanner.data.models.Validation;
 import com.example.foodplanner.ui.auth.validation.AuthInputValidatorImpl;
 import com.example.foodplanner.ui.auth.validation.ValidationSateImpl;
+import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.utils.Constants;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -36,7 +37,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class RegisterFragment extends Fragment implements SingUpView {
+public class RegisterFragment  extends BaseFragment implements SingUpView {
     TextInputEditText emailText, passwordText, repeatedPasswordText;
     TextInputLayout emailText_P, passwordText_P, repeatedPasswordText_P;
     AppCompatButton register;
@@ -48,17 +49,9 @@ public class RegisterFragment extends Fragment implements SingUpView {
     FirebaseFirestore firebaseDatabase;
     private ProgressDialog progressDialog;
     GoogleSignInClient googleSignInClient;
-
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_register, container, false);
+    protected int getLayout() {
+        return R.layout.fragment_register;
     }
 
     @Override

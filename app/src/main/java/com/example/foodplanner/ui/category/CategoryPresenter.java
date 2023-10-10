@@ -21,7 +21,7 @@ public class CategoryPresenter implements OnClickCategory{
         getAllCategoriesWithDetails();
     }
 
-    private MutableLiveData<List<CategoryWithDetails>> allCategoriesWithDetails = new MutableLiveData<>();
+    private final MutableLiveData<List<CategoryWithDetails>> allCategoriesWithDetails = new MutableLiveData<>();
 
     public LiveData<List<CategoryWithDetails>> categoriesWithDetails() {
         return allCategoriesWithDetails;
@@ -42,7 +42,7 @@ public class CategoryPresenter implements OnClickCategory{
     }
 
     @Override
-    public void onClick(String nameOfCategory, View view) {
+    public void ClickCategory(String nameOfCategory, View view) {
         CategoryFragmentDirections.ActionCategoryFragmentToMealsFragment action=
                 CategoryFragmentDirections.actionCategoryFragmentToMealsFragment(nameOfCategory);
         Navigation.findNavController(view).navigate(action);

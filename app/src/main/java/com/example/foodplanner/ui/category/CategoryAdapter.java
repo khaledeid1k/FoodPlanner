@@ -48,7 +48,7 @@ public class CategoryAdapter extends
         ).into(holder.imageViewOfCategory);
         holder.textViewOfCategory.setText(categoryWithDetails.getStrCategory());
         holder.itemView.setOnClickListener(view -> {
-            onClickCategory.onClick(categoryWithDetails.getStrCategory()+ Constants.CATEGORY,view);
+            onClickCategory.ClickCategory(categoryWithDetails.getStrCategory()+ Constants.CATEGORY,view);
         });
     }
 
