@@ -3,6 +3,8 @@ package com.example.foodplanner.data.repository;
 import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.data.local.LocalSource;
+import com.example.foodplanner.data.models.IngredientMeasurePair;
+import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.category.Categories;
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
@@ -14,7 +16,9 @@ import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.RemoteSource;
 import com.example.foodplanner.data.network.StateOfResponse;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,15 +27,16 @@ import retrofit2.Response;
 public class RepositoryIm implements Repository {
     private RemoteSource remoteSource;
     private LocalSource localSource;
-    private  static RepositoryIm repo=null;
+    private static RepositoryIm repo = null;
 
-    public  static RepositoryIm getInstance(RemoteSource remoteResource,
-                                            LocalSource localSource){
-        if(repo==null){
-            repo= new RepositoryIm(remoteResource,localSource);
+    public static RepositoryIm getInstance(RemoteSource remoteResource,
+                                           LocalSource localSource) {
+        if (repo == null) {
+            repo = new RepositoryIm(remoteResource, localSource);
         }
         return repo;
     }
+
     public RepositoryIm(RemoteSource remoteResource, LocalSource localSource) {
         this.remoteSource = remoteResource;
         this.localSource = localSource;
@@ -115,7 +120,7 @@ public class RepositoryIm implements Repository {
 
     @Override
     public LiveData<Boolean> getFavoriteMealById(String mealId) {
-       return localSource.getFavoriteMealById(mealId);
+        return localSource.getFavoriteMealById(mealId);
     }
 
     @Override
@@ -131,6 +136,30 @@ public class RepositoryIm implements Repository {
     @Override
     public void savePlanedMeal(PlanedMeal planedMeal) {
         localSource.savePlanedMeal(planedMeal);
+    }
+
+    @Override
+    public ArrayList<IngredientMeasurePair> getIngredientAndMeasure(Meal meal) {
+        return localSource.getIngredientAndMeasure(meal).stream().filter(
+                i -> i.getIngredient() != null && !i.getIngredient().trim().isEmpty()
+        ).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public ArrayList<Instructions> getInstructions(Meal meal) {
+        ArrayList<Instructions> instructions=new ArrayList<>();
+
+        String[] split = localSource.getInstructions(meal).split("\\.");
+        int stepNumber = 1;
+        for (String s : split) {
+            String trimmedInstruction = s.trim();
+            if (!trimmedInstruction.isEmpty()) {
+                instructions.add(new Instructions(stepNumber + "-",
+                        trimmedInstruction));
+                stepNumber++;
+            }
+        }
+        return instructions;
     }
 
 

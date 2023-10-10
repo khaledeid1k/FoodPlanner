@@ -17,13 +17,13 @@ import java.util.ArrayList;
 public class InstructionsAdapter extends RecyclerView.Adapter<InstructionsAdapter.InstructionsViewHolder> {
 
     Context context;
-    ArrayList<Instructions> instructionsArrayList;
+    ArrayList<Instructions> instructions;
 
     public InstructionsAdapter(Context context,
-                               ArrayList<Instructions> instructionsArrayList
+                               ArrayList<Instructions> instructions
                             ) {
         this.context = context;
-        this.instructionsArrayList = instructionsArrayList;
+        this.instructions = instructions;
     }
 
 
@@ -38,7 +38,7 @@ public class InstructionsAdapter extends RecyclerView.Adapter<InstructionsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull InstructionsViewHolder holder, int position) {
-        Instructions instructions = instructionsArrayList.get(position);
+        Instructions instructions = this.instructions.get(position);
         String formattedText = context.getString(R.string.ingredient_measure,
                 instructions.getNumber(),
                 instructions.getInstruction());
@@ -47,7 +47,7 @@ public class InstructionsAdapter extends RecyclerView.Adapter<InstructionsAdapte
 
     @Override
     public int getItemCount() {
-        return instructionsArrayList==null?0:instructionsArrayList.size();
+        return instructions ==null?0: instructions.size();
     }
 
     public class InstructionsViewHolder extends RecyclerView.ViewHolder{

@@ -1,6 +1,6 @@
 package com.example.foodplanner;
 
-import static com.example.foodplanner.utils.Extensions.showRequestLogDialog;
+import static com.example.foodplanner.utils.Extensions.showRequestLoginDialog;
 
 import android.os.Bundle;
 import android.view.View;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements StateOfBottomNav 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.favourite||itemId==R.id.plan) {
-                 showRequestLogDialog(controller,this);
+                 showRequestLoginDialog(controller,this);
                     return false;
             }
                 return NavigationUI.onNavDestinationSelected(item, controller);

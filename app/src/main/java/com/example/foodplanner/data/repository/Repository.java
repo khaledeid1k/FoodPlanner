@@ -2,6 +2,8 @@ package com.example.foodplanner.data.repository;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.foodplanner.data.models.IngredientMeasurePair;
+import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.category.Categories;
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
@@ -12,6 +14,7 @@ import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.StateOfResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Repository {
@@ -49,4 +52,6 @@ public interface Repository {
     LiveData<List<PlanedMeal>> getPlanedMeals(String day, String timeOfMeal, String userId);
     void deletePlanedMeal(PlanedMeal planedMeal);
     void savePlanedMeal(PlanedMeal planedMeal);
+    ArrayList<IngredientMeasurePair> getIngredientAndMeasure(Meal meal);
+    ArrayList<Instructions> getInstructions(Meal meal);
 }

@@ -1,22 +1,18 @@
 package com.example.foodplanner.ui.meal;
 
 import static com.example.foodplanner.utils.Constants.UserId;
+import static com.example.foodplanner.utils.Extensions.showRequestLoginDialog;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -29,55 +25,43 @@ import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.PlanedMeal;
-import com.example.foodplanner.data.models.User;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.network.NetWork;
 import com.example.foodplanner.data.repository.RepositoryIm;
+import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.ui.meal.dapter.IngredientAdapter;
 import com.example.foodplanner.ui.meal.dapter.InstructionsAdapter;
 import com.example.foodplanner.utils.Constants;
 import com.example.foodplanner.utils.Extensions;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.DateValidatorPointForward;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 
-public class MealFragment extends Fragment {
+public class MealFragment extends BaseFragment implements MealView {
 
     ImageView imageSingleMeal, backFromMeal, addMealToPlan;
     CheckBox favouriteIconSingleMeal;
     TextView nameSingleMeal, countrySingleMeal, tileOfMeal;
     RecyclerView recyclerViewSingleMeal;
     Button buttonIngredientSingleMeal, buttonVideoSingleMeal, buttonInstructionsSingleMeal;
-
-
-    IngredientAdapter ingredientAdapter;
-    InstructionsAdapter instructionsAdapter;
-    ArrayList<IngredientMeasurePair> ingredientMeasurePairs;
-    ArrayList<Instructions> instructionsArrayList;
-    Meal meal;
-    MealPresenter mealPresenter;
     YouTubePlayerView youTubePlayerView;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-    }
+    MealPresenterView mealPresenterView;
+    IngredientAdapter ingredientAdapter;
+    InstructionsAdapter instructionsAdapter;
+    Meal meal;
+    MealPresenter mealPresenter;
+    boolean isLogin;
+    NavController controller;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_meal, container, false);
+    protected int getLayout() {
+        return R.layout.fragment_meal;
     }
 
     @Override
@@ -85,7 +69,7 @@ public class MealFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         inti(view);
         setUp();
-        moveBetweenIngredientAndInstructionsAndVideo();
+        moveBetweenIngredientAndInstructions();
         showVideo();
         showDaysOfWeekDialog();
     }
@@ -107,66 +91,62 @@ public class MealFragment extends Fragment {
 
         buttonIngredientSingleMeal.performClick();
         meal = MealFragmentArgs.fromBundle(getArguments()).getMeal();
-        instructionsArrayList = new ArrayList<>();
-        ingredientMeasurePairs = new ArrayList<>();
-        mealPresenter = new MealPresenter(meal, ingredientMeasurePairs, instructionsArrayList, RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())));
-        ingredientAdapter = new IngredientAdapter(getActivity(), ingredientMeasurePairs);
-        instructionsAdapter = new InstructionsAdapter(getActivity(), instructionsArrayList);
+        mealPresenter = new MealPresenter(meal,
+                RepositoryIm.getInstance(
+                        NetWork.getInstance(),
+                        LocalSourceIm.getInstance(getActivity())), this);
+        mealPresenterView=mealPresenter;
+
+
     }
 
     void setUp() {
         Glide.with(requireActivity()).load(meal.getStrMealThumb()).error(R.drawable.no_result_search).into(imageSingleMeal);
-
         nameSingleMeal.setText(meal.getStrMeal());
         tileOfMeal.setText(meal.getStrMeal());
         backFromMeal.setOnClickListener(Extensions::closeFragment);
         countrySingleMeal.setText(meal.getStrArea());
+        recyclerViewSingleMeal.setAdapter(ingredientAdapter);
+        isLogin = !Constants.UserId.equals("");
+        checkMealIsFavorite();
+        addMealToFavorite();
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        controller = navHostFragment.getNavController();
 
-        favouriteIconSingleMeal.setOnClickListener(view -> {
-            if (Constants.UserId.equals("")) {
-                favouriteIconSingleMeal.setChecked(false);
-                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+    }
 
-                NavController controller = navHostFragment.getNavController();
-                Extensions.showRequestLogDialog(controller, requireContext());
-            } else {
-                favouriteIconSingleMeal.setEnabled(true);
-                if (favouriteIconSingleMeal.isChecked()) {
-                    mealPresenter.isFavouriteClicked.setValue(true);
-                } else {
-                    mealPresenter.isFavouriteClicked.setValue(false);
-                }
-            }
-        });
-
-        mealPresenter.checkMealInFavoriteOrNot(meal.getIdMeal()).observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+    void checkMealIsFavorite() {
+        mealPresenter.mealIsFavorite(meal.getIdMeal()).observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 favouriteIconSingleMeal.setChecked(aBoolean);
             }
         });
-        recyclerViewSingleMeal.setAdapter(ingredientAdapter);
+
     }
 
-
-    void moveBetweenIngredientAndInstructionsAndVideo() {
+    void moveBetweenIngredientAndInstructions() {
         buttonIngredientSingleMeal.setOnClickListener(view -> {
             recyclerViewSingleMeal.setVisibility(View.VISIBLE);
             youTubePlayerView.setVisibility(View.INVISIBLE);
             recyclerViewSingleMeal.setAdapter(ingredientAdapter);
-
         });
         buttonInstructionsSingleMeal.setOnClickListener(view -> {
             recyclerViewSingleMeal.setVisibility(View.VISIBLE);
             youTubePlayerView.setVisibility(View.INVISIBLE);
-
             recyclerViewSingleMeal.setAdapter(instructionsAdapter);
-
-
         });
-        buttonVideoSingleMeal.setOnClickListener(view -> {
 
+    }
 
+    void addMealToFavorite() {
+        favouriteIconSingleMeal.setOnClickListener(view -> {
+            if (isLogin) {
+                favouriteIconSingleMeal.setEnabled(true);
+            } else {
+                favouriteIconSingleMeal.setChecked(false);
+                showRequestLoginDialog(controller, requireContext());
+            }
         });
 
     }
@@ -188,53 +168,73 @@ public class MealFragment extends Fragment {
         });
     }
 
-
-
-
     void showDaysOfWeekDialog() {
-
         addMealToPlan.setOnClickListener(view -> {
-            if (!Constants.UserId.equals("")) {
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Select day For add your meal ")
-                        .setItems(R.array.days_of_week, (dialog, which) -> {
-                            String dayOfWeek = getResources().getStringArray(R.array.days_of_week)[which];
-                            showMealsOfDayDialog(dayOfWeek);
-                        }).create().show();
-            }else {
-                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+            if (isLogin) {
+                showWeekDialog();
+            } else {
+                showRequestLoginDialog(controller, requireContext());
 
-                NavController controller = navHostFragment.getNavController();
-                Extensions.showRequestLogDialog(controller, requireContext());
             }
 
         });
 
     }
-    private void showMealsOfDayDialog(String dayOfWeek) {
+
+    private void showWeekDialog() {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.selected_planned_meal)
+                .setItems(R.array.days_of_week, (dialog, which) -> {
+                    String dayOfWeek = getResources().getStringArray(R.array.days_of_week)[which];
+                    showDayDialog(dayOfWeek);
+                }).create().show();
+    }
+
+    private void showDayDialog(String dayOfWeek) {
         new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle("Choose time of your meal")
+                .setTitle(R.string.choose_type_of_meal)
                 .setItems(R.array.meals_of_day, (dialog, which) -> {
                     String timeOfMeal = getResources().getStringArray(R.array.meals_of_day)[which];
-                    if(!(dayOfWeek+timeOfMeal).isEmpty()){
-                        Toast.makeText(requireActivity(), "Saved", Toast.LENGTH_SHORT).show();
-                        mealPresenter.savePlanedMeal(new PlanedMeal(
-                                UserId,dayOfWeek,timeOfMeal,meal));
+                    if (!(dayOfWeek + timeOfMeal).isEmpty()) {
+                        saveToPlanedMeal(dayOfWeek, timeOfMeal);
                     }
-
                 }).create().show();
+    }
+
+    void saveToPlanedMeal(String dayOfWeek, String timeOfMeal) {
+        mealPresenterView.savePlanedMeal(new PlanedMeal(
+                UserId, dayOfWeek, timeOfMeal, meal));
+        Toast.makeText(requireActivity(), "Saved", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(favouriteIconSingleMeal.isChecked()){
+        stateOfMeal();
+    }
+
+    void stateOfMeal() {
+        if (favouriteIconSingleMeal.isChecked()) {
             meal.setUserId(UserId);
-            mealPresenter.saveToFavorite(meal);
-        }else {
-            mealPresenter.deleteFromFavorite(meal);
+            mealPresenterView.saveToFavorite(meal);
+        } else {
+            mealPresenterView.deleteFromFavorite(meal);
         }
     }
+
+    @Override
+    public void getIngredientAndMeasure(ArrayList<IngredientMeasurePair> ingredientMeasurePairs) {
+        ingredientAdapter = new IngredientAdapter(getActivity(), ingredientMeasurePairs);
+
+
+    }
+
+    @Override
+    public void getInstructions(ArrayList<Instructions> instructions) {
+        instructionsAdapter = new InstructionsAdapter(getActivity(), instructions);
+
+    }
+
 
 }
 

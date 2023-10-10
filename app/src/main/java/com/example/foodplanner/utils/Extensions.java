@@ -11,8 +11,6 @@ import com.example.foodplanner.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class Extensions {
@@ -20,7 +18,7 @@ public class Extensions {
         Navigation.findNavController(view).popBackStack();
     }
 
-    public static void showRequestLogDialog(NavController controller, Context context) {
+    public static void showRequestLoginDialog(NavController controller, Context context) {
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle("Please log in to access this feature.");

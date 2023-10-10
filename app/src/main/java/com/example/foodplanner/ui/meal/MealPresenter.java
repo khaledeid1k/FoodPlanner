@@ -14,84 +14,49 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MealPresenter  {
+public class MealPresenter implements MealPresenterView {
 
 Repository repository;
-
-
-
+    MealView mealView;
     Meal meal;
-    ArrayList<IngredientMeasurePair> ingredientMeasurePairs;
-    ArrayList<Instructions> instructionsArrayList;
-    MutableLiveData<Boolean> isFavouriteClicked = new MutableLiveData<>();
 
     public MealPresenter(Meal meal,
-                         ArrayList<IngredientMeasurePair> ingredientMeasurePairs,
-                         ArrayList<Instructions> instructionsArrayList,
-                         Repository repository) {
-
+                         Repository repository,MealView mealView) {
         this.meal = meal;
-        this.ingredientMeasurePairs = ingredientMeasurePairs;
-        this.instructionsArrayList = instructionsArrayList;
-        addIngredientAndMeasure();
-        addInstructions();
         this.repository=repository;
+        this.mealView=mealView;
+        getIngredientAndMeasure();
+        addInstructions();
     }
 
-    void addIngredientAndMeasure() {
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient1(), meal.getStrMeasure1()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient2(), meal.getStrMeasure2()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient2(), meal.getStrMeasure3()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient4(), meal.getStrMeasure4()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient5(), meal.getStrMeasure5()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient6(), meal.getStrMeasure6()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient7(), meal.getStrMeasure7()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient8(), meal.getStrMeasure8()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient9(), meal.getStrMeasure9()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient10(), meal.getStrMeasure10()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient11(), meal.getStrMeasure11()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient12(), meal.getStrMeasure12()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient13(), meal.getStrMeasure13()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient14(), meal.getStrMeasure14()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient15(), meal.getStrMeasure15()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient16(), meal.getStrMeasure16()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient17(), meal.getStrMeasure17()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient18(), meal.getStrMeasure18()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient19(), meal.getStrMeasure19()));
-        ingredientMeasurePairs.add(new IngredientMeasurePair(meal.getStrIngredient20(), meal.getStrMeasure20()));
-
-        List<IngredientMeasurePair> collect = ingredientMeasurePairs.stream().filter(
-                i -> i.getIngredient() != null && !i.getIngredient().trim().isEmpty()
-        ).collect(Collectors.toList());
-        ingredientMeasurePairs.clear();
-        ingredientMeasurePairs.addAll(collect);
+    void getIngredientAndMeasure() {
+        mealView.getIngredientAndMeasure(repository.getIngredientAndMeasure(meal));
     }
-
     void addInstructions() {
-        String[] split = meal.getStrInstructions().split("\\.");
-        int stepNumber = 1;
-        for (String s : split) {
-            String trimmedInstruction = s.trim();
-            if (!trimmedInstruction.isEmpty()) {
-                instructionsArrayList.add(new Instructions(stepNumber + "-", trimmedInstruction));
-                stepNumber++;
-            }
-        }
+        mealView.getInstructions(repository.getInstructions(meal));
     }
 
-    void saveToFavorite(Meal meal){
-        repository.saveMeal(meal);
-    }
-    void deleteFromFavorite(Meal meal){
-        repository.deleteMeal(meal);
-    }
-    LiveData<Boolean> checkMealInFavoriteOrNot(String mealId){
+
+
+
+    LiveData<Boolean> mealIsFavorite(String mealId){
        return repository.getFavoriteMealById(mealId);
     }
-    void savePlanedMeal(
-            PlanedMeal planedMeal
-    ){
+
+    @Override
+    public void savePlanedMeal(PlanedMeal planedMeal) {
         repository.savePlanedMeal(planedMeal);
     }
+
+    @Override
+    public void saveToFavorite(Meal meal) {
+        repository.saveMeal(meal);
+    }
+
+    @Override
+    public void deleteFromFavorite(Meal meal) {
+        repository.deleteMeal(meal);
+    }
+
 
 }
