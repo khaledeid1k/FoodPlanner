@@ -18,145 +18,15 @@ import com.example.foodplanner.ui.meals.OnClickListener;
 import com.example.foodplanner.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SearchPresenter implements OnClickListener {
+public class SearchPresenter implements OnClickListener, StateOfResponse,SearchPresenterView{
     Repository repository;
-    ArrayList<FilteredItem> filteredItemArrayList=new ArrayList<>();
     ArrayList<FilteredItem> filtered;
-
-
-    private MutableLiveData<ArrayList<FilteredItem>> filteredItemsMutableLiveData =
-            new MutableLiveData<>();
-
-    public LiveData<ArrayList<FilteredItem>> filteredItemsLiveData() {
-        return filteredItemsMutableLiveData;
-    }
-
-    public SearchPresenter( Repository repository) {
-        this.repository = repository;
-    }
-
-
-
-    void searchOfCategory(String nameOfCategory) {
-        repository.filterByCategory(nameOfCategory, new StateOfResponse<>() {
-            @Override
-            public void succeeded(FilteredItems response) {
-                filteredItemsMutableLiveData.setValue(response.getMeals());
-            }
-
-            @Override
-            public void failure(String message) {
-
-            }
-        });
-
-    }
-
-    void searchByCountry(String nameOfCountry) {
-        repository.filterByArea(nameOfCountry, new StateOfResponse<>() {
-            @Override
-            public void succeeded(FilteredItems response) {
-                filteredItemsMutableLiveData.setValue(response.getMeals());
-            }
-
-            @Override
-            public void failure(String message) {
-
-            }
-        });
-    }
-
-    void searchByIngredient(String nameOfIngredient) {
-
-        repository.filterByMainIngredient(nameOfIngredient, new StateOfResponse<>() {
-            @Override
-            public void succeeded(FilteredItems response) {
-                filteredItemsMutableLiveData.setValue(response.getMeals());
-            }
-
-            @Override
-            public void failure(String message) {
-
-            }
-        });
-    }
-
-    void searchByMeal(String charOfMeal) {
-        if (charOfMeal.length()==1) {
-            repository.getMealsByFirstLetter(charOfMeal, new StateOfResponse<>() {
-                @Override
-                public void succeeded(Meals response) {
-                    List<Meal> meals = response != null ? response.getMeals() : null;
-                    if (meals != null) {
-                      filtered = new ArrayList<>();
-                        for (Meal meal : meals) {
-                            filtered.add(new FilteredItem(
-                                    meal.getStrMeal(),
-                                    meal.getStrMealThumb(),
-                                    meal.getIdMeal()
-                            ));
-                        }
-                        filteredItemsMutableLiveData.setValue(filtered);
-                    }
-                }
-
-                @Override
-                public void failure(String message) {
-
-                }
-            });
-        }else {
-            if(filtered!=null){
-            filtered= (ArrayList<FilteredItem>) filtered.stream()
-
-                 .filter(s -> s.getStrMeal().toLowerCase(Locale.ROOT)
-                         .contains(charOfMeal))
-                    .distinct().collect(Collectors.toList());
-            filteredItemsMutableLiveData.setValue(filtered);
-
-           }
-        }
-
-    }
-
-
-    void getTextOfSelectedChip(String selectedChipText,String wordOfSearch) {
-        switch (selectedChipText) {
-            case Constants.Category: {
-                searchOfCategory(wordOfSearch);
-            }
-            break;
-
-            case Constants.Country: {
-                searchByCountry(wordOfSearch);
-
-            }
-            break;
-
-            case Constants.Ingredient: {
-                searchByIngredient(wordOfSearch);
-
-            }
-            break;
-            default:{
-                searchByMeal(wordOfSearch);
-            }
-
-
-
-        }
-        if(Objects.equals(wordOfSearch, Constants.Empty)){
-            filteredItemArrayList.clear();
-            filteredItemsMutableLiveData.setValue(filteredItemArrayList);
-        }
-
-    }
-
 
 
 
@@ -164,12 +34,7 @@ public class SearchPresenter implements OnClickListener {
         repository.getMealByName(nameOfMeal, new StateOfResponse<>() {
             @Override
             public void succeeded(Meals response) {
-                SearchFragmentDirections.ActionSearchToMealFragment action =
-                        SearchFragmentDirections.actionSearchToMealFragment(
-                      response.getMeals().get(0)  );
-                Navigation.findNavController(view).navigate(
-                        action
-                );
+                moveToMealScreen(response.getMeals().get(0),view);
             }
 
             @Override
@@ -179,11 +44,97 @@ public class SearchPresenter implements OnClickListener {
         });
     }
 
+
+    @Override
+    public void succeeded(Object response) {
+        if (response instanceof  FilteredItems){
+            FilteredItems filteredItems = (FilteredItems) response;
+            if(filteredItems.getMeals()!=null) {
+                filteredItemsMutableLiveData.setValue(
+                        filteredItems.getMeals().stream()
+                        .distinct()
+                        .sorted(Comparator.comparing(FilteredItem::getStrMeal))
+                        .collect(Collectors.toCollection(ArrayList::new)));
+            }else {
+                filteredItemsMutableLiveData.setValue(new ArrayList<>());}
+
+        }else if(response instanceof  Meals){
+            Meals meals = (Meals) response;
+            filtered= repository.searchByMeal(meals);
+            filteredItemsMutableLiveData.setValue(filtered.stream()
+                    .distinct()
+                    .sorted(Comparator.comparing(FilteredItem::getStrMeal))
+                    .collect(Collectors.toCollection(ArrayList::new)));
+        }
+    }
+
+    @Override
+    public void failure(String message) {
+
+    }
+
+    private MutableLiveData<ArrayList<FilteredItem>> filteredItemsMutableLiveData =
+            new MutableLiveData<>();
+
+    public LiveData<ArrayList<FilteredItem>> filteredItemsLiveData() {
+        return filteredItemsMutableLiveData;
+    }
+    public SearchPresenter( Repository repository) {
+        this.repository = repository;
+    }
+    void searchOfCategory(String nameOfCategory) {
+        repository.filterByCategory(nameOfCategory,this);
+    }
+    void searchByCountry(String nameOfCountry) {
+        repository.filterByArea(nameOfCountry, this);
+    }
+    void searchByIngredient(String nameOfIngredient) {
+        repository.filterByMainIngredient(nameOfIngredient,this);
+    }
+    void searchByMeal(String charOfMeal) {
+        if (charOfMeal.length()==1) {
+            repository.getMealsByFirstLetter(charOfMeal, this);
+        }else {
+            filteredItemsMutableLiveData.setValue(repository.searchInMeals(filtered,charOfMeal));
+        }
+
+    }
+    void moveToMealScreen(Meal meal,View view){
+        SearchFragmentDirections.ActionSearchToMealFragment action =
+                SearchFragmentDirections.actionSearchToMealFragment(
+                        meal );
+        Navigation.findNavController(view).navigate(
+                action    );
+    }
+
+
     @Override
     public void onclickMeal(String nameOfMeal, View view) {
-
         moveToMealScreen(nameOfMeal,view);
+    }
 
 
+    @Override
+    public void sendChipValueAndSearchValue(String selectedChipText, String wordOfSearch) {
+        switch (selectedChipText) {
+            case Constants.Category: {
+                searchOfCategory(wordOfSearch);
+            }
+            break;
+            case Constants.Country: {
+                searchByCountry(wordOfSearch);
+            }
+            break;
+            case Constants.Ingredient: {
+                searchByIngredient(wordOfSearch);
+            }
+            break;
+            default:{
+                searchByMeal(wordOfSearch);
+            }
+        }
+        if(Objects.equals(wordOfSearch, Constants.Empty)){
+            filteredItemsMutableLiveData.setValue(new ArrayList<>());
+        }
     }
 }

@@ -21,6 +21,7 @@ import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.filter.FilteredItem;
 import com.example.foodplanner.data.network.NetWork;
 import com.example.foodplanner.data.repository.RepositoryIm;
+import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.ui.meals.MealsAdapter;
 import com.example.foodplanner.utils.Constants;
 import com.google.android.material.chip.Chip;
@@ -34,44 +35,36 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class SearchFragment extends Fragment {
-    String TAG = "SearchFragment";
+public class SearchFragment extends BaseFragment {
     ChipGroup chipGroup;
     MaterialAutoCompleteTextView searchText;
-    Chip chip1, chip2, chip3;
-    SearchPresenter searchPresenter;
     RecyclerView recyclerViewOfSearch;
-    ArrayList<FilteredItem> filteredItemArrayList;
-    MealsAdapter mealsAdapter;
     LottieAnimationView lottieAnimation;
-    String wordOfSearch=Constants.Empty;
-    String selectedChipText=Constants.Meal;
 
+
+    String wordOfSearch = Constants.Empty;
+    String selectedChipText = Constants.Meal;
+    SearchPresenter searchPresenter;
+    MealsAdapter mealsAdapter;
+    ArrayList<FilteredItem> filteredItemArrayList;
+    SearchPresenterView searchPresenterView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search, container, false);
+    protected int getLayout() {
+        return R.layout.fragment_search;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        setUp();
+        setChipText();
+        setWordOfSearch();
+        observeFilterData();
     }
 
     void init(View view) {
         chipGroup = view.findViewById(R.id.chipGroup);
-        chip1 = view.findViewById(R.id.category_search);
-        chip2 = view.findViewById(R.id.country_search);
-        chip3 = view.findViewById(R.id.ingredients_search);
         searchText = view.findViewById(R.id.search_text_value);
         recyclerViewOfSearch = view.findViewById(R.id.recycler_view_search);
         lottieAnimation = view.findViewById(R.id.lottie_animation_search);
@@ -79,32 +72,36 @@ public class SearchFragment extends Fragment {
         searchPresenter = new SearchPresenter(
                 RepositoryIm.getInstance(NetWork.getInstance(),
                         LocalSourceIm.getInstance(getActivity())));
-
-        filteredItemArrayList=new ArrayList<>();
+        searchPresenterView = searchPresenter;
+        filteredItemArrayList = new ArrayList<>();
 
         mealsAdapter = new MealsAdapter(filteredItemArrayList, requireActivity(),
                 searchPresenter
         );
-
 
         recyclerViewOfSearch.setAdapter(mealsAdapter);
 
     }
 
 
-    void setUp() {
+    void setChipText() {
         chipGroup.setSingleSelection(true);
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             Chip selectedChip = requireActivity().findViewById(checkedId);
+
             if (selectedChip != null) {
                 selectedChipText = selectedChip.getText().toString();
-                searchPresenter.getTextOfSelectedChip(selectedChipText,wordOfSearch);
+                searchPresenterView.sendChipValueAndSearchValue(selectedChipText, wordOfSearch);
             } else {
-                selectedChipText=Constants.Meal;
-                searchPresenter.getTextOfSelectedChip(selectedChipText,wordOfSearch);
+                selectedChipText = Constants.Meal;
+                searchPresenterView.sendChipValueAndSearchValue(selectedChipText, wordOfSearch);
             }
 
         });
+
+    }
+
+    void setWordOfSearch() {
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -113,14 +110,12 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()>0) {
-                    wordOfSearch=charSequence.toString();
-                    searchPresenter.getTextOfSelectedChip(selectedChipText,wordOfSearch);
-                }else {
-                    wordOfSearch=Constants.Empty;
-                    searchPresenter.getTextOfSelectedChip(selectedChipText,wordOfSearch);
-
-
+                if (charSequence.length() > 0) {
+                    wordOfSearch = charSequence.toString();
+                    searchPresenterView.sendChipValueAndSearchValue(selectedChipText, wordOfSearch);
+                } else {
+                    wordOfSearch = Constants.Empty;
+                    searchPresenterView.sendChipValueAndSearchValue(selectedChipText, wordOfSearch);
                 }
             }
 
@@ -129,25 +124,22 @@ public class SearchFragment extends Fragment {
 
             }
         });
+
+
+    }
+
+    void observeFilterData() {
         searchPresenter.filteredItemsLiveData().observe(getViewLifecycleOwner(),
                 filteredItems -> {
-                    ArrayList<FilteredItem> collect=new ArrayList<>();
-                    if (filteredItems != null){
-                        Log.i(TAG, "afdsdfsdf: " + filteredItems);
-                  collect =
-                            (ArrayList<FilteredItem>) filteredItems.stream().distinct()
-                                    .sorted(Comparator.comparing(FilteredItem::getStrMeal))
-                                    .collect(Collectors.toList());}
-
-                    if (collect.size() != 0) {
+                    if (filteredItems.size() != 0) {
                         lottieAnimation.setVisibility(View.INVISIBLE);
                     } else {
                         lottieAnimation.setVisibility(View.VISIBLE);
                     }
 
-                    mealsAdapter.updateData(collect);
+                    mealsAdapter.updateData(filteredItems);
+
 
                 });
-
     }
 }

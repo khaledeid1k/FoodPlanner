@@ -8,6 +8,7 @@ import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.category.Categories;
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.country.Countries;
+import com.example.foodplanner.data.models.filter.FilteredItem;
 import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.ingredient.Ingredients;
 import com.example.foodplanner.data.models.meal.Meal;
@@ -54,4 +55,6 @@ public interface Repository {
     void savePlanedMeal(PlanedMeal planedMeal);
     ArrayList<IngredientMeasurePair> getIngredientAndMeasure(Meal meal);
     ArrayList<Instructions> getInstructions(Meal meal);
-}
+     ArrayList<FilteredItem> searchByMeal(Meals meals) ;
+     ArrayList<FilteredItem> searchInMeals(ArrayList<FilteredItem> meals, String charOfMeal) ;
+    }

@@ -9,6 +9,7 @@ import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.category.Categories;
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.country.Countries;
+import com.example.foodplanner.data.models.filter.FilteredItem;
 import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.ingredient.Ingredients;
 import com.example.foodplanner.data.models.meal.Meal;
@@ -18,6 +19,7 @@ import com.example.foodplanner.data.network.StateOfResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
@@ -147,7 +149,7 @@ public class RepositoryIm implements Repository {
 
     @Override
     public ArrayList<Instructions> getInstructions(Meal meal) {
-        ArrayList<Instructions> instructions=new ArrayList<>();
+        ArrayList<Instructions> instructions = new ArrayList<>();
 
         String[] split = localSource.getInstructions(meal).split("\\.");
         int stepNumber = 1;
@@ -162,6 +164,32 @@ public class RepositoryIm implements Repository {
         return instructions;
     }
 
+    @Override
+    public ArrayList<FilteredItem> searchByMeal(Meals meals) {
+        if ((meals != null ? meals.getMeals() : null) != null) {
+            return meals.getMeals().stream().map(meal ->
+                            new FilteredItem(
+                                    meal.getStrMeal(),
+                                    meal.getStrMealThumb(),
+                                    meal.getIdMeal()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<FilteredItem> searchInMeals(ArrayList<FilteredItem> meals, String charOfMeal) {
+        if (meals != null) {
+            return meals.stream()
+                    .filter(s -> s.getStrMeal().toLowerCase(Locale.ROOT)
+                            .contains(charOfMeal))
+                    .distinct()
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } else {
+            return new ArrayList<>();
+        }
+
+    }
 
     <T> StateOfResponse<T> WrapResponse(Call<T> call, StateOfResponse<T> stateOfResponse) {
         call.enqueue(new Callback<T>() {
