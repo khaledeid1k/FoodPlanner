@@ -133,10 +133,10 @@ public class PlannedMealFragment extends BaseFragment implements PlannedMealView
         cardOfPlanedMeal.setVisibility(View.INVISIBLE);
     }
     void existPlanedMeal(){
-        lottieAnimation.setVisibility(View.VISIBLE);
-        noPlanedMeals.setVisibility(View.VISIBLE);
-        deleteMeal.setVisibility(View.INVISIBLE);
-        cardOfPlanedMeal.setVisibility(View.INVISIBLE);
+        lottieAnimation.setVisibility(View.INVISIBLE);
+        noPlanedMeals.setVisibility(View.INVISIBLE);
+        deleteMeal.setVisibility(View.VISIBLE);
+        cardOfPlanedMeal.setVisibility(View.VISIBLE);
     }
 
     void navigateToMealDetails(Meal meal){

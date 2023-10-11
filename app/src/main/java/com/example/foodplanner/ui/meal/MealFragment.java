@@ -195,7 +195,7 @@ public class MealFragment extends BaseFragment implements MealView {
                 .setTitle(R.string.choose_type_of_meal)
                 .setItems(R.array.meals_of_day, (dialog, which) -> {
                     String timeOfMeal = getResources().getStringArray(R.array.meals_of_day)[which];
-                    if (!(dayOfWeek + timeOfMeal).isEmpty()) {
+                    if (!timeOfMeal.isEmpty()) {
                         saveToPlanedMeal(dayOfWeek, timeOfMeal);
                     }
                 }).create().show();
