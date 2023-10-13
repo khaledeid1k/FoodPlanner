@@ -1,7 +1,8 @@
 package com.example.foodplanner.ui.home.adapter;
 
+import static com.example.foodplanner.utils.Constants.UserId;
+
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,20 +30,20 @@ import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
     ArrayList<DataItem> dataItemList;
-    NavigationToShowAll navigationToShowAll;
+    HomeInteractionListener homeInteractionListener;
     Context context;
     HomePresenter presenter;
+    OnClickHomeHorizontalItem onClickHomeHorizontalItem;
 
     public HomeAdapter(
             Context context,
             ArrayList<DataItem> dataItemList,
-            NavigationToShowAll navigationToShowAll,
-            HomePresenter presenter
-    ) {
+            HomeInteractionListener homeInteractionListener,
+            OnClickHomeHorizontalItem onClickHomeHorizontalItem) {
         this.dataItemList = dataItemList;
-       this.navigationToShowAll = navigationToShowAll;
+       this.homeInteractionListener = homeInteractionListener;
         this.context = context;
-        this.presenter = presenter;
+        this.onClickHomeHorizontalItem = onClickHomeHorizontalItem;
     }
 
 
@@ -90,11 +91,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 Glide.with(context).load(meal.getStrMealThumb()).error(
                         R.drawable.no_result_search
                 ).into(((HeaderViewHolder) holder).imageMealOfDay);
-                holder.itemView.setOnClickListener(view -> navigationToShowAll.onNavigate(dataItem,view));
+                holder.itemView.setOnClickListener(view -> homeInteractionListener.navigateToShowAll(dataItem,view));
                 ((HeaderViewHolder) holder).logout.setOnClickListener(
-                        view -> navigationToShowAll.logout()
+                        view -> homeInteractionListener.logout(view)
                 );
-                if(Constants.UserId.equals("")){((HeaderViewHolder) holder).logout.setVisibility(View.GONE);}
+                if(UserId.equals("")){((HeaderViewHolder) holder).logout.setVisibility(View.GONE);}
 
             }
         } else if(holder instanceof ItemViewHolder){
@@ -103,14 +104,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 String title = tag.getTitle();
                 ((ItemViewHolder) holder).tileOfList.setText(title);
                 ItemsAdapter itemsAdapter = new ItemsAdapter(context,
-                       dataItem,presenter,Constants.VIEW_TYPE_LINER
+                       dataItem,onClickHomeHorizontalItem,Constants.VIEW_TYPE_LINER
                         );
                 ((ItemViewHolder) holder).recycleItemHome.setAdapter(
                         itemsAdapter
                 );
                  ((ItemViewHolder) holder).showAll.setOnClickListener(
                          view -> {
-                             navigationToShowAll.onNavigate(dataItem,view);
+                             homeInteractionListener.navigateToShowAll(dataItem,view);
                          }
                  );
 
@@ -120,14 +121,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 String title = tag.getTitle();
                 ((ItemViewHolder) holder).tileOfList.setText(title);
                 ItemsAdapter itemsAdapter = new ItemsAdapter(context,
-                        dataItem,presenter,Constants.VIEW_TYPE_LINER
+                        dataItem,onClickHomeHorizontalItem,Constants.VIEW_TYPE_LINER
                 );
                 ((ItemViewHolder) holder).recycleItemHome.setAdapter(
                         itemsAdapter
                 );
                 ((ItemViewHolder) holder).showAll.setOnClickListener(
                         view -> {
-                            navigationToShowAll.onNavigate(dataItem,view);
+                            homeInteractionListener.navigateToShowAll(dataItem,view);
                         }
                 );
 
@@ -137,14 +138,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 String title = tag.getTitle();
                 ((ItemViewHolder) holder).tileOfList.setText(title);
                 ItemsAdapter itemsAdapter = new ItemsAdapter(context,
-                       dataItem,presenter,Constants.VIEW_TYPE_LINER
+                       dataItem,onClickHomeHorizontalItem,Constants.VIEW_TYPE_LINER
                         );
                 ((ItemViewHolder) holder).recycleItemHome.setAdapter(
                         itemsAdapter
                 );
                  ((ItemViewHolder) holder).showAll.setOnClickListener(
                          view -> {
-                             navigationToShowAll.onNavigate(dataItem,view);
+                             homeInteractionListener.navigateToShowAll(dataItem,view);
                          }
                  );
 

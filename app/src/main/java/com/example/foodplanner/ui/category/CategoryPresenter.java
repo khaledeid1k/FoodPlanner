@@ -13,25 +13,22 @@ import com.example.foodplanner.data.repository.Repository;
 
 import java.util.List;
 
-public class CategoryPresenter implements OnClickCategory{
+public class CategoryPresenter {
     Repository repository;
+    CategoryView categoryView;
 
-    public CategoryPresenter(Repository repository) {
+    public CategoryPresenter(Repository repository,CategoryView categoryView) {
         this.repository = repository;
+        this.categoryView = categoryView;
         getAllCategoriesWithDetails();
     }
 
-    private final MutableLiveData<List<CategoryWithDetails>> allCategoriesWithDetails = new MutableLiveData<>();
-
-    public LiveData<List<CategoryWithDetails>> categoriesWithDetails() {
-        return allCategoriesWithDetails;
-    }
 
     private void getAllCategoriesWithDetails() {
         repository.getAllCategoriesWithDetails(new StateOfResponse<>() {
             @Override
             public void succeeded(CategoriesWithDetails response) {
-                allCategoriesWithDetails.setValue(response.getCategories());
+                categoryView.getAllCategoriesWithDetails(response.getCategories());
             }
 
             @Override
@@ -41,10 +38,5 @@ public class CategoryPresenter implements OnClickCategory{
         });
     }
 
-    @Override
-    public void ClickCategory(String nameOfCategory, View view) {
-        CategoryFragmentDirections.ActionCategoryFragmentToMealsFragment action=
-                CategoryFragmentDirections.actionCategoryFragmentToMealsFragment(nameOfCategory);
-        Navigation.findNavController(view).navigate(action);
-    }
+
 }

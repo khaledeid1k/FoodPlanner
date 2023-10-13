@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.lifecycle.LiveData;
+import androidx.navigation.Navigation;
 
 import android.view.View;
 import android.widget.Button;
@@ -141,7 +142,12 @@ public class PlannedMealFragment extends BaseFragment implements PlannedMealView
 
     void navigateToMealDetails(Meal meal){
         mealImage.setOnClickListener(view -> {
-            plannedMealPresenterView.onClickPlanedMeal(meal,view);
+            PlannedMealFragmentDirections.ActionPlannedMealFragmentToMealFragment action =
+                    PlannedMealFragmentDirections.actionPlannedMealFragmentToMealFragment(
+                            meal);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
         });
     }
 }

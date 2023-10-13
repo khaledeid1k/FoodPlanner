@@ -1,22 +1,20 @@
 package com.example.foodplanner.ui.meals;
 
 import android.util.Log;
-import android.view.View;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.Navigation;
 
 import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.StateOfResponse;
 import com.example.foodplanner.data.repository.Repository;
 
-public class MealsPresenter implements OnClickListener {
+public class MealsPresenter implements MealsPresenterView {
     Repository repository;
+    MealsFragmentView mealsFragmentView;
 
-    public MealsPresenter(Repository repository,String nameOfItem) {
+    public MealsPresenter(Repository repository,String nameOfItem,
+                          MealsFragmentView mealsFragmentView) {
         this.repository = repository;
+        this.mealsFragmentView = mealsFragmentView;
         if(nameOfItem.split(",")[1].equals("ca")){
             getMealsCategories(nameOfItem.split(",")[0]);
         }else {
@@ -26,20 +24,12 @@ public class MealsPresenter implements OnClickListener {
 
     }
 
-    private MutableLiveData<FilteredItems> filteredItemsMutableLiveData =
-            new MutableLiveData<>();
-
-
-    public LiveData<FilteredItems> filteredItemsLiveData() {
-        return filteredItemsMutableLiveData;
-    }
-
 
     void getMealsCategories(String categoryName){
         repository.filterByCategory(categoryName, new StateOfResponse<>() {
             @Override
             public void succeeded(FilteredItems response) {
-                filteredItemsMutableLiveData.setValue(response);
+                mealsFragmentView.getMeals(response.getMeals());
             }
 
             @Override
@@ -53,8 +43,7 @@ public class MealsPresenter implements OnClickListener {
             @Override
             public void succeeded(FilteredItems response) {
                 Log.i("TAG", "succeeded: "+response.getMeals().get(0));
-                filteredItemsMutableLiveData.setValue(response);
-
+                mealsFragmentView.getMeals(response.getMeals());
             }
 
             @Override
@@ -65,17 +54,12 @@ public class MealsPresenter implements OnClickListener {
     }
 
 
-    @Override
-    public void onclickMeal(String nameOfMeal, View view) {
+
+    public void onclickMeal(String nameOfMeal) {
         repository.getMealByName(nameOfMeal, new StateOfResponse<>() {
             @Override
             public void succeeded(Meals response) {
-                MealsFragmentDirections.ActionMealsFragmentToMealFragment action =
-                        MealsFragmentDirections.actionMealsFragmentToMealFragment(
-                                response.getMeals().get(0));
-                Navigation.findNavController(view).navigate(
-                        action
-                );
+                mealsFragmentView.getMealByName(response.getMeals().get(0));
             }
 
             @Override

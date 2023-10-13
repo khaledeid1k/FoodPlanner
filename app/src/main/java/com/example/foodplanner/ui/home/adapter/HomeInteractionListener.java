@@ -5,7 +5,7 @@ import android.view.View;
 import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.ui.base.BaseInteractionListener;
 
-public interface NavigationToShowAll extends BaseInteractionListener {
-    void onNavigate(DataItem dataItem, View view);
-    void logout();
+public interface HomeInteractionListener extends BaseInteractionListener {
+    void navigateToShowAll(DataItem dataItem, View view);
+    void logout(View view);
 }

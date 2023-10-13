@@ -1,7 +1,6 @@
 package com.example.foodplanner.ui.home.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +20,7 @@ import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHolder> {
@@ -32,16 +28,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
     Context context;
     ArrayList items;
     DataItem dataItem;
-    OnClickItem onClickItem;
+    OnClickHomeHorizontalItem onClickHomeHorizontalItem;
     int type;
 
     public ItemsAdapter(Context context,
                         DataItem dataItem,
-                        OnClickItem onClickItem,
+                        OnClickHomeHorizontalItem onClickHomeHorizontalItem,
                         int type) {
         this.context = context;
         this.dataItem = dataItem;
-        this.onClickItem = onClickItem;
+        this.onClickHomeHorizontalItem = onClickHomeHorizontalItem;
         this.type = type;
         if (dataItem instanceof MealsItem) {
             List<Meal> resourcesData = ((MealsItem) dataItem).getTag().getResourcesData();
@@ -92,7 +88,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
                 Glide.with(context).load(meal.getStrMealThumb()).error(
                         R.drawable.ic_launcher_background
                 ).into(subHolder.productImage);
-                subHolder.itemView.setOnClickListener(view -> onClickItem.click(dataItem, position,view));
+                subHolder.itemView.setOnClickListener(view -> onClickHomeHorizontalItem.navigateToDetails(dataItem, position,view));
 
             } else if (o instanceof CategoryWithDetails) {
                 CategoryWithDetails categoryWithDetails = ((CategoryWithDetails) o);
@@ -100,7 +96,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
                 Glide.with(context).load(categoryWithDetails.getStrCategoryThumb()).error(
                         R.drawable.ic_launcher_background
                 ).into(subHolder.productImage);
-                subHolder.itemView.setOnClickListener(view -> onClickItem.click(dataItem, position,view));
+                subHolder.itemView.setOnClickListener(view -> onClickHomeHorizontalItem.navigateToDetails(dataItem, position,view));
 
             } else if (o instanceof Country) {
                 Country country = ((Country) o);
@@ -108,7 +104,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
                 Glide.with(context).load(R.drawable.food_image_eleven).error(
                         R.drawable.ic_launcher_background
                 ).into(subHolder.productImage);
-                subHolder.itemView.setOnClickListener(view -> onClickItem.click(dataItem, position,view));
+                subHolder.itemView.setOnClickListener(view -> onClickHomeHorizontalItem.navigateToDetails(dataItem, position,view));
 
             }
         }
@@ -120,7 +116,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
                 Glide.with(context).load(meal.getStrMealThumb()).error(
                         R.drawable.ic_launcher_background
                 ).into(subHolder.productImage);
-                subHolder.itemView.setOnClickListener(view -> onClickItem.click(dataItem, position,view));
+                subHolder.itemView.setOnClickListener(view -> onClickHomeHorizontalItem.navigateToDetails(dataItem, position,view));
 
             } else if (o instanceof CategoryWithDetails) {
                 CategoryWithDetails categoryWithDetails = ((CategoryWithDetails) o);
@@ -128,7 +124,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
                 Glide.with(context).load(categoryWithDetails.getStrCategoryThumb()).error(
                         R.drawable.ic_launcher_background
                 ).into(subHolder.productImage);
-                subHolder.itemView.setOnClickListener(view -> onClickItem.click(dataItem, position,view));
+                subHolder.itemView.setOnClickListener(view -> onClickHomeHorizontalItem.navigateToDetails(dataItem, position,view));
 
             } else if (o instanceof Country) {
                 Country country = ((Country) o);
@@ -136,7 +132,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsViewHol
                 Glide.with(context).load(R.drawable.food_image_eleven).error(
                         R.drawable.ic_launcher_background
                 ).into(subHolder.productImage);
-                subHolder.itemView.setOnClickListener(view -> onClickItem.click(dataItem, position,view));
+                subHolder.itemView.setOnClickListener(view -> onClickHomeHorizontalItem.navigateToDetails(dataItem, position,view));
 
             }
         }

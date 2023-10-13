@@ -7,4 +7,6 @@ public interface MealPresenterView {
     void savePlanedMeal(PlanedMeal planedMeal);
     void saveToFavorite(Meal meal);
     void deleteFromFavorite(Meal meal);
+    void getIdMeal(String mealId);
+
 }

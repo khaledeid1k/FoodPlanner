@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 
 public class MealPresenter implements MealPresenterView {
 
-Repository repository;
+    Repository repository;
     MealView mealView;
     Meal meal;
 
     public MealPresenter(Meal meal,
-                         Repository repository,MealView mealView) {
+                         Repository repository, MealView mealView) {
         this.meal = meal;
-        this.repository=repository;
-        this.mealView=mealView;
+        this.repository = repository;
+        this.mealView = mealView;
         getIngredientAndMeasure();
         addInstructions();
     }
@@ -32,15 +32,9 @@ Repository repository;
     void getIngredientAndMeasure() {
         mealView.getIngredientAndMeasure(repository.getIngredientAndMeasure(meal));
     }
+
     void addInstructions() {
         mealView.getInstructions(repository.getInstructions(meal));
-    }
-
-
-
-
-    LiveData<Boolean> mealIsFavorite(String mealId){
-       return repository.getFavoriteMealById(mealId);
     }
 
     @Override
@@ -56,6 +50,11 @@ Repository repository;
     @Override
     public void deleteFromFavorite(Meal meal) {
         repository.deleteMeal(meal);
+    }
+
+    @Override
+    public void getIdMeal(String mealId) {
+        mealView.getIsFavoriteMealById(repository.getFavoriteMealById(mealId));
     }
 
 

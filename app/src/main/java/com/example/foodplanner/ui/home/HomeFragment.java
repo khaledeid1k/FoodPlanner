@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,13 +20,22 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.Tag;
+import com.example.foodplanner.data.models.category.CategoryWithDetails;
+import com.example.foodplanner.data.models.country.Country;
+import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.network.NetWork;
+import com.example.foodplanner.data.network.auth.ILogOut;
+import com.example.foodplanner.data.network.auth.Logout;
 import com.example.foodplanner.data.repository.RepositoryIm;
+import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.ui.home.adapter.CategoriesItem;
 import com.example.foodplanner.ui.home.adapter.CountriesItem;
 import com.example.foodplanner.ui.home.adapter.HeaderItem;
 import com.example.foodplanner.ui.home.adapter.HomeAdapter;
+import com.example.foodplanner.ui.home.adapter.HomeFragmentView;
+import com.example.foodplanner.ui.home.adapter.HomeInteractionListener;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
+import com.example.foodplanner.ui.home.adapter.OnClickHomeHorizontalItem;
 import com.example.foodplanner.utils.Constants;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,116 +44,139 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class HomeFragment extends Fragment implements HomeView {
+public class HomeFragment extends BaseFragment implements HomeInteractionListener,
+        OnClickHomeHorizontalItem, HomeFragmentView {
 
     RecyclerView recyclerView;
     HomePresenter presenter;
     HomeAdapter homeAdapter;
     ArrayList<DataItem> items;
     LottieAnimationView lottieAnimation;
-    private static final String TAG = "HomeFragmentlollllllllll";
-
+    ILogOut ILogOut;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+    protected int getLayout() {
+        return R.layout.fragment_home;
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         inti(view);
-        addRandomMeal();
-        addMealsByFirstLetter();
-        addCategoriesWithDetails();
-        addAllCountries();
-
     }
 
     void inti(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
         lottieAnimation = view.findViewById(R.id.lottie_animation_home);
         presenter = new HomePresenter(
-                RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(requireActivity())),this);
+                RepositoryIm.getInstance(NetWork.getInstance(),
+                        LocalSourceIm.getInstance(requireActivity())), this);
         items = new ArrayList<>();
-        homeAdapter = new HomeAdapter(requireActivity(), items, presenter, presenter);
+        homeAdapter = new HomeAdapter(
+                requireActivity(),
+                items,
+                this,
+                this);
         recyclerView.setAdapter(homeAdapter);
-    }
-
-    void addRandomMeal() {
-        presenter.randomMealLiveData().observe(getViewLifecycleOwner(), meal -> {
-            lottieAnimation.setVisibility(View.INVISIBLE);
-            items.add(0,new HeaderItem(meal));
-            homeAdapter.updateData(items);
-        });
-
-    }
-
-    void addMealsByFirstLetter() {
-        presenter.mealsByFirstLetter().observe(getViewLifecycleOwner(), meals -> {
-            items.add(new MealsItem(new Tag<>("Meals", meals)));
-            lottieAnimation.setVisibility(View.INVISIBLE);
-
-            homeAdapter.updateData(items);
-        });
-    }
-
-    void addCategoriesWithDetails() {
-        presenter.categoriesWithDetails().observe(getViewLifecycleOwner(), categoryWithDetailsList -> {
-            items.add(new CategoriesItem(new Tag<>("Categories", categoryWithDetailsList)));
-            lottieAnimation.setVisibility(View.INVISIBLE);
-
-            homeAdapter.updateData(items);
-        });
-    }
-
-    void addAllCountries() {
-
-        presenter.allCountries().observe(getViewLifecycleOwner(), countryList -> {
-            items.add(new CountriesItem(new Tag<>("Countries", countryList)));
-            lottieAnimation.setVisibility(View.INVISIBLE);
-
-            homeAdapter.updateData(items);
-        });
-
+        ILogOut = new Logout();
 
     }
 
 
     @Override
-    public void logout() {
-        Constants.UserId="";
-        NavHostFragment navHostFragment = (NavHostFragment)
-                requireActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.fragmentContainerView);
-
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(
-                GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), googleSignInOptions);
-        mGoogleSignInClient.signOut().addOnCompleteListener(requireActivity(), task -> {
-            if (task.isSuccessful()) {
-
-                moveToLoginScreen( navHostFragment.getNavController());
-                Log.i(TAG, "logout: ");
-            } else {
-                Log.i(TAG, "Error in logout: ");
-
-            }
-        });
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser == null) {
-            moveToLoginScreen( navHostFragment.getNavController());
-            Log.d(TAG, "Sign out was successful");
-        } else {
-            Log.e(TAG, "Sign out failed");
+    public void navigateToShowAll(DataItem dataItem, View view) {
+        if (dataItem instanceof MealsItem) {
+            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        } else if (dataItem instanceof CategoriesItem) {
+            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        } else if (dataItem instanceof CountriesItem) {
+            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        } else if (dataItem instanceof HeaderItem) {
+            navigateToDetailsOfRandomMeal(dataItem, view);
         }
+    }
+
+    void navigateToDetailsOfRandomMeal(DataItem dataItem, View view) {
+        HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
+                HomeFragmentDirections.actionHomeFragmentToMealFragment(((HeaderItem) dataItem).getTag().getResourcesData());
+        Navigation.findNavController(view).navigate(
+                action
+        );
+    }
+
+
+    @Override
+    public void navigateToDetails(DataItem dataItem, int position, View view) {
+        if (dataItem instanceof MealsItem) {
+            HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((MealsItem) dataItem).getTag().getResourcesData().get(0));
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        } else if (dataItem instanceof CategoriesItem) {
+            HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CategoriesItem) dataItem).getTag().getResourcesData().get(position).getStrCategory() + Constants.CATEGORY);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        } else if (dataItem instanceof CountriesItem) {
+            HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CountriesItem) dataItem).getTag().getResourcesData().get(position).getStrArea() + Constants.COUNTRY);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        }
+    }
+
+    @Override
+    public void logout(View view) {
+        ILogOut.logOut();
+        Navigation.findNavController(view).navigate(R.id.action_homeF_to_loginFragment);
+    }
+
+
+    @Override
+    public void getRandomMealLiveData(Meal meal) {
+        lottieAnimation.setVisibility(View.INVISIBLE);
+        items.add(0, new HeaderItem(meal));
+        homeAdapter.updateData(items);
+    }
+
+    @Override
+    public void getMealsByFirstLetter(List<Meal> meals) {
+        items.add(new MealsItem(new Tag<>("Meals", meals)));
+        lottieAnimation.setVisibility(View.INVISIBLE);
+
+        homeAdapter.updateData(items);
+    }
+
+    @Override
+    public void getCategoriesWithDetails(List<CategoryWithDetails> categoriesWithDetailsList) {
+        items.add(new CategoriesItem(new Tag<>("Categories", categoriesWithDetailsList)));
+        lottieAnimation.setVisibility(View.INVISIBLE);
+        homeAdapter.updateData(items);
+    }
+
+    @Override
+    public void getAllCountries(List<Country> countries) {
+        items.add(new CountriesItem(new Tag<>("Countries", countries)));
+        lottieAnimation.setVisibility(View.INVISIBLE);
+        homeAdapter.updateData(items);
+
     }
 }
 

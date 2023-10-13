@@ -42,7 +42,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
                 R.drawable.ic_launcher_background
         ).into(holder.ImageOfMeal);
 
-       holder.itemView.setOnClickListener(view -> onClickItem.onclickMeal(filteredItem.getStrMeal(),view));
+       holder.itemView.setOnClickListener(view -> onClickItem.onclickMeal(filteredItem.getStrMeal()));
 
     }
 

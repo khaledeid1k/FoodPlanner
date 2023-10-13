@@ -27,19 +27,19 @@ import com.example.foodplanner.ui.home.adapter.ItemsAdapter;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
 import com.example.foodplanner.data.models.Tag;
 import com.example.foodplanner.data.models.meal.Meal;
+import com.example.foodplanner.ui.home.adapter.OnClickHomeHorizontalItem;
 import com.example.foodplanner.utils.Constants;
 import com.example.foodplanner.utils.Extensions;
 
 import java.util.List;
 
 
-public class ShowAllFragment extends Fragment {
+public class ShowAllFragment extends Fragment implements OnClickHomeHorizontalItem {
     TextView tileOfShowAll;
     RecyclerView recyclerViewShowAll;
     ItemsAdapter itemsAdapter;
     ImageView back;
     DataItem dataItem;
-    ShowAllPresenter showAllPresenter;
     LottieAnimationView lottieAnimation;
 
     @Override
@@ -70,7 +70,6 @@ public class ShowAllFragment extends Fragment {
         back = view.findViewById(R.id.back_from_show_all);
         lottieAnimation = view.findViewById(R.id.lottie_animation_show_all);
 
-        showAllPresenter = new ShowAllPresenter();
         back.setOnClickListener(Extensions::closeFragment);
 
 
@@ -83,7 +82,7 @@ public class ShowAllFragment extends Fragment {
             itemsAdapter = new ItemsAdapter(
                     getActivity(),
                     dataItem,
-                    showAllPresenter,
+                    this,
                     Constants.VIEW_TYPE_GRID);
             lottieAnimation.setVisibility(View.INVISIBLE);
             recyclerViewShowAll.setAdapter(itemsAdapter);
@@ -93,7 +92,7 @@ public class ShowAllFragment extends Fragment {
             itemsAdapter = new ItemsAdapter(
                     getActivity(),
                     dataItem,
-                    showAllPresenter,
+                    this,
                     Constants.VIEW_TYPE_GRID);
             lottieAnimation.setVisibility(View.INVISIBLE);
             recyclerViewShowAll.setAdapter(itemsAdapter);
@@ -103,11 +102,38 @@ public class ShowAllFragment extends Fragment {
             itemsAdapter = new ItemsAdapter(
                     getActivity(),
                     dataItem,
-                    showAllPresenter,
+                    this,
                     Constants.VIEW_TYPE_GRID);
             lottieAnimation.setVisibility(View.INVISIBLE);
             recyclerViewShowAll.setAdapter(itemsAdapter);
             tileOfShowAll.setText(tag.getTitle());
+        }
+    }
+
+
+
+    @Override
+    public void navigateToDetails(DataItem dataItem, int position, View view) {
+        if (dataItem instanceof MealsItem) {
+            ShowAllFragmentDirections.ActionShowAllFragmentToMealFragment action =
+                    ShowAllFragmentDirections.actionShowAllFragmentToMealFragment(((MealsItem)dataItem).getTag().getResourcesData().get(position));
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        }
+        else if (dataItem instanceof CategoriesItem) {
+            ShowAllFragmentDirections.ActionShowAllFragmentToMealsFragment action =
+                    ShowAllFragmentDirections.actionShowAllFragmentToMealsFragment(((CategoriesItem)dataItem).getTag().getResourcesData().get(position).getStrCategory()+ Constants.CATEGORY);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
+        }
+        else if (dataItem instanceof CountriesItem) {
+            ShowAllFragmentDirections.ActionShowAllFragmentToMealsFragment action =
+                    ShowAllFragmentDirections.actionShowAllFragmentToMealsFragment(((CountriesItem)dataItem).getTag().getResourcesData().get(position).getStrArea()+Constants.COUNTRY);
+            Navigation.findNavController(view).navigate(
+                    action
+            );
         }
     }
 }

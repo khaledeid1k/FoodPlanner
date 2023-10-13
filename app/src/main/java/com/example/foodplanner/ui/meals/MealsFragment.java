@@ -4,12 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +15,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.filter.FilteredItem;
+import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.network.NetWork;
 import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.base.BaseFragment;
@@ -25,7 +24,8 @@ import com.example.foodplanner.utils.Extensions;
 import java.util.ArrayList;
 
 
-public class MealsFragment extends BaseFragment {
+public class MealsFragment extends BaseFragment  implements OnClickListener ,
+        MealsFragmentView {
     RecyclerView recyclerViewMeals;
     TextView nameList;
     MealsAdapter mealsAdapter;
@@ -34,6 +34,7 @@ public class MealsFragment extends BaseFragment {
     ImageView back;
     String nameOfItem;
     LottieAnimationView lottieAnimationLoadingMeals;
+    MealsPresenterView mealsPresenterView;
 
     @Override
     protected int getLayout() {
@@ -62,20 +63,35 @@ public class MealsFragment extends BaseFragment {
 
         mealsPresenter = new MealsPresenter(
                 RepositoryIm.getInstance(NetWork.getInstance(),
-                        LocalSourceIm.getInstance(requireActivity())), nameOfItem);
+                        LocalSourceIm.getInstance(requireActivity())),
+                nameOfItem,this);
+        mealsPresenterView =mealsPresenter;
         meals = new ArrayList<>();
-        mealsAdapter = new MealsAdapter(meals, requireActivity(), mealsPresenter);
+        mealsAdapter = new MealsAdapter(meals, requireActivity(), this);
         recyclerViewMeals.setAdapter(mealsAdapter);
-        observeFilteredMeals();
         back.setOnClickListener(Extensions::closeFragment);
 
     }
 
-    void observeFilteredMeals() {
-        mealsPresenter.filteredItemsLiveData().observe(getViewLifecycleOwner(),
-                filteredItems -> {
-                    lottieAnimationLoadingMeals.setVisibility(View.INVISIBLE);
-                    mealsAdapter.updateData(filteredItems.getMeals());
-                });
+
+    @Override
+    public void onclickMeal(String nameOfMeal) {
+        mealsPresenterView.onclickMeal(nameOfMeal);
+    }
+
+    @Override
+    public void getMealByName(Meal meal) {
+        MealsFragmentDirections.ActionMealsFragmentToMealFragment action =
+                MealsFragmentDirections.actionMealsFragmentToMealFragment(
+                     meal);
+        Navigation.findNavController(requireView()).navigate(
+                action
+        );
+    }
+
+    @Override
+    public void getMeals(ArrayList<FilteredItem> filteredItems) {
+        lottieAnimationLoadingMeals.setVisibility(View.INVISIBLE);
+        mealsAdapter.updateData(filteredItems);
     }
 }

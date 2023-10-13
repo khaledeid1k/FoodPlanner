@@ -8,67 +8,50 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 
+import com.example.foodplanner.R;
 import com.example.foodplanner.data.models.DataItem;
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
 import com.example.foodplanner.data.models.country.Countries;
 import com.example.foodplanner.data.models.country.Country;
-import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.StateOfResponse;
+import com.example.foodplanner.data.network.auth.ILogOut;
+import com.example.foodplanner.data.network.auth.Logout;
 import com.example.foodplanner.data.repository.Repository;
 import com.example.foodplanner.ui.home.adapter.CategoriesItem;
 import com.example.foodplanner.ui.home.adapter.CountriesItem;
 import com.example.foodplanner.ui.home.adapter.HeaderItem;
+import com.example.foodplanner.ui.home.adapter.HomeFragmentView;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
-import com.example.foodplanner.ui.home.adapter.NavigationToShowAll;
-import com.example.foodplanner.ui.home.adapter.OnClickItem;
+import com.example.foodplanner.ui.home.adapter.HomeInteractionListener;
+import com.example.foodplanner.ui.home.adapter.OnClickHomeHorizontalItem;
 import com.example.foodplanner.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class HomePresenter implements NavigationToShowAll, OnClickItem {
+public class HomePresenter  {
     Repository repository;
-    HomeView homeView;
-    HomePresenter(Repository repository, HomeView homeView) {
+    HomeFragmentView homeFragmentView;
+    HomePresenter(Repository repository,  HomeFragmentView homeFragmentView) {
         this.repository = repository;
-        this.homeView = homeView;
+        this.homeFragmentView = homeFragmentView;
         getAllCategoriesWithDetails();
         getRandomMeal();
         getAllCountries();
         getMealsByFirstLetter();
+
     }
 
-    private MutableLiveData<Meal> randomMealLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<Meal>> mealsByFirstLetter = new MutableLiveData<>();
-    private MutableLiveData<List<CategoryWithDetails>> allCategoriesWithDetails = new MutableLiveData<>();
-    private MutableLiveData<List<Country>> allCountries = new MutableLiveData<>();
 
-    public LiveData<Meal> randomMealLiveData() {
-        return randomMealLiveData;
-    }
-
-    public LiveData<List<Meal>> mealsByFirstLetter() {
-        return mealsByFirstLetter;
-    }
-
-    public LiveData<List<CategoryWithDetails>> categoriesWithDetails() {
-        return allCategoriesWithDetails;
-    }
-
-    public LiveData<List<Country>> allCountries() {
-        return allCountries;
-    }
 
 
     private void getRandomMeal() {
         repository.getRandomMeal(new StateOfResponse<>() {
             @Override
             public void succeeded(Meals response) {
-                randomMealLiveData.setValue(response.getMeals().get(0));
+                homeFragmentView.getRandomMealLiveData(response.getMeals().get(0));
             }
 
             @Override
@@ -85,7 +68,7 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
             @Override
             public void succeeded(Meals response) {
                 if(response.getMeals()!=null&&response.getMeals().size()>4) {
-                    mealsByFirstLetter.setValue(response.getMeals());
+                    homeFragmentView.getMealsByFirstLetter(response.getMeals());
                 }else {
                     getMealsByFirstLetter();
                 }
@@ -102,7 +85,7 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
         repository.getAllCategoriesWithDetails(new StateOfResponse<>() {
             @Override
             public void succeeded(CategoriesWithDetails response) {
-                allCategoriesWithDetails.setValue(response.getCategories());
+                homeFragmentView.getCategoriesWithDetails(response.getCategories());
             }
 
             @Override
@@ -116,7 +99,7 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
         repository.getAllCountries(new StateOfResponse<>() {
             @Override
             public void succeeded(Countries response) {
-                allCountries.setValue(response.getMeals());
+                homeFragmentView.getAllCountries(response.getMeals());
             }
 
             @Override
@@ -126,63 +109,7 @@ public class HomePresenter implements NavigationToShowAll, OnClickItem {
         });
     }
 
-    @Override
-    public void onNavigate(DataItem dataItem, View view) {
-        if (dataItem instanceof MealsItem) {
-            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
-            Navigation.findNavController(view).navigate(
-                    action
-            );
-        } else if (dataItem instanceof CategoriesItem) {
-            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
-            Navigation.findNavController(view).navigate(
-                    action
-            );
-        } else if (dataItem instanceof CountriesItem) {
-            HomeFragmentDirections.ActionHomeFragmentToShowAllFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToShowAllFragment(dataItem);
-            Navigation.findNavController(view).navigate(
-                    action
-            );
-        } else if (dataItem instanceof HeaderItem) {
-            HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((HeaderItem) dataItem).getTag().getResourcesData());
-            Navigation.findNavController(view).navigate(
-                    action
-            );
-        }
-    }
 
 
-
-    @Override
-    public void click(DataItem dataItem, int position, View view) {
-        if (dataItem instanceof MealsItem) {
-            HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToMealFragment(((MealsItem) dataItem).getTag().getResourcesData().get(0));
-            Navigation.findNavController(view).navigate(
-                    action
-            );
-        } else if (dataItem instanceof CategoriesItem) {
-            HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CategoriesItem) dataItem).getTag().getResourcesData().get(position).getStrCategory() + Constants.CATEGORY);
-            Navigation.findNavController(view).navigate(
-                    action
-            );
-        } else if (dataItem instanceof CountriesItem) {
-            HomeFragmentDirections.ActionHomeFragmentToMealsFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToMealsFragment(((CountriesItem) dataItem).getTag().getResourcesData().get(position).getStrArea() + Constants.COUNTRY);
-            Navigation.findNavController(view).navigate(
-                    action
-            );
-        }
-    }
-
-    @Override
-    public void logout() {
-        homeView.logout();
-    }
 
 }

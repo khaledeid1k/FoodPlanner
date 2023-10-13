@@ -13,16 +13,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.filter.FilteredItem;
+import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.network.NetWork;
 import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.ui.meals.MealsAdapter;
+import com.example.foodplanner.ui.meals.OnClickListener;
 import com.example.foodplanner.utils.Constants;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -35,7 +38,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class SearchFragment extends BaseFragment {
+public class SearchFragment extends BaseFragment implements SearchFragmentView,
+        OnClickListener {
     ChipGroup chipGroup;
     MaterialAutoCompleteTextView searchText;
     RecyclerView recyclerViewOfSearch;
@@ -60,7 +64,7 @@ public class SearchFragment extends BaseFragment {
         init(view);
         setChipText();
         setWordOfSearch();
-        observeFilterData();
+
     }
 
     void init(View view) {
@@ -71,12 +75,12 @@ public class SearchFragment extends BaseFragment {
 
         searchPresenter = new SearchPresenter(
                 RepositoryIm.getInstance(NetWork.getInstance(),
-                        LocalSourceIm.getInstance(getActivity())));
+                        LocalSourceIm.getInstance(getActivity())),this);
         searchPresenterView = searchPresenter;
         filteredItemArrayList = new ArrayList<>();
 
         mealsAdapter = new MealsAdapter(filteredItemArrayList, requireActivity(),
-                searchPresenter
+                this
         );
 
         recyclerViewOfSearch.setAdapter(mealsAdapter);
@@ -88,7 +92,6 @@ public class SearchFragment extends BaseFragment {
         chipGroup.setSingleSelection(true);
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             Chip selectedChip = requireActivity().findViewById(checkedId);
-
             if (selectedChip != null) {
                 selectedChipText = selectedChip.getText().toString();
                 searchPresenterView.sendChipValueAndSearchValue(selectedChipText, wordOfSearch);
@@ -128,18 +131,31 @@ public class SearchFragment extends BaseFragment {
 
     }
 
-    void observeFilterData() {
-        searchPresenter.filteredItemsLiveData().observe(getViewLifecycleOwner(),
-                filteredItems -> {
-                    if (filteredItems.size() != 0) {
-                        lottieAnimation.setVisibility(View.INVISIBLE);
-                    } else {
-                        lottieAnimation.setVisibility(View.VISIBLE);
-                    }
 
-                    mealsAdapter.updateData(filteredItems);
+    @Override
+    public void getFilterData(ArrayList<FilteredItem> filteredItems) {
+        if (filteredItems.size() != 0) {
+            lottieAnimation.setVisibility(View.INVISIBLE);
+        } else {
+            lottieAnimation.setVisibility(View.VISIBLE);
+        }
+
+        mealsAdapter.updateData(filteredItems);
 
 
-                });
+    }
+
+    @Override
+    public void navigateToMeal(Meal meal) {
+        SearchFragmentDirections.ActionSearchToMealFragment action =
+                SearchFragmentDirections.actionSearchToMealFragment(
+                        meal);
+        Navigation.findNavController(requireView()).navigate(
+                action);
+    }
+
+    @Override
+    public void onclickMeal(String nameOfMeal) {
+        searchPresenterView.getMealByName(nameOfMeal);
     }
 }

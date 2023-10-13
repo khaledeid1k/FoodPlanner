@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
@@ -20,15 +22,17 @@ import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.base.BaseFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class FavouriteFragment extends BaseFragment implements FavouriteView {
+public class FavouriteFragment extends BaseFragment implements OnClickFavorites, FavouriteFragmentView {
     FavouriteAdapter favouriteAdapter;
     RecyclerView recyclerView;
     ArrayList<Meal> favourites;
     FavouritePresenter favouritePresenter;
     LottieAnimationView lottieAnimationNoFavourites;
     TextView noFavorites;
+    FavoritePresenterView favoritePresenterView;
 
     @Override
     protected int getLayout() {
@@ -39,38 +43,47 @@ public class FavouriteFragment extends BaseFragment implements FavouriteView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        setUp();
     }
 
-    void init(View view){
-        recyclerView=view.findViewById(R.id.recycle_favourite);
-        lottieAnimationNoFavourites =view.findViewById(R.id.lottie_animation_favourite);
-        noFavorites=view.findViewById(R.id.no_favorite_Text);
+    void init(View view) {
+        recyclerView = view.findViewById(R.id.recycle_favourite);
+        lottieAnimationNoFavourites = view.findViewById(R.id.lottie_animation_favourite);
+        noFavorites = view.findViewById(R.id.no_favorite_Text);
 
-        favourites =new ArrayList<>();
-        favouritePresenter=new FavouritePresenter(
-                RepositoryIm.getInstance(NetWork.getInstance(),
-                        LocalSourceIm.getInstance(getActivity())),this);
-        favouriteAdapter=new FavouriteAdapter(favourites,getActivity(),favouritePresenter,Favorite);
+        favourites = new ArrayList<>();
+        favouritePresenter = new FavouritePresenter(RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())), this);
+        favouriteAdapter = new FavouriteAdapter(favourites, getActivity(), this, Favorite);
+        favoritePresenterView = favouritePresenter;
         recyclerView.setAdapter(favouriteAdapter);
     }
-    void setUp(){
-        favouritePresenter.getFavoritesMeals().observe(getViewLifecycleOwner(), meals -> {
-            favouriteAdapter.updateData(new ArrayList<>(meals));
-         if(meals.size()!=0){
-             lottieAnimationNoFavourites.setVisibility(View.INVISIBLE);
-             noFavorites.setVisibility(View.INVISIBLE);
-         }else {
-             lottieAnimationNoFavourites.setVisibility(View.VISIBLE);
-             noFavorites.setVisibility(View.VISIBLE);
-         }
 
-        });
+
+    @Override
+    public void onClickFavorite(Meal meal, View view) {
+        FavouriteFragmentDirections.ActionFavouriteFragmentToMealFragment action = FavouriteFragmentDirections.actionFavouriteFragmentToMealFragment(meal);
+        Navigation.findNavController(view).navigate(action);
 
     }
 
     @Override
-    public void deleteItem() {
-        favouriteAdapter.updateData(favourites);
+    public void deleteFavorite(Meal meal) {
+        favoritePresenterView.deleteFavorite(meal);
+
+    }
+
+    @Override
+    public void getFavoritesMeals(LiveData<List<Meal>> mealsLiveData) {
+        mealsLiveData.observe(getViewLifecycleOwner(), meals -> {
+            favouriteAdapter.updateData(new ArrayList<>(meals));
+            if (meals.size() != 0) {
+                lottieAnimationNoFavourites.setVisibility(View.INVISIBLE);
+                noFavorites.setVisibility(View.INVISIBLE);
+            } else {
+                lottieAnimationNoFavourites.setVisibility(View.VISIBLE);
+                noFavorites.setVisibility(View.VISIBLE);
+            }
+
+        });
+
     }
 }

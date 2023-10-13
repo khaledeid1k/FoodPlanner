@@ -12,33 +12,24 @@ import com.example.foodplanner.data.repository.Repository;
 
 import java.util.List;
 
-public class FavouritePresenter implements OnClickFavorites {
+public class FavouritePresenter implements FavoritePresenterView {
     Repository repository;
-    FavouriteView favouriteView;
-
-
-    public FavouritePresenter(Repository repository,  FavouriteView favouriteView) {
+    FavouriteFragmentView favouriteFragmentView;
+    public FavouritePresenter(Repository repository
+            ,  FavouriteFragmentView favouriteFragmentView) {
         this.repository = repository;
-        this.favouriteView = favouriteView;
+        this.favouriteFragmentView = favouriteFragmentView;
+        getFavoritesMeals();
     }
-    @Override
-    public void onClickFavorite(Meal meal, View view) {
-        FavouriteFragmentDirections.ActionFavouriteFragmentToMealFragment action =
-                FavouriteFragmentDirections.actionFavouriteFragmentToMealFragment(
-                        meal);
-        Navigation.findNavController(view).navigate(
-                action
-        );
 
-    }
+
 
     @Override
     public void deleteFavorite(Meal meal) {
         repository.deleteMeal(meal);
-        favouriteView.deleteItem();
     }
+   void getFavoritesMeals(){
+        favouriteFragmentView.getFavoritesMeals(repository.getFavoritesMeals(UserId));
 
-    LiveData<List<Meal>> getFavoritesMeals(){
-        return repository.getFavoritesMeals(UserId);
     }
 }

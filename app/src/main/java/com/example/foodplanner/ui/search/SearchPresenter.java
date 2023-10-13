@@ -24,17 +24,22 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SearchPresenter implements OnClickListener, StateOfResponse,SearchPresenterView{
+public class SearchPresenter implements StateOfResponse,
+        SearchPresenterView {
     Repository repository;
     ArrayList<FilteredItem> filtered;
+    SearchFragmentView searchFragmentView;
 
+    public SearchPresenter(Repository repository, SearchFragmentView searchFragmentView) {
+        this.repository = repository;
+        this.searchFragmentView = searchFragmentView;
+    }
 
-
-    void moveToMealScreen(String nameOfMeal,View view) {
+    void moveToMealScreen(String nameOfMeal) {
         repository.getMealByName(nameOfMeal, new StateOfResponse<>() {
             @Override
             public void succeeded(Meals response) {
-                moveToMealScreen(response.getMeals().get(0),view);
+                searchFragmentView.navigateToMeal(response.getMeals().get(0));
             }
 
             @Override
@@ -47,24 +52,26 @@ public class SearchPresenter implements OnClickListener, StateOfResponse,SearchP
 
     @Override
     public void succeeded(Object response) {
-        if (response instanceof  FilteredItems){
+        if (response instanceof FilteredItems) {
             FilteredItems filteredItems = (FilteredItems) response;
-            if(filteredItems.getMeals()!=null) {
-                filteredItemsMutableLiveData.setValue(
-                        filteredItems.getMeals().stream()
+            if (filteredItems.getMeals() != null) {
+                searchFragmentView.getFilterData(filteredItems.getMeals().stream()
                         .distinct()
                         .sorted(Comparator.comparing(FilteredItem::getStrMeal))
                         .collect(Collectors.toCollection(ArrayList::new)));
-            }else {
-                filteredItemsMutableLiveData.setValue(new ArrayList<>());}
+            } else {
+                searchFragmentView.getFilterData((new ArrayList<>()));
+            }
 
-        }else if(response instanceof  Meals){
+        } else if (response instanceof Meals) {
             Meals meals = (Meals) response;
-            filtered= repository.searchByMeal(meals);
-            filteredItemsMutableLiveData.setValue(filtered.stream()
-                    .distinct()
-                    .sorted(Comparator.comparing(FilteredItem::getStrMeal))
-                    .collect(Collectors.toCollection(ArrayList::new)));
+            filtered = repository.searchByMeal(meals);
+            searchFragmentView.getFilterData(
+                    filtered.stream()
+                            .distinct()
+                            .sorted(Comparator.comparing(FilteredItem::getStrMeal))
+                            .collect(Collectors.toCollection(ArrayList::new))
+            );
         }
     }
 
@@ -73,45 +80,34 @@ public class SearchPresenter implements OnClickListener, StateOfResponse,SearchP
 
     }
 
-    private MutableLiveData<ArrayList<FilteredItem>> filteredItemsMutableLiveData =
-            new MutableLiveData<>();
 
-    public LiveData<ArrayList<FilteredItem>> filteredItemsLiveData() {
-        return filteredItemsMutableLiveData;
-    }
-    public SearchPresenter( Repository repository) {
-        this.repository = repository;
-    }
     void searchOfCategory(String nameOfCategory) {
-        repository.filterByCategory(nameOfCategory,this);
+        repository.filterByCategory(nameOfCategory, this);
     }
+
     void searchByCountry(String nameOfCountry) {
         repository.filterByArea(nameOfCountry, this);
     }
+
     void searchByIngredient(String nameOfIngredient) {
-        repository.filterByMainIngredient(nameOfIngredient,this);
+        repository.filterByMainIngredient(nameOfIngredient, this);
     }
+
     void searchByMeal(String charOfMeal) {
-        if (charOfMeal.length()==1) {
+        if (charOfMeal.length() == 1) {
             repository.getMealsByFirstLetter(charOfMeal, this);
-        }else {
-            filteredItemsMutableLiveData.setValue(repository.searchInMeals(filtered,charOfMeal));
+        } else {
+            searchFragmentView.getFilterData(
+                    repository.searchInMeals(filtered, charOfMeal)
+            );
         }
 
     }
-    void moveToMealScreen(Meal meal,View view){
-        SearchFragmentDirections.ActionSearchToMealFragment action =
-                SearchFragmentDirections.actionSearchToMealFragment(
-                        meal );
-        Navigation.findNavController(view).navigate(
-                action    );
-    }
 
 
-    @Override
-    public void onclickMeal(String nameOfMeal, View view) {
-        moveToMealScreen(nameOfMeal,view);
-    }
+
+
+
 
 
     @Override
@@ -129,12 +125,17 @@ public class SearchPresenter implements OnClickListener, StateOfResponse,SearchP
                 searchByIngredient(wordOfSearch);
             }
             break;
-            default:{
+            default: {
                 searchByMeal(wordOfSearch);
             }
         }
-        if(Objects.equals(wordOfSearch, Constants.Empty)){
-            filteredItemsMutableLiveData.setValue(new ArrayList<>());
+        if (Objects.equals(wordOfSearch, Constants.Empty)) {
+            searchFragmentView.getFilterData(new ArrayList<>());
         }
+    }
+
+    @Override
+    public void getMealByName(String nameOfMeal) {
+        moveToMealScreen(nameOfMeal);
     }
 }

@@ -30,6 +30,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends BaseFragment implements LoginView {
     private TextInputEditText emailText, passwordText;
@@ -134,7 +135,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 .requestEmail()
                 .build();
         return GoogleSignIn.getClient(requireActivity(), googleSignInOptions);
-
     }
 
     @Override
@@ -164,9 +164,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void failureLogin(String message) {
-        if(googleSignInClient!=null){
-            googleSignInClient.signOut();
-        }
         progressDialog.dismiss();
            if (!message.isEmpty()) {
                Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
@@ -195,4 +192,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
     void moveToHome() {
       Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeF);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(googleSignInClient!=null) {
+            googleSignInClient.signOut();
+        }
+    }
+
 }
