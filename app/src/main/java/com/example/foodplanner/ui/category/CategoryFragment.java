@@ -12,7 +12,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
-import com.example.foodplanner.data.network.NetWork;
+import com.example.foodplanner.data.network.RemoteSourceIm;
 import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.base.BaseFragment;
 
@@ -42,7 +42,7 @@ public class CategoryFragment extends BaseFragment implements OnClickCategory,Ca
         lottieAnimation=view.findViewById(R.id.lottie_animation_category);
         categories =new ArrayList<>();
         categoryPresenter = new CategoryPresenter(
-                RepositoryIm.getInstance(NetWork.getInstance(),
+                RepositoryIm.getInstance(RemoteSourceIm.getInstance(),
                         LocalSourceIm.getInstance(getActivity())),this);
         categoryAdapter=new CategoryAdapter(getContext(), categories,this);
         recycleOfCategories.setAdapter(categoryAdapter);
