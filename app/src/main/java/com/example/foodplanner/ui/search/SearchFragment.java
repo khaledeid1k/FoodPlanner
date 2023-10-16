@@ -3,16 +3,10 @@ package com.example.foodplanner.ui.search;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +15,7 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.filter.FilteredItem;
 import com.example.foodplanner.data.models.meal.Meal;
-import com.example.foodplanner.data.network.NetWork;
+import com.example.foodplanner.data.network.RemoteSourceIm;
 import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.ui.meals.MealsAdapter;
@@ -32,10 +26,6 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class SearchFragment extends BaseFragment implements SearchFragmentView,
@@ -74,7 +64,7 @@ public class SearchFragment extends BaseFragment implements SearchFragmentView,
         lottieAnimation = view.findViewById(R.id.lottie_animation_search);
 
         searchPresenter = new SearchPresenter(
-                RepositoryIm.getInstance(NetWork.getInstance(),
+                RepositoryIm.getInstance(RemoteSourceIm.getInstance(),
                         LocalSourceIm.getInstance(getActivity())),this);
         searchPresenterView = searchPresenter;
         filteredItemArrayList = new ArrayList<>();
