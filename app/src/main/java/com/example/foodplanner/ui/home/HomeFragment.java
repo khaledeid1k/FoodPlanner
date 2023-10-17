@@ -1,21 +1,18 @@
 package com.example.foodplanner.ui.home;
 
-import static com.example.foodplanner.utils.Extensions.moveToLoginScreen;
+import static com.example.foodplanner.utils.Extensions.intiStateAnimation;
+import static com.example.foodplanner.utils.Extensions.updateUIState;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.DataItem;
@@ -23,7 +20,7 @@ import com.example.foodplanner.data.models.Tag;
 import com.example.foodplanner.data.models.category.CategoryWithDetails;
 import com.example.foodplanner.data.models.country.Country;
 import com.example.foodplanner.data.models.meal.Meal;
-import com.example.foodplanner.data.network.NetWork;
+import com.example.foodplanner.data.network.RemoteSourceIm;
 import com.example.foodplanner.data.network.auth.ILogOut;
 import com.example.foodplanner.data.network.auth.Logout;
 import com.example.foodplanner.data.repository.RepositoryIm;
@@ -32,16 +29,10 @@ import com.example.foodplanner.ui.home.adapter.CategoriesItem;
 import com.example.foodplanner.ui.home.adapter.CountriesItem;
 import com.example.foodplanner.ui.home.adapter.HeaderItem;
 import com.example.foodplanner.ui.home.adapter.HomeAdapter;
-import com.example.foodplanner.ui.home.adapter.HomeFragmentView;
 import com.example.foodplanner.ui.home.adapter.HomeInteractionListener;
 import com.example.foodplanner.ui.home.adapter.MealsItem;
 import com.example.foodplanner.ui.home.adapter.OnClickHomeHorizontalItem;
 import com.example.foodplanner.utils.Constants;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +42,11 @@ public class HomeFragment extends BaseFragment implements HomeInteractionListene
 
     RecyclerView recyclerView;
     HomePresenter presenter;
+    HomePresenterView homePresenterView;
     HomeAdapter homeAdapter;
     ArrayList<DataItem> items;
-    LottieAnimationView lottieAnimation;
     ILogOut ILogOut;
+    AppCompatButton retryButton;
 
     @Override
     protected int getLayout() {
@@ -69,9 +61,10 @@ public class HomeFragment extends BaseFragment implements HomeInteractionListene
 
     void inti(View view) {
         recyclerView = view.findViewById(R.id.recycle_home);
-        lottieAnimation = view.findViewById(R.id.lottie_animation_home);
+        intiStateAnimation(view);
+        retryButton=view.findViewById(R.id.retry);
         presenter = new HomePresenter(
-                RepositoryIm.getInstance(NetWork.getInstance(),
+                RepositoryIm.getInstance(RemoteSourceIm.getInstance(),
                         LocalSourceIm.getInstance(requireActivity())), this);
         items = new ArrayList<>();
         homeAdapter = new HomeAdapter(
@@ -81,6 +74,13 @@ public class HomeFragment extends BaseFragment implements HomeInteractionListene
                 this);
         recyclerView.setAdapter(homeAdapter);
         ILogOut = new Logout();
+        homePresenterView=presenter;
+        homePresenterView.getRandomMeal();
+        homePresenterView.getAllCountries();
+        homePresenterView.getMealsByFirstLetter();
+        homePresenterView.getAllCategoriesWithDetails();
+
+
 
     }
 
@@ -109,7 +109,6 @@ public class HomeFragment extends BaseFragment implements HomeInteractionListene
             navigateToDetailsOfRandomMeal(dataItem, view);
         }
     }
-
     void navigateToDetailsOfRandomMeal(DataItem dataItem, View view) {
         HomeFragmentDirections.ActionHomeFragmentToMealFragment action =
                 HomeFragmentDirections.actionHomeFragmentToMealFragment(((HeaderItem) dataItem).getTag().getResourcesData());
@@ -117,8 +116,6 @@ public class HomeFragment extends BaseFragment implements HomeInteractionListene
                 action
         );
     }
-
-
     @Override
     public void navigateToDetails(DataItem dataItem, int position, View view) {
         if (dataItem instanceof MealsItem) {
@@ -149,33 +146,58 @@ public class HomeFragment extends BaseFragment implements HomeInteractionListene
     }
 
 
+
+
     @Override
-    public void getRandomMealLiveData(Meal meal) {
-        lottieAnimation.setVisibility(View.INVISIBLE);
+    public void getRandomMeal(Meal meal) {
+        updateUIState(false,false);
+
         items.add(0, new HeaderItem(meal));
         homeAdapter.updateData(items);
+
     }
 
     @Override
     public void getMealsByFirstLetter(List<Meal> meals) {
-        items.add(new MealsItem(new Tag<>("Meals", meals)));
-        lottieAnimation.setVisibility(View.INVISIBLE);
+        updateUIState(false,false);
 
+        items.add(new MealsItem(new Tag<>("Meals", meals)));
         homeAdapter.updateData(items);
+
     }
 
     @Override
     public void getCategoriesWithDetails(List<CategoryWithDetails> categoriesWithDetailsList) {
+        updateUIState(false,false);
+
         items.add(new CategoriesItem(new Tag<>("Categories", categoriesWithDetailsList)));
-        lottieAnimation.setVisibility(View.INVISIBLE);
         homeAdapter.updateData(items);
     }
 
     @Override
     public void getAllCountries(List<Country> countries) {
+        updateUIState(false,false);
+
         items.add(new CountriesItem(new Tag<>("Countries", countries)));
-        lottieAnimation.setVisibility(View.INVISIBLE);
         homeAdapter.updateData(items);
+
+    }
+
+    @Override
+    public void showLoading() {
+        updateUIState(true,false);
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+        updateUIState(false,true);
+        retryButton.setOnClickListener(view -> {
+            homePresenterView.getRandomMeal();
+            homePresenterView.getAllCountries();
+            homePresenterView.getMealsByFirstLetter();
+            homePresenterView.getAllCategoriesWithDetails();
+
+        });
 
     }
 }

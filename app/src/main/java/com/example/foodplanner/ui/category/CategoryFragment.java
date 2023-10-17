@@ -1,10 +1,16 @@
 package com.example.foodplanner.ui.category;
 
+import static com.example.foodplanner.utils.Extensions.intiStateAnimation;
+import static com.example.foodplanner.utils.Extensions.updateUIState;
+
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,10 +28,11 @@ import java.util.List;
 public class CategoryFragment extends BaseFragment implements OnClickCategory,CategoryView{
 
     CategoryPresenter categoryPresenter;
+    CategoryPresenterView categoryPresenterView;
     ArrayList<CategoryWithDetails> categories;
     RecyclerView recycleOfCategories;
     CategoryAdapter categoryAdapter;
-    LottieAnimationView lottieAnimation;
+    AppCompatButton retryButton;
 
     @Override
     protected int getLayout() {
@@ -39,25 +46,42 @@ public class CategoryFragment extends BaseFragment implements OnClickCategory,Ca
     }
     void  inti(View view){
         recycleOfCategories =view.findViewById(R.id.recycle_category);
-        lottieAnimation=view.findViewById(R.id.lottie_animation_category);
+        intiStateAnimation(view);
+
+        retryButton=view.findViewById(R.id.retry);
+
         categories =new ArrayList<>();
         categoryPresenter = new CategoryPresenter(
                 RepositoryIm.getInstance(RemoteSourceIm.getInstance(),
                         LocalSourceIm.getInstance(getActivity())),this);
+        categoryPresenterView=categoryPresenter;
         categoryAdapter=new CategoryAdapter(getContext(), categories,this);
         recycleOfCategories.setAdapter(categoryAdapter);
-
+        categoryPresenterView.getAllCategories();
     }
     @Override
-    public void ClickCategory(String nameOfCategory, View view) {
+    public void clickCategory(String nameOfCategory, View view) {
         CategoryFragmentDirections.ActionCategoryFragmentToMealsFragment action=
                 CategoryFragmentDirections.actionCategoryFragmentToMealsFragment(nameOfCategory);
         Navigation.findNavController(view).navigate(action);
     }
 
     @Override
-    public void getAllCategoriesWithDetails(List<CategoryWithDetails> categoriesWithDetails) {
-        categoryAdapter.updateData(new ArrayList<>(categoriesWithDetails));
-        lottieAnimation.setVisibility(View.INVISIBLE);
+    public void getAllCategoriesWithDetails(ArrayList<CategoryWithDetails> categoriesWithDetails) {
+        categoryAdapter.updateData(categoriesWithDetails);
+        updateUIState(false,false);
+    }
+
+    @Override
+    public void showLoading() {
+        updateUIState(true,false);
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+        categories.clear();
+        updateUIState(false,true);
+        retryButton.setOnClickListener(view -> categoryPresenterView.getAllCategories());
+
     }
 }

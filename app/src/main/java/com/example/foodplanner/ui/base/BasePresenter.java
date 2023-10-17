@@ -15,9 +15,10 @@ public abstract class BasePresenter {
 
     public <T> void applySchedulersAndPostUIStates(
             Single<StateOfResponse<T>> stateOfResponseSingle
-            , BasePresenterView basePresenterView
+            , BasePresenterView<T> basePresenterView
     ) {
         basePresenterView.showLoading();
+
         stateOfResponseSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

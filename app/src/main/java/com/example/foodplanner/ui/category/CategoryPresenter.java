@@ -1,24 +1,24 @@
 package com.example.foodplanner.ui.category;
 
+import static com.example.foodplanner.utils.Extensions.updateUIState;
+
 import com.example.foodplanner.data.models.category.CategoriesWithDetails;
-import com.example.foodplanner.data.models.filter.FilteredItems;
-import com.example.foodplanner.data.network.StateOfResponsee;
 import com.example.foodplanner.data.repository.Repository;
 import com.example.foodplanner.ui.base.BasePresenter;
 import com.example.foodplanner.ui.base.BasePresenterView;
 
-public class CategoryPresenter extends BasePresenter implements BasePresenterView<CategoriesWithDetails> {
+public class CategoryPresenter extends BasePresenter implements
+        BasePresenterView<CategoriesWithDetails>,CategoryPresenterView {
     Repository repository;
     CategoryView categoryView;
 
     public CategoryPresenter(Repository repository,CategoryView categoryView) {
         this.repository = repository;
         this.categoryView = categoryView;
-        getAllCategoriesWithDetails();
     }
 
-
-    private void getAllCategoriesWithDetails() {
+    @Override
+    public void getAllCategories() {
         applySchedulersAndPostUIStates( repository.getAllCategoriesWithDetails(),
                 this);
     }
@@ -26,7 +26,7 @@ public class CategoryPresenter extends BasePresenter implements BasePresenterVie
 
     @Override
     public void showLoading() {
-
+        categoryView.showLoading();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CategoryPresenter extends BasePresenter implements BasePresenterVie
 
     @Override
     public void showError(String errorMessage) {
-
+        categoryView.showError(errorMessage);
     }
 }
 

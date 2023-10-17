@@ -10,5 +10,5 @@ import java.util.ArrayList;
 public interface MealView {
     void  getIngredientAndMeasure(ArrayList<IngredientMeasurePair> ingredientMeasurePairs);
     void  getInstructions(ArrayList<Instructions> instructions);
-    void  getIsFavoriteMealById( LiveData<Boolean> isFavorite);
+    void  getIsFavoriteMealById( Boolean isFavorite);
 }

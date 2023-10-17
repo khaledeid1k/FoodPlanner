@@ -8,5 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface FavouriteFragmentView {
-    void getFavoritesMeals(LiveData<List<Meal>> meals);
+    void getFavoritesMeals(List<Meal> meals);
+    void showLoading();
+    void showError(String errorMessage);
 }

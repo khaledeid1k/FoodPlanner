@@ -6,6 +6,7 @@ import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
 
 public interface PlannedMealView {
-    void getPlanedMeal(LiveData<PlanedMeal> planedMealLiveData);
-
+    void getPlanedMeal(PlanedMeal planedMeal);
+    void showLoading();
+    void showError(String errorMessage);
 }

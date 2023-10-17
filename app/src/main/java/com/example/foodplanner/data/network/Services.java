@@ -7,37 +7,39 @@ import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.ingredient.Ingredients;
 import com.example.foodplanner.data.models.meal.Meals;
 
-import retrofit2.Call;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface Services {
 
     @GET("search.php")
-    Call<Meals> getMealByName(@Query("s") String nameOfMeal );
+    Single<Response<Meals>> getMealByName(@Query("s") String nameOfMeal );
 
     @GET("search.php")
-    Call<Meals> getMealsByFirstLetter(@Query("f") String firstLetterOfMeal);
+    Single<Response<Meals>>getMealsByFirstLetter(@Query("f") String firstLetterOfMeal);
     @GET("lookup.php")
-    Call<Meals> getMealDetailsById(@Query("i") String idOfMeal);
+    Single<Response<Meals>>getMealDetailsById(@Query("i") String idOfMeal);
     @GET("random.php")
-    Call<Meals> getRandomMeal();
+    Single<Response<Meals>>getRandomMeal();
 
     @GET("categories.php")
-    Call<CategoriesWithDetails> getAllCategoriesWithDetails();
+    Single<Response<CategoriesWithDetails>>getAllCategoriesWithDetails();
 
     @GET("list.php?c=list")
-    Call<Categories> getAllCategories();
+    Single<Response<Categories>>getAllCategories();
     @GET("list.php?a=list")
-    Call<Countries> getAllCountries();
+    Single<Response<Countries>>getAllCountries();
     @GET("list.php?i=list")
-    Call<Ingredients> getAllIngredients();
+    Single<Response<Ingredients>>getAllIngredients();
 
     @GET("filter.php")
-    Call<FilteredItems> filterByMainIngredient(@Query("i") String nameOfMainIngredient);
+    Single<Response<FilteredItems>>filterByMainIngredient(@Query("i") String nameOfMainIngredient);
     @GET("filter.php")
-    Call<FilteredItems> filterByCategory(@Query("c") String nameOfCategory);
+    Single<Response<FilteredItems>>filterByCategory(@Query("c") String nameOfCategory);
     @GET("filter.php")
-    Call<FilteredItems> filterByArea(@Query("a") String nameOfArea);
+    Single<Response<FilteredItems>>filterByArea(@Query("a") String nameOfArea);
 
 }

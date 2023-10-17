@@ -33,7 +33,9 @@ public class SearchPresenter extends BasePresenter implements SearchPresenterVie
         if (charOfMeal.length() == 1) {
             applySchedulersAndPostUIStates(repository.getMealsByFirstLetter(charOfMeal), this);
         } else {
-            searchFragmentView.getFilterData(repository.searchInMeals(filtered, charOfMeal));
+            if (filtered != null) {
+                searchFragmentView.getFilterData(repository.searchInMeals(filtered, charOfMeal));
+            }
         }
 
     }
@@ -82,7 +84,7 @@ public class SearchPresenter extends BasePresenter implements SearchPresenterVie
 
     @Override
     public void showLoading() {
-        Log.i("WrapResponse", "showLoading: ");
+        searchFragmentView.showLoading();
     }
 
     @Override
@@ -109,7 +111,7 @@ public class SearchPresenter extends BasePresenter implements SearchPresenterVie
 
     @Override
     public void showError(String errorMessage) {
-        Log.i("WrapResponse", "errorMessage: " + errorMessage);
+        searchFragmentView.showError(errorMessage);
 
     }
 }

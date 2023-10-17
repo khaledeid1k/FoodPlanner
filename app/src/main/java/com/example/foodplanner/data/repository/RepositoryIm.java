@@ -1,7 +1,5 @@
 package com.example.foodplanner.data.repository;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodplanner.data.local.LocalSource;
 import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
@@ -15,15 +13,21 @@ import com.example.foodplanner.data.models.ingredient.Ingredients;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.models.meal.Meals;
 import com.example.foodplanner.data.network.RemoteSource;
-import com.example.foodplanner.data.network.StateOfResponse;
+import com.example.foodplanner.data.repository.state.Failed;
+import com.example.foodplanner.data.repository.state.StateOfResponse;
+import com.example.foodplanner.data.repository.state.Success;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import retrofit2.Call;
-import retrofit2.Callback;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Response;
 
 public class RepositoryIm implements Repository {
@@ -44,100 +48,105 @@ public class RepositoryIm implements Repository {
         this.localSource = localSource;
     }
 
+
+    //region remote
     @Override
-    public StateOfResponse<Meals> getMealByName(String nameOfMeal, StateOfResponse<Meals> stateOfResponse) {
-        return WrapResponse(remoteSource.getMealByName(nameOfMeal), stateOfResponse);
+    public Single<StateOfResponse<Meal>> getMealByName(String nameOfMeal
+    ) {
+        return wrapResponseAndMakeOperation(remoteSource.getMealByName(nameOfMeal),
+                meals-> meals.getMeals().get(0));
     }
 
     @Override
-    public StateOfResponse<Meals> getMealsByFirstLetter(String firstLetterOfMeal, StateOfResponse<Meals> stateOfResponse) {
-        return WrapResponse(remoteSource.getMealsByFirstLetter(firstLetterOfMeal), stateOfResponse);
+    public Single<StateOfResponse<Meals>> getMealsByFirstLetter(String firstLetterOfMeal
+    ) {
+        return wrapResponse(remoteSource.getMealsByFirstLetter(firstLetterOfMeal));
     }
 
     @Override
-    public StateOfResponse<Meals> getMealDetailsById(String idOfMeal, StateOfResponse<Meals> stateOfResponse) {
-        return WrapResponse(remoteSource.getMealDetailsById(idOfMeal), stateOfResponse);
-
+    public Single<StateOfResponse<Meals>> getMealDetailsById(String idOfMeal) {
+        return null;
     }
 
     @Override
-    public StateOfResponse<Meals> getRandomMeal(StateOfResponse<Meals> stateOfResponse) {
-        return WrapResponse(remoteSource.getRandomMeal(), stateOfResponse);
+    public Single<StateOfResponse<Meal>> getRandomMeal() {
+        return wrapResponseAndMakeOperation(remoteSource.getRandomMeal(),
+               meals->meals.getMeals().get(0) );
     }
 
     @Override
-    public StateOfResponse<CategoriesWithDetails> getAllCategoriesWithDetails(StateOfResponse<CategoriesWithDetails> stateOfResponse) {
-        return WrapResponse(remoteSource.getAllCategoriesWithDetails(), stateOfResponse);
+    public Single<StateOfResponse<CategoriesWithDetails>> getAllCategoriesWithDetails() {
+        return wrapResponse(remoteSource.getAllCategoriesWithDetails());
+    }
+
+
+    @Override
+    public Single<StateOfResponse<Categories>> getAllCategories() {
+        return wrapResponse(remoteSource.getAllCategories());
     }
 
     @Override
-    public StateOfResponse<Categories> getAllCategories(StateOfResponse<Categories> stateOfResponse) {
-        return WrapResponse(remoteSource.getAllCategories(), stateOfResponse);
+    public Single<StateOfResponse<Countries>> getAllCountries() {
+        return wrapResponse(remoteSource.getAllCountries());
     }
 
     @Override
-    public StateOfResponse<Countries> getAllCountries(StateOfResponse<Countries> stateOfResponse) {
-        return WrapResponse(remoteSource.getAllCountries(), stateOfResponse);
-
+    public Single<StateOfResponse<Ingredients>> getAllIngredients() {
+        return null;
     }
 
     @Override
-    public StateOfResponse<Ingredients> getAllIngredients(StateOfResponse<Ingredients> stateOfResponse) {
-        return WrapResponse(remoteSource.getAllIngredients(), stateOfResponse);
-
+    public Single<StateOfResponse<FilteredItems>> filterByMainIngredient(String nameOfMainIngredient) {
+        return wrapResponse(remoteSource.filterByMainIngredient(nameOfMainIngredient));
     }
 
     @Override
-    public StateOfResponse<FilteredItems> filterByMainIngredient(String nameOfMainIngredient, StateOfResponse<FilteredItems> stateOfResponse) {
-        return WrapResponse(remoteSource.filterByMainIngredient(nameOfMainIngredient), stateOfResponse);
-
+    public Single<StateOfResponse<FilteredItems>> filterByCategory(String nameOfCategory) {
+        return wrapResponse(remoteSource.filterByCategory(nameOfCategory));
     }
 
     @Override
-    public StateOfResponse<FilteredItems> filterByCategory(String nameOfCategory, StateOfResponse<FilteredItems> stateOfResponse) {
-        return WrapResponse(remoteSource.filterByCategory(nameOfCategory), stateOfResponse);
+    public Single<StateOfResponse<FilteredItems>> filterByArea(String nameOfArea) {
+        return wrapResponse(remoteSource.filterByArea(nameOfArea));
 
     }
+    // endregion
+
+    //region local
 
     @Override
-    public StateOfResponse<FilteredItems> filterByArea(String nameOfArea, StateOfResponse<FilteredItems> stateOfResponse) {
-        return WrapResponse(remoteSource.filterByArea(nameOfArea), stateOfResponse);
-
-    }
-
-    @Override
-    public LiveData<List<Meal>> getFavoritesMeals(String userId) {
+    public Single<List<Meal>> getFavoritesMeals(String userId) {
         return localSource.getFavoritesMeals(userId);
     }
 
     @Override
-    public void saveMeal(Meal meal) {
-        localSource.saveMeal(meal);
+    public Completable saveMeal(Meal meal) {
+        return localSource.saveMeal(meal);
     }
 
     @Override
-    public void deleteMeal(Meal meal) {
-        localSource.deleteMeal(meal);
+    public Completable deleteMeal(Meal meal) {
+        return localSource.deleteMeal(meal);
     }
 
     @Override
-    public LiveData<Boolean> getFavoriteMealById(String mealId) {
+    public Single<Boolean> getFavoriteMealById(String mealId) {
         return localSource.getFavoriteMealById(mealId);
     }
 
     @Override
-    public LiveData<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId) {
+    public Flowable<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId) {
         return localSource.getPlanedMeals(day, timeOfMeal, userId);
     }
 
     @Override
-    public void deletePlanedMeal(PlanedMeal planedMeal) {
-        localSource.deletePlanedMeal(planedMeal);
+    public Completable deletePlanedMeal(PlanedMeal planedMeal) {
+        return localSource.deletePlanedMeal(planedMeal);
     }
 
     @Override
-    public void savePlanedMeal(PlanedMeal planedMeal) {
-        localSource.savePlanedMeal(planedMeal);
+    public Completable savePlanedMeal(PlanedMeal planedMeal) {
+        return localSource.savePlanedMeal(planedMeal);
     }
 
     @Override
@@ -172,13 +181,15 @@ public class RepositoryIm implements Repository {
                                     meal.getStrMeal(),
                                     meal.getStrMealThumb(),
                                     meal.getIdMeal()))
+                    .distinct().sorted(Comparator.comparing(FilteredItem::getStrMeal))
                     .collect(Collectors.toCollection(ArrayList::new));
         }
         return new ArrayList<>();
     }
 
     @Override
-    public ArrayList<FilteredItem> searchInMeals(ArrayList<FilteredItem> meals, String charOfMeal) {
+    public ArrayList<FilteredItem> searchInMeals(ArrayList<FilteredItem> meals,
+                                                 String charOfMeal) {
         if (meals != null) {
             return meals.stream()
                     .filter(s -> s.getStrMeal().toLowerCase(Locale.ROOT)
@@ -190,20 +201,38 @@ public class RepositoryIm implements Repository {
         }
 
     }
+    // endregion
 
-    <T> StateOfResponse<T> WrapResponse(Call<T> call, StateOfResponse<T> stateOfResponse) {
-        call.enqueue(new Callback<T>() {
-            @Override
-            public void onResponse(Call<T> call, Response<T> response) {
-                stateOfResponse.succeeded(response.body());
+    @NonNull <T> Single<StateOfResponse<T>> wrapResponse(Single<Response<T>> response) {
+        return response.map(responseBody -> {
+            if (responseBody.isSuccessful()) {
+               return new Success<>(responseBody.body());
+            } else {
+                return  new Failed<T>(responseBody.message());
             }
+        }
 
-            @Override
-            public void onFailure(Call<T> call, Throwable t) {
-                stateOfResponse.failure(t.getMessage());
-            }
-        });
-        return stateOfResponse;
+        ).onErrorReturn(throwable -> new Failed<>(throwable.getMessage()));
+
+
+
+    }
+
+    @NonNull <T,R> Single<StateOfResponse<R>> wrapResponseAndMakeOperation(
+            Single<Response<T>> response, Function<T, R> mapper) {
+        return response.map(responseBody -> {
+                    if (responseBody.isSuccessful()) {
+                        R mappedData = mapper.apply(responseBody.body());
+                        return new Success<>(mappedData);
+                    } else {
+                        return  new Failed<R>(responseBody.message());
+                    }
+                }
+
+        ).onErrorReturn(throwable -> new Failed<>(throwable.getMessage()));
+
+
+
     }
 
 }

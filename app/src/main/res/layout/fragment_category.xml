@@ -31,16 +31,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tile_of_list_category"
         />
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_animation_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:lottie_rawRes="@raw/loading"
+    <include
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/tile_of_list_category"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/network_error"/>
+
+    <include
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/tile_of_list_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/loading"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

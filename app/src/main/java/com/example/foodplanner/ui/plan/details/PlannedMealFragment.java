@@ -1,9 +1,13 @@
 package com.example.foodplanner.ui.plan.details;
 
+import static com.example.foodplanner.utils.Extensions.intiStateAnimation;
+import static com.example.foodplanner.utils.Extensions.updateUIState;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.lifecycle.LiveData;
@@ -20,10 +24,9 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.data.local.LocalSourceIm;
 import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
-import com.example.foodplanner.data.network.NetWork;
+import com.example.foodplanner.data.network.RemoteSourceIm;
 import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.base.BaseFragment;
-import com.example.foodplanner.ui.favourite.FavouriteAdapter;
 import com.example.foodplanner.utils.Extensions;
 
 
@@ -36,7 +39,7 @@ public class PlannedMealFragment extends BaseFragment implements PlannedMealView
     Button deleteMeal;
     ImageView back;
     CardView cardOfPlanedMeal;
-
+    AppCompatButton retryButton;
     PlannedMealPresenterView plannedMealPresenterView;
     String timeOfMeal;
     String day;
@@ -56,6 +59,8 @@ public class PlannedMealFragment extends BaseFragment implements PlannedMealView
     }
 
     void init(View view) {
+        intiStateAnimation(view);
+        retryButton = view.findViewById(R.id.retry);
         mealImage = view.findViewById(R.id.photo_meal);
         nameOfMeal = view.findViewById(R.id.title_meal);
         deleteMeal = view.findViewById(R.id.delete_meal);
@@ -75,7 +80,7 @@ public class PlannedMealFragment extends BaseFragment implements PlannedMealView
     }
 
     void setUp() {
-        plannedMealPresenter = new PlannedMealPresenter(RepositoryIm.getInstance(NetWork.getInstance(), LocalSourceIm.getInstance(getActivity())), this);
+        plannedMealPresenter = new PlannedMealPresenter(RepositoryIm.getInstance(RemoteSourceIm.getInstance(), LocalSourceIm.getInstance(getActivity())), this);
         plannedMealPresenterView = plannedMealPresenter;
         plannedMealPresenterView.getPlanedMeal(day, timeOfMeal);
         back.setOnClickListener(Extensions::closeFragment);
@@ -116,8 +121,8 @@ public class PlannedMealFragment extends BaseFragment implements PlannedMealView
     }
 
     @Override
-    public void getPlanedMeal(LiveData<PlanedMeal> planedMealLiveData) {
-        planedMealLiveData.observe(getViewLifecycleOwner(), planedMeal -> {
+    public void getPlanedMeal(PlanedMeal planedMeal) {
+        updateUIState(false, false);
             if (planedMeal != null) {
                 existPlanedMeal();
                 addData(planedMeal);
@@ -125,8 +130,22 @@ public class PlannedMealFragment extends BaseFragment implements PlannedMealView
                 NoPlanedMeal();
             }
 
+
+    }
+
+    @Override
+    public void showLoading() {
+        updateUIState(true, false);
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+        updateUIState(false, true);
+        retryButton.setOnClickListener(view -> {
+            plannedMealPresenterView.getPlanedMeal(day,timeOfMeal);
         });
     }
+
     void NoPlanedMeal(){
         lottieAnimation.setVisibility(View.VISIBLE);
         noPlanedMeals.setVisibility(View.VISIBLE);

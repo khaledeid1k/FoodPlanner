@@ -1,9 +1,8 @@
 package com.example.foodplanner.ui.base;
 
-public interface BasePresenterView {
-
+public interface BasePresenterView <T> {
     void showLoading();
-    <T>void showData(T data);
+    void showData(T data);
     void showError(String errorMessage);
 
 

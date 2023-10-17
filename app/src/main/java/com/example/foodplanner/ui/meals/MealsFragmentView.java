@@ -8,4 +8,6 @@ import java.util.ArrayList;
 public interface MealsFragmentView {
     void getMealByName(Meal meal);
     void getMeals(ArrayList<FilteredItem> filteredItems);
+    void showLoading();
+    void showError(String errorMessage);
 }
