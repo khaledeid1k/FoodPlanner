@@ -9,58 +9,70 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+
 public class SignInWithGoogle {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseDatabase;
     AuthView authView;
-    public SignInWithGoogle(AuthView authView){
-        this.authView=authView;
+    Single<FirebaseUser> single;
+
+    public SignInWithGoogle(AuthView authView) {
+        this.authView = authView;
         init();
         checkIfUserLoginBefore();
     }
 
-    void  init(){
+    void init() {
         firebaseDatabase = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public void signInWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,
-                null);
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                checkIfEmailExists(currentUser);
-            } else {
-                authView.failure("Failed to sign in with Google.");
-            }
+    public Single<Boolean> signInWithGoogle(String idToken) {
+         single = Single.create(emitter -> {
+            AuthCredential credential = GoogleAuthProvider.getCredential(idToken,
+                    null);
+            firebaseAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onSuccess(firebaseAuth.getCurrentUser());
+                } else {
+                    emitter.onError(new Throwable("Failed to sign in with Google."));
+                }
+            });
+        });
+       return single.flatMap(this::checkIfEmailExists);
+
+
+    }
+
+    Single<Boolean> checkIfEmailExists(FirebaseUser currentUser) {
+        return Single.create(emitter -> {
+            CollectionReference collection = firebaseDatabase.collection(Constants.CollectionPath);
+            collection.whereEqualTo(Constants.email, currentUser.getEmail())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot result = task.getResult();
+                            boolean isEmailExists = !result.isEmpty();
+                            if (isEmailExists) {
+                                putValueOfUserId(currentUser.getUid());
+                                emitter.onSuccess(true);
+                            } else {
+                                currentUser.delete();
+                                emitter.onError(new Throwable("Email not register"));
+                            }
+                        } else {
+                            currentUser.delete();
+                            emitter.onError((new Throwable("Error checking email in fireStore")));
+                        }
+
+                    });
         });
     }
 
-    void checkIfEmailExists(FirebaseUser currentUser) {
-        CollectionReference collection = firebaseDatabase.collection(Constants.CollectionPath);
-        collection.whereEqualTo(Constants.email, currentUser.getEmail())
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot result = task.getResult();
-                        boolean isEmailExists = !result.isEmpty();
-                        if (isEmailExists) {
-                            putValueOfUserId(currentUser.getUid());
-                            authView.succeed();
-                        } else {
-                            currentUser.delete();
-                            authView.failure("Email not register");
-                        }
-                    } else {
-                        currentUser.delete();
-                        authView.failure("Error checking email in fireStore");
-                    }
-
-                });
-    }
-
-    void putValueOfUserId(  String uid){
+    void putValueOfUserId(String uid) {
         Constants.UserId = uid;
     }
 
@@ -70,12 +82,11 @@ public class SignInWithGoogle {
         if (currentUser != null) {
             putValueOfUserId(currentUser.getUid());
             authView.checkIfUserLoginBefore(true);
-        }else {
+        } else {
             authView.checkIfUserLoginBefore(false);
 
         }
     }
-
 
 
 }

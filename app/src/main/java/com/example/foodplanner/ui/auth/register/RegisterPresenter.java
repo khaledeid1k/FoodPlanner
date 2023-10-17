@@ -7,6 +7,9 @@ import com.example.foodplanner.data.network.auth.RegisterWithEmail;
 import com.example.foodplanner.data.network.auth.RegisterWithGoogle;
 import com.example.foodplanner.ui.auth.validation.ValidationSate;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class RegisterPresenter implements AuthView {
     ValidationSate validationSate;
     SingUpView singUpView;
@@ -23,22 +26,24 @@ public class RegisterPresenter implements AuthView {
 
     }
     void registerWithEmail(User user){
-        registerWithEmail.checkStateOfUser(user);
+        registerWithEmail.checkStateOfUser(user).subscribeOn(
+                Schedulers.io()
+        ).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                ()-> singUpView.succeedRegister(),
+                e-> singUpView.failureRegister(e.getMessage())
+        );
     }
 
     void registerWithGoogle(String idToken){
-        registerWithGoogle.registerWithGoogle(idToken);
+        registerWithGoogle.registerWithGoogle(idToken).subscribeOn(
+                Schedulers.io()).observeOn(
+                AndroidSchedulers.mainThread()
+        ).subscribe(
+                s-> singUpView.succeedRegister(),
+                e-> singUpView.failureRegister(e.getMessage())
+        );
     }
-    @Override
-    public void succeed() {
-        singUpView.succeedRegister();
 
-    }
-
-    @Override
-    public void failure(String message) {
-        singUpView.failureRegister(message);
-    }
 
     @Override
     public void checkIfUserLoginBefore(boolean state) {
