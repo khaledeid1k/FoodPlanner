@@ -9,13 +9,16 @@ import com.google.firebase.auth.FirebaseUser;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 
 public class SigInWithEmail {
     private FirebaseAuth firebaseAuth;
     AuthView authView;
     ValidationSate validationSate;
-    Completable completable;
+    Observable<Validation> observable;
+
 
 
     public SigInWithEmail(AuthView authView, ValidationSate validationSate) {
@@ -28,13 +31,12 @@ public class SigInWithEmail {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public @NonNull Completable checkStateOfUser(User user) {
-
-            Validation validation = validateUserData(user);
+    public @NonNull Observable<Validation> checkStateOfUser(User user) {
+        Validation validation = validateUserData(user);
+        observable= Observable.create(emitter -> {
             if (validation.isValid()) {
-                authView.resultValidate(validation);
-                completable= Completable.create(emitter ->
-                        firebaseAuth.signInWithEmailAndPassword(
+                emitter.onNext(validation);
+                firebaseAuth.signInWithEmailAndPassword(
                                 user.getEmail(),
                                 user.getPassword()
                         ).
@@ -47,12 +49,15 @@ public class SigInWithEmail {
                                         emitter.onError(new Throwable("Email not register"));
                                     }
                                 }
-                        ));
+                        );
 
             } else {
-                authView.resultValidate(validation);
+                emitter.onNext(validation);
+
+
             }
-     return completable;
+        });
+     return observable;
     }
 
     Validation validateUserData(User user) {

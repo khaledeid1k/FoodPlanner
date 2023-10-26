@@ -12,7 +12,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class RegisterWithEmail {
@@ -20,7 +22,7 @@ public class RegisterWithEmail {
     AuthView authView;
     ValidationSate validationSate;
     private FirebaseFirestore firebaseDatabase;
-    Completable completable;
+    Observable<Validation> observable;
 
 
     public RegisterWithEmail(AuthView authView, ValidationSate validationSate) {
@@ -44,11 +46,11 @@ public class RegisterWithEmail {
         Constants.UserId = uid;
     }
 
-    public Completable checkStateOfUser(User user) {
+    public @NonNull Observable<Validation> checkStateOfUser(User user) {
         Validation validation = validateUserData(user);
+        observable= Observable.create(emitter -> {
         if (validation.isValid()) {
-            authView.resultValidate(validation);
-            completable= Completable.create(emitter ->
+            emitter.onNext(validation);
             firebaseAuth.createUserWithEmailAndPassword(
                     user.getEmail(), user.getPassword()
             ).addOnCompleteListener(
@@ -58,25 +60,25 @@ public class RegisterWithEmail {
                             String uid = currentUser.getUid();
                             putValueOfUserId(uid);
                             storeData(user, uid).subscribe(
-                                    e-> emitter.onComplete()
+                                    emitter::onComplete
                             );
 
                         }else {
                             emitter.onError(new Throwable("Email is register before, Please Login in."));
                         }
                     }
-            )
             );
+
         } else {
-            authView.resultValidate(validation);
+            emitter.onNext(validation);
 
         }
-
-return completable;
+    });
+return observable;
 
     }
-    Single<Boolean> storeData(User userData, String userId) {
-        return Single.create(emitter -> {
+    Completable storeData(User userData, String userId) {
+        return Completable.create(emitter -> {
         DocumentReference documentReference = firebaseDatabase.collection(
                 Constants.CollectionPath
         ).document(userId);
@@ -84,7 +86,7 @@ return completable;
         user.put(Constants.email, userData.getEmail());
         user.put(Constants.password, userData.getPassword());
         documentReference.set(user).addOnSuccessListener(unused -> {
-            emitter.onSuccess(true);
+            emitter.onComplete();
         })    .addOnFailureListener(task -> {
             emitter.onError(new Throwable("Failed to sign in with Google"));
         });

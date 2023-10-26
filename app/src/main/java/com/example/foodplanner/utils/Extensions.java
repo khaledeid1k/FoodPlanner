@@ -61,8 +61,8 @@ public class Extensions {
     }
 
     public static void updateUIState(boolean showLoading, boolean showError) {
-        layout_error.setVisibility(showError ? View.VISIBLE : View.INVISIBLE);
-        lottieAnimationLoading.setVisibility(showLoading ? View.VISIBLE : View.INVISIBLE);
+        layout_error.setVisibility(showError ? View.VISIBLE : View.GONE);
+        lottieAnimationLoading.setVisibility(showLoading ? View.VISIBLE : View.GONE);
     }
 
 

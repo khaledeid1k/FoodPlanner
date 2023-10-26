@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.Response;
 
@@ -115,7 +116,7 @@ public class RepositoryIm implements Repository {
     //region local
 
     @Override
-    public Single<List<Meal>> getFavoritesMeals(String userId) {
+    public Observable<List<Meal>> getFavoritesMeals(String userId) {
         return localSource.getFavoritesMeals(userId);
     }
 
@@ -135,8 +136,8 @@ public class RepositoryIm implements Repository {
     }
 
     @Override
-    public Flowable<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId) {
-        return localSource.getPlanedMeals(day, timeOfMeal, userId);
+    public Flowable<PlanedMeal> getPlanedMeal(String day, String timeOfMeal, String userId) {
+        return localSource.getPlanedMeal(day, timeOfMeal, userId);
     }
 
     @Override

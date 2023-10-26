@@ -2,21 +2,18 @@ package com.example.foodplanner.data.local;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodplanner.data.local.dp.FoodDao;
 import com.example.foodplanner.data.local.dp.FoodDataBase;
 import com.example.foodplanner.data.models.IngredientMeasurePair;
-import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class LocalSourceIm implements LocalSource {
@@ -35,12 +32,12 @@ public class LocalSourceIm implements LocalSource {
 
     public LocalSourceIm(Context context) {
         this.context = context;
-        FoodDataBase dataBase = FoodDataBase.getInstance(context);
+            FoodDataBase dataBase = FoodDataBase.getInstance(context);
         foodDao = dataBase.getFoodDao();
     }
 
     @Override
-    public Single<List<Meal>> getFavoritesMeals(String userId) {
+    public Observable<List<Meal>> getFavoritesMeals(String userId) {
         return foodDao.getAllFavoritesMeals( userId);
     }
 
@@ -62,8 +59,8 @@ public class LocalSourceIm implements LocalSource {
     }
 
     @Override
-    public Flowable<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId) {
-        return foodDao.getPlanedMeals(day, timeOfMeal, userId);
+    public Flowable<PlanedMeal> getPlanedMeal(String day, String timeOfMeal, String userId) {
+        return foodDao.getPlanedMeal(day, timeOfMeal, userId);
     }
 
 

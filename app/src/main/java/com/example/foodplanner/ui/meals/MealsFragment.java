@@ -29,7 +29,7 @@ import com.example.foodplanner.utils.Extensions;
 import java.util.ArrayList;
 
 
-public class MealsFragment extends BaseFragment  implements OnClickListener ,
+public class MealsFragment extends BaseFragment implements OnClickListener,
         MealsFragmentView {
     RecyclerView recyclerViewMeals;
     TextView nameList;
@@ -56,7 +56,7 @@ public class MealsFragment extends BaseFragment  implements OnClickListener ,
     void init(View view) {
         recyclerViewMeals = view.findViewById(R.id.recycle_of_meals);
         intiStateAnimation(view);
-        retryButton=view.findViewById(R.id.retry);
+        retryButton = view.findViewById(R.id.retry);
         nameList = view.findViewById(R.id.meals_text);
         back = view.findViewById(R.id.back_from_meals);
         nameOfItem = MealsFragmentArgs.fromBundle(getArguments()).getNameOfItem();
@@ -71,7 +71,7 @@ public class MealsFragment extends BaseFragment  implements OnClickListener ,
                 RepositoryIm.getInstance(RemoteSourceIm.getInstance(),
                         LocalSourceIm.getInstance(requireActivity())),
                 this);
-        mealsPresenterView =mealsPresenter;
+        mealsPresenterView = mealsPresenter;
         meals = new ArrayList<>();
         mealsAdapter = new MealsAdapter(meals, requireActivity(), this);
         recyclerViewMeals.setAdapter(mealsAdapter);
@@ -90,11 +90,11 @@ public class MealsFragment extends BaseFragment  implements OnClickListener ,
 
     @Override
     public void getMealByName(Meal meal) {
-        updateUIState(false,false);
+        updateUIState(false, false);
 
         MealsFragmentDirections.ActionMealsFragmentToMealFragment action =
                 MealsFragmentDirections.actionMealsFragmentToMealFragment(
-                     meal);
+                        meal);
         Navigation.findNavController(requireView()).navigate(
                 action
         );
@@ -102,19 +102,19 @@ public class MealsFragment extends BaseFragment  implements OnClickListener ,
 
     @Override
     public void getMeals(ArrayList<FilteredItem> filteredItems) {
-        updateUIState(false,false);
+        updateUIState(false, false);
         mealsAdapter.updateData(filteredItems);
     }
 
     @Override
     public void showLoading() {
-        updateUIState(true,false);
+        updateUIState(true, false);
 
     }
 
     @Override
     public void showError(String errorMessage) {
-        updateUIState(false,true);
+        updateUIState(false, true);
         meals.clear();
         mealsAdapter.updateData(meals);
         retryButton.setOnClickListener(view -> mealsPresenter.getMeals(nameOfItem));

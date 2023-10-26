@@ -18,6 +18,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface Repository {
@@ -48,7 +49,7 @@ public interface Repository {
 
     //region local
 
-    Single<List<Meal>> getFavoritesMeals(String userId);
+    Observable<List<Meal>> getFavoritesMeals(String userId);
 
     Completable saveMeal(Meal meal);
 
@@ -57,7 +58,7 @@ public interface Repository {
     Single<Boolean> getFavoriteMealById(String mealId);
 
 
-    Flowable<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId);
+    Flowable<PlanedMeal> getPlanedMeal(String day, String timeOfMeal, String userId);
 
     Completable deletePlanedMeal(PlanedMeal planedMeal);
 

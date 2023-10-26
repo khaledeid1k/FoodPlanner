@@ -24,7 +24,7 @@ public class PlannedMealPresenter extends BasePresenter implements PlannedMealPr
 
     @Override
     public void getPlanedMeal(String day, String timeOfMeal) {
-        repository.getPlanedMeals(day, timeOfMeal, UserId).subscribeOn(Schedulers.io())
+        repository.getPlanedMeal(day, timeOfMeal, UserId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(
                         planedMeal ->  {
                             plannedMealView.getPlanedMeal(planedMeal);

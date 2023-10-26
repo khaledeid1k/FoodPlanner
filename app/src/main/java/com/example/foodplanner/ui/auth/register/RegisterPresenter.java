@@ -29,8 +29,10 @@ public class RegisterPresenter implements AuthView {
         registerWithEmail.checkStateOfUser(user).subscribeOn(
                 Schedulers.io()
         ).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                ()-> singUpView.succeedRegister(),
-                e-> singUpView.failureRegister(e.getMessage())
+                validation-> singUpView.resultValidate(validation),
+                e-> singUpView.failureRegister(e.getMessage()),
+                ()-> singUpView.succeedRegister()
+
         );
     }
 
@@ -50,8 +52,5 @@ public class RegisterPresenter implements AuthView {
 
     }
 
-    @Override
-    public void resultValidate(Validation validation) {
-        singUpView.resultValidate(validation);
-    }
+
 }

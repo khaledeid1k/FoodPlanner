@@ -34,8 +34,9 @@ public class LoginPresenter implements AuthView {
         sigInWithEmail.checkStateOfUser(user).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> loginView.succeedLogin(),
-                        error -> loginView.failureLogin(error.getMessage())
+                        (validation) ->  loginView.resultValidate(validation),
+                        error -> loginView.failureLogin(error.getMessage()),
+                        ()-> loginView.succeedLogin()
                 );
     }
 
@@ -44,12 +45,8 @@ public class LoginPresenter implements AuthView {
                         Schedulers.io()
                 ).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        canLogin -> {
-                            loginView.succeedLogin();
-                        },
-                        error -> {
-                            loginView.failureLogin(error.getMessage());
-                        }
+                        canLogin -> loginView.succeedLogin(),
+                        error -> loginView.failureLogin(error.getMessage())
                 );
     }
 
@@ -68,8 +65,4 @@ public class LoginPresenter implements AuthView {
         }
     }
 
-    @Override
-    public void resultValidate(Validation validation) {
-        loginView.resultValidate(validation);
-    }
 }
