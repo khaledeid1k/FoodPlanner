@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +26,7 @@ import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
-import com.example.foodplanner.data.network.NetWork;
+import com.example.foodplanner.data.network.RemoteSourceIm;
 import com.example.foodplanner.data.repository.RepositoryIm;
 import com.example.foodplanner.ui.base.BaseFragment;
 import com.example.foodplanner.ui.meal.dapter.IngredientAdapter;
@@ -94,7 +93,7 @@ public class MealFragment extends BaseFragment implements MealView {
         meal = MealFragmentArgs.fromBundle(getArguments()).getMeal();
         mealPresenter = new MealPresenter(meal,
                 RepositoryIm.getInstance(
-                        NetWork.getInstance(),
+                        RemoteSourceIm.getInstance(),
                         LocalSourceIm.getInstance(getActivity())), this);
         mealPresenterView=mealPresenter;
 
@@ -199,7 +198,7 @@ public class MealFragment extends BaseFragment implements MealView {
     void saveToPlanedMeal(String dayOfWeek, String timeOfMeal) {
         mealPresenterView.savePlanedMeal(new PlanedMeal(
                 UserId, dayOfWeek, timeOfMeal, meal));
-        Toast.makeText(requireActivity(), "Saved", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), "Saved To Plan", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -231,9 +230,9 @@ public class MealFragment extends BaseFragment implements MealView {
     }
 
     @Override
-    public void getIsFavoriteMealById(LiveData<Boolean> isFavorite) {
-        isFavorite.observe(getViewLifecycleOwner(), aBoolean ->
-                favouriteIconSingleMeal.setChecked(aBoolean));
+    public void getIsFavoriteMealById(Boolean isFavorite) {
+                favouriteIconSingleMeal.setChecked(isFavorite);
+
     }
 
 

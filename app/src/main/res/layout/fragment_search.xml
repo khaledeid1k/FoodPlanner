@@ -71,18 +71,9 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.chip.ChipGroup>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_animation_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:lottie_rawRes="@raw/no_result_of_search"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
+
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_search"
@@ -97,5 +88,34 @@
         android:orientation="vertical"
         tools:listitem="@layout/item_search"
         android:layout_height="@dimen/height_0"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_animation_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:lottie_rawRes="@raw/no_result_of_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
+    <include
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/network_error"/>
+
+    <include
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/loading"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

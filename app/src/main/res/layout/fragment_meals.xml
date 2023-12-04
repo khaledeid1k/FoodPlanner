@@ -5,17 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.showAll.ShowAllFragment">
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_animation_meals"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/meals_text"
-        app:lottie_rawRes="@raw/loading"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
+
     <TextView
         android:id="@+id/meals_text"
         android:layout_width="wrap_content"
@@ -54,5 +44,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/meals_text"
         />
+
+    <include
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/meals_text"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/network_error"/>
+
+    <include
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/meals_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/loading"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

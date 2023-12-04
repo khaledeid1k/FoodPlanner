@@ -8,4 +8,6 @@ import java.util.ArrayList;
 public interface SearchFragmentView {
     void  getFilterData(ArrayList<FilteredItem> filteredItems);
     void  navigateToMeal(Meal meal);
+    void showLoading();
+    void showError(String errorMessage);
 }

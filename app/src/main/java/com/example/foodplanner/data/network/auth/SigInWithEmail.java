@@ -7,12 +7,18 @@ import com.example.foodplanner.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Objects;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 
 public class SigInWithEmail {
     private FirebaseAuth firebaseAuth;
     AuthView authView;
     ValidationSate validationSate;
+    Observable<Validation> observable;
+
 
 
     public SigInWithEmail(AuthView authView, ValidationSate validationSate) {
@@ -23,32 +29,35 @@ public class SigInWithEmail {
 
     void init() {
         firebaseAuth = FirebaseAuth.getInstance();
-
     }
 
-    public void checkStateOfUser(User user) {
+    public @NonNull Observable<Validation> checkStateOfUser(User user) {
         Validation validation = validateUserData(user);
-        if (validation.isValid()) {
-            authView.resultValidate(validation);
-            firebaseAuth.signInWithEmailAndPassword(
-                            user.getEmail(),
-                            user.getPassword()
-                    ).
-                    addOnCompleteListener(
-                            task -> {
-                                if (task.isSuccessful()) {
-                                    putValueOfUserId(firebaseAuth.getCurrentUser().getUid());
-                                    authView.succeed();
-                                } else {
-                                    authView.failure("Email not register");
+        observable= Observable.create(emitter -> {
+            if (validation.isValid()) {
+                emitter.onNext(validation);
+                firebaseAuth.signInWithEmailAndPassword(
+                                user.getEmail(),
+                                user.getPassword()
+                        ).
+                        addOnCompleteListener(
+                                task -> {
+                                    if (task.isSuccessful()) {
+                                        putValueOfUserId(firebaseAuth.getCurrentUser().getUid());
+                                        emitter.onComplete();
+                                    } else {
+                                        emitter.onError(new Throwable("Email not register"));
+                                    }
                                 }
-                            }
-                    );
+                        );
 
-        } else {
-            authView.resultValidate(validation);
-        }
+            } else {
+                emitter.onNext(validation);
 
+
+            }
+        });
+     return observable;
     }
 
     Validation validateUserData(User user) {

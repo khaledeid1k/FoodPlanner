@@ -1,7 +1,5 @@
 package com.example.foodplanner.data.repository;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodplanner.data.models.IngredientMeasurePair;
 import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.PlanedMeal;
@@ -13,48 +11,66 @@ import com.example.foodplanner.data.models.filter.FilteredItems;
 import com.example.foodplanner.data.models.ingredient.Ingredients;
 import com.example.foodplanner.data.models.meal.Meal;
 import com.example.foodplanner.data.models.meal.Meals;
-import com.example.foodplanner.data.network.StateOfResponse;
+import com.example.foodplanner.data.repository.state.StateOfResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+
 public interface Repository {
+    //region remote
+    Single<StateOfResponse<Meal>> getMealByName(String nameOfMeal);
 
-    StateOfResponse<Meals> getMealByName(String nameOfMeal, StateOfResponse<Meals> stateOfResponse);
+    Single<StateOfResponse<Meals>> getMealsByFirstLetter(String firstLetterOfMeal);
 
-    StateOfResponse<Meals> getMealsByFirstLetter(String firstLetterOfMeal, StateOfResponse<Meals> stateOfResponse);
+    Single<StateOfResponse<Meals>> getMealDetailsById(String idOfMeal);
 
-    StateOfResponse<Meals> getMealDetailsById(String idOfMeal, StateOfResponse<Meals> stateOfResponse);
+    Single<StateOfResponse<Meal>> getRandomMeal();
 
-    StateOfResponse<Meals> getRandomMeal(StateOfResponse<Meals> stateOfResponse);
+    Single<StateOfResponse<CategoriesWithDetails>> getAllCategoriesWithDetails();
 
-    StateOfResponse<CategoriesWithDetails> getAllCategoriesWithDetails(StateOfResponse<CategoriesWithDetails> stateOfResponse);
+    Single<StateOfResponse<Categories>> getAllCategories();
 
-    StateOfResponse<Categories> getAllCategories(StateOfResponse<Categories> stateOfResponse);
+    Single<StateOfResponse<Countries>> getAllCountries();
 
-    StateOfResponse<Countries> getAllCountries(StateOfResponse<Countries> stateOfResponse);
+    Single<StateOfResponse<Ingredients>> getAllIngredients();
 
-    StateOfResponse<Ingredients> getAllIngredients(StateOfResponse<Ingredients> stateOfResponse);
+    Single<StateOfResponse<FilteredItems>> filterByMainIngredient(String nameOfMainIngredient);
 
-    StateOfResponse<FilteredItems> filterByMainIngredient(String nameOfMainIngredient, StateOfResponse<FilteredItems> stateOfResponse);
+    Single<StateOfResponse<FilteredItems>> filterByCategory(String nameOfCategory);
 
-    StateOfResponse<FilteredItems> filterByCategory(String nameOfCategory, StateOfResponse<FilteredItems> stateOfResponse);
+    Single<StateOfResponse<FilteredItems>> filterByArea(String nameOfArea);
 
-    StateOfResponse<FilteredItems> filterByArea(String nameOfArea, StateOfResponse<FilteredItems> stateOfResponse);
+    // endregion
 
-    LiveData<List<Meal>> getFavoritesMeals(String userId);
+    //region local
 
-    void saveMeal(Meal meal);
+    Observable<List<Meal>> getFavoritesMeals(String userId);
 
-    void deleteMeal(Meal meal);
-    LiveData<Boolean> getFavoriteMealById(String mealId);
+    Completable saveMeal(Meal meal);
+
+    Completable deleteMeal(Meal meal);
+
+    Single<Boolean> getFavoriteMealById(String mealId);
 
 
-    LiveData<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId);
-    void deletePlanedMeal(PlanedMeal planedMeal);
-    void savePlanedMeal(PlanedMeal planedMeal);
+    Flowable<PlanedMeal> getPlanedMeal(String day, String timeOfMeal, String userId);
+
+    Completable deletePlanedMeal(PlanedMeal planedMeal);
+
+    Completable savePlanedMeal(PlanedMeal planedMeal);
+
     ArrayList<IngredientMeasurePair> getIngredientAndMeasure(Meal meal);
+
     ArrayList<Instructions> getInstructions(Meal meal);
-     ArrayList<FilteredItem> searchByMeal(Meals meals) ;
-     ArrayList<FilteredItem> searchInMeals(ArrayList<FilteredItem> meals, String charOfMeal) ;
-    }
+
+    ArrayList<FilteredItem> searchByMeal(Meals meals);
+
+    ArrayList<FilteredItem> searchInMeals(ArrayList<FilteredItem> meals, String charOfMeal);
+
+    // endregion
+}

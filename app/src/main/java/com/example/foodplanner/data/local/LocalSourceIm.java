@@ -2,18 +2,19 @@ package com.example.foodplanner.data.local;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodplanner.data.local.dp.FoodDao;
 import com.example.foodplanner.data.local.dp.FoodDataBase;
 import com.example.foodplanner.data.models.IngredientMeasurePair;
-import com.example.foodplanner.data.models.Instructions;
 import com.example.foodplanner.data.models.PlanedMeal;
 import com.example.foodplanner.data.models.meal.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 
 public class LocalSourceIm implements LocalSource {
 
@@ -31,46 +32,46 @@ public class LocalSourceIm implements LocalSource {
 
     public LocalSourceIm(Context context) {
         this.context = context;
-        FoodDataBase dataBase = FoodDataBase.getInstance(context);
+            FoodDataBase dataBase = FoodDataBase.getInstance(context);
         foodDao = dataBase.getFoodDao();
     }
 
     @Override
-    public LiveData<List<Meal>> getFavoritesMeals(String userId) {
+    public Observable<List<Meal>> getFavoritesMeals(String userId) {
         return foodDao.getAllFavoritesMeals( userId);
     }
 
     @Override
-    public void saveMeal(Meal meal) {
-        new Thread(() -> foodDao.saveMeal(meal)).start();
+    public Completable saveMeal(Meal meal) {
+        return foodDao.saveMeal(meal);
 
     }
 
     @Override
-    public void deleteMeal(Meal meal) {
-        new Thread(() -> foodDao.deleteMeal(meal)).start();
+    public Completable deleteMeal(Meal meal) {
+      return foodDao.deleteMeal(meal);
 
     }
 
     @Override
-    public LiveData<Boolean> getFavoriteMealById(String mealId) {
+    public Single<Boolean> getFavoriteMealById(String mealId) {
         return foodDao.getFavoriteMealById(mealId);
     }
 
     @Override
-    public LiveData<PlanedMeal> getPlanedMeals(String day, String timeOfMeal, String userId) {
-        return foodDao.getPlanedMeals(day, timeOfMeal, userId);
+    public Flowable<PlanedMeal> getPlanedMeal(String day, String timeOfMeal, String userId) {
+        return foodDao.getPlanedMeal(day, timeOfMeal, userId);
     }
 
 
     @Override
-    public void deletePlanedMeal(PlanedMeal planedMeal) {
-        new Thread(() -> foodDao.deletePlanedMeal(planedMeal)).start();
+    public Completable deletePlanedMeal(PlanedMeal planedMeal) {
+        return foodDao.deletePlanedMeal(planedMeal);
     }
 
     @Override
-    public void savePlanedMeal(PlanedMeal planedMeal) {
-        new Thread(() -> foodDao.savePlanedMeal(planedMeal)).start();
+    public Completable savePlanedMeal(PlanedMeal planedMeal) {
+        return foodDao.savePlanedMeal(planedMeal);
     }
 
     @Override
